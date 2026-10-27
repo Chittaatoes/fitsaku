@@ -16,7 +16,7 @@
     "web-push": "^3.6.7"
   },
   "optionalDependencies": {
-    "@anthropic-ai/claude-agent-sdk": "^0.3.223"
+    "@anthropic-ai/claude-agent-sdk": "^0.3.310"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.12",
