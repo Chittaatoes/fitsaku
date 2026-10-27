@@ -1,0 +1,14 @@
+**/node_modules
+frontend/dist
+media
+data
+.env
+.git
+*.log
+# Third-party exercise media (Gym visual): licensed to the openGym app only, never part of a FitSaku
+# build context. The licence notice (catalogue/media/NOTICE.md) stays. A holder of a licence removes
+# these two lines on purpose.
+catalogue/media/still
+catalogue/media/clip
+.env.*
+coach-auth

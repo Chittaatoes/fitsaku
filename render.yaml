@@ -1,0 +1,37 @@
+# Render Blueprint for the FitSaku API. Secrets are never written here: `sync: false` values are
+# entered in the Render dashboard when the Blueprint is created. See docs/DEPLOYMENT.md.
+services:
+  - type: web
+    name: fitsaku-api
+    runtime: node
+    plan: free                  # spins down after inactivity: the first request after a pause is slow
+    rootDir: api
+    buildCommand: npm ci --omit=dev --omit=optional
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL       # Supabase "Session pooler" connection string
+        sync: false
+      - key: DATABASE_SSL_CA    # Supabase CA certificate (PEM). Required: the database certificate is always verified
+        sync: false
+      - key: DATABASE_POOL_MAX
+        value: "5"
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: RP_ID              # the confirmed production domain, e.g. fitsaku.my.id
+        sync: false
+      - key: ORIGIN             # https://<RP_ID>
+        sync: false
+      - key: TRUST_PROXY
+        value: "1"
+      - key: INVITE_ONLY        # explicit; a database deployment is invite-only anyway unless PUBLIC_SIGNUP=1 and an admin exists
+        value: "1"
+      - key: BOOTSTRAP_SECRET   # one-time owner bootstrap; delete it after the owner exists (docs/DEPLOYMENT.md)
+        sync: false
+      - key: MEDIA_UPLOADS      # uploads would live on a disk Render does not keep
+        value: "0"
+      - key: AUDIT_IP
+        value: "off"

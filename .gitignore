@@ -1,0 +1,49 @@
+# Exercise media downloaded by installs before v1.4.0 (now in catalogue/media); kept ignored so an
+# old folder never gets committed by accident
+media/img/
+media/gif/
+
+# Runtime data — users, passkeys, per-user state, session secret
+data/
+
+# Local config
+.env
+
+# Build output / deps
+frontend/dist/
+node_modules/
+*.log
+.DS_Store
+node_modules
+.claude/
+.agents/
+.superpowers/
+
+# Nix build result symlinks
+result
+result-*
+
+# CI reports (test:* jobs write these next to the suites)
+junit.xml
+coverage/
+frontend/bundle-size.json
+
+# Local planning notes
+docs/superpowers/plans/
+
+# Third-party exercise media (Gym visual) is licensed to the openGym app only: a FitSaku repository
+# must not redistribute it. The licence notice (catalogue/media/NOTICE.md) is kept.
+catalogue/media/still/
+catalogue/media/clip/
+
+# Never commit credentials, dumps or user data
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+*.dump
+*.sql.gz
+coach-auth/
+uploads/
+frontend/build_output.txt
