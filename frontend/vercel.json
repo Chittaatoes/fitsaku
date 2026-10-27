@@ -10,7 +10,7 @@
     }
   },
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://fitsaku-api.onrender.com/api/:path*" },
+    { "source": "/api/:path*", "destination": "https://fitsaku.onrender.com/api/:path*" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [
