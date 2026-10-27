@@ -2520,10 +2520,14 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 
 /* --- finish screen: share row, and the share sheet's app shortcuts --- */
 .fin-share{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.fin-sbtn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border-radius:14px;font-size:15px;font-weight:600;
-  background:color-mix(in srgb,var(--acc) 14%,var(--surface-2));color:var(--acc);transition:transform var(--fast),background var(--fast)}
-.fin-sbtn .icn{font-size:19px}
-.fin-sbtn:active{transform:scale(.97);background:color-mix(in srgb,var(--acc) 24%,var(--surface-2))}
+.fin-sbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:62px;padding:8px 6px;border-radius:16px;
+  font-size:13px;font-weight:600;line-height:1.2;text-align:center;overflow-wrap:anywhere;
+  background:color-mix(in srgb,var(--acc) 26%,var(--surface-2));color:var(--label);box-shadow:inset 0 0 0 .5px color-mix(in srgb,var(--acc) 45%,transparent);
+  transition:transform var(--fast),background var(--fast)}
+.fin-sbtn .icn{font-size:23px;color:var(--acc)}
+.fin-sbtn:active{transform:scale(.97);background:color-mix(in srgb,var(--acc) 38%,var(--surface-2))}
+/* inside the centred card the footer is not at the screen's edge: no home-indicator gap under Done */
+.center .fin-foot{padding-bottom:16px}
 .share-apps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
 .share-app{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 2px 8px;border-radius:14px;background:var(--surface-2);
   color:var(--label);font-size:11px;font-weight:600;text-align:center;line-height:1.2;min-width:0;overflow-wrap:anywhere}
