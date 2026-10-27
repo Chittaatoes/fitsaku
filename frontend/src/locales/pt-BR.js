@@ -1699,6 +1699,20 @@ export const PT_BR_OVERRIDES = {
   "Log weight": "Registrar peso",
   "Quick start": "Início rápido",
   "Became owner with the one-time bootstrap secret": "Virou proprietário com o segredo de inicialização de uso único",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "Outro perfil já usa este número de celular.",
+  "Enter a valid phone number and a 4-digit PIN.": "Digite um número de celular válido e um PIN de 4 dígitos.",
+  "PIN (4 digits)": "PIN (4 dígitos)",
+  "Phone & PIN": "Celular e PIN",
+  "Phone number": "Número de celular",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "Escolha um nome, um número de celular e um PIN de 4 dígitos. Você entra com os dois últimos. O número não é verificado: nenhum SMS é enviado.",
+  "Repeat the PIN": "Repita o PIN",
+  "Sign in with phone number": "Entrar com número de celular",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "Esse PIN é fácil demais de adivinhar. Evite 1234, 0000 e semelhantes.",
+  "The two PINs are not the same.": "Os dois PINs não são iguais.",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Este navegador não oferece suporte a passkeys. Entre com seu número de celular e PIN.",
+  "Use your phone number and your 4-digit PIN.": "Use seu número de celular e seu PIN de 4 dígitos.",
+  "Wrong phone number or PIN.": "Número de celular ou PIN incorreto.",
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

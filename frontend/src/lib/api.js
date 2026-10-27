@@ -424,6 +424,13 @@ export async function passwordLogin(name, password) {
 export async function passwordRegister(name, password, code, email) {
   return (await post('/api/register/password', { name, password, code: code || '', ...(email ? { email } : {}) })).user
 }
+// Phone number + 4-digit PIN (config.phone_login). Same session cookie, same returned user.
+export async function phoneLogin(phone, pin) {
+  return (await post('/api/login/phone', { phone, pin })).user
+}
+export async function phoneRegister(name, phone, pin, code) {
+  return (await post('/api/register/phone', { name, phone, pin, code: code || '' })).user
+}
 export async function passwordResetRedeem(name, code, next) {
   return (await post('/api/login/password-reset', { name, code, next })).user
 }

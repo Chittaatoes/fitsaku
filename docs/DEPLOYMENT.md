@@ -21,6 +21,8 @@ Dashboard wording changes: trust the dashboards over this file for button names,
 | `DATABASE_POOL_MAX` | pool size (default 5) | Render | public | - | optional |
 | `SESSION_SECRET` | signs session cookies; keep stable. Else generated once into the database | Render | **Secret** | - | set (Blueprint generates) |
 | `BOOTSTRAP_SECRET` | one-time owner bootstrap, 32 to 40 letters/digits (`openssl rand -hex 16`) | Render | **Secret** | - | set for the bootstrap, then **remove** |
+| `PHONE_LOGIN` | `1` adds sign-up/sign-in with a phone number and a 4-digit PIN (`/api/register/phone`, `/api/login/phone`, `/api/account/pin`). See "Phone number + PIN" below | Render | public | - | `1` |
+| `PHONE_DEFAULT_COUNTRY` | calling code a number starting with `0` is read in | Render | public | - | `62` |
 | `INVITE_ONLY` | explicit invite-only | Render | public | - | `1` |
 | `PUBLIC_SIGNUP` | `1` allows open registration, **only** when an administrator exists and `INVITE_ONLY` is not set. A database deployment is invite-only otherwise | Render | public | - | unset until go-live |
 | `FIRST_USER_ADMIN` | **ignored** with a database (use `BOOTSTRAP_SECRET`); file self-hosting unchanged | - | - | - | never |
@@ -114,6 +116,19 @@ A neutral placeholder is shown instead; the catalogue, search, filters, logging 
 
 ### 12. Open registration
 Only after: owner verified (step 4), restricted media absent (step 11), TLS validated (step 1), staging tests passed, backups understood. Then `PUBLIC_SIGNUP=1` and **remove** `INVITE_ONLY`. It has no effect while no administrator exists. Revert to close it.
+
+## Phone number + PIN sign-in
+Enabled with `PHONE_LOGIN=1` (set in `render.yaml`). Sign-up and sign-in take a phone number and a 4-digit PIN; the profile is stored in the database
+like any other (`users[].phone` as E.164, `users[].pin` = scrypt hash of the PIN keyed with the server secret, plus the failure counter).
+Read this before relying on it:
+- **A 4-digit PIN is a weak secret by nature (10,000 values).** Safety comes from limiting guesses: 5 wrong PINs pause the account (5 min, then 15, then an hour, up to 24 h),
+  the counter is on the account record so a restart or a Render spin-down does not reset it, and every wrong PIN also counts against the caller's address. Trivial PINs (`0000`, `1234`, ...) are refused.
+  Even so, a determined attacker who knows a phone number can still try about 15 PINs a day against that account. Use passkeys for anything that matters.
+- **The phone number is not verified.** No SMS is sent (that needs a paid provider); the number is only an identifier. Anyone can register an unused number.
+  That is why sign-up stays **invite-only** (`INVITE_ONLY`; a database deployment fails closed). Do not open `PUBLIC_SIGNUP` with phone sign-up on until numbers are verified.
+- The PIN is never stored or logged in the clear; a copy of the database alone cannot be searched for the 10,000 PINs because they are keyed with `SESSION_SECRET` first. **Keep `SESSION_SECRET` stable**: changing it makes every PIN stop working.
+- There is no PIN reset by SMS. A forgotten PIN needs an administrator (delete the profile, or recover through a passkey); changing a PIN needs the current one (`POST /api/account/pin`).
+- A profile created with a phone number has no passkey; adding one later is not offered in this version.
 
 ## One API instance (what happens on deploys)
 The API keeps data in memory and writes it through to PostgreSQL. Profile documents are compare-and-swap on their revision, so two instances cannot overwrite each other's workouts.

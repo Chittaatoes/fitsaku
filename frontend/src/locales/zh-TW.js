@@ -2595,4 +2595,18 @@ export default {
   "Log weight": "記錄體重",
   "Quick start": "快速開始",
   "Became owner with the one-time bootstrap secret": "以一次性引導密鑰成為擁有者",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "另一個設定檔已在使用這個電話號碼。",
+  "Enter a valid phone number and a 4-digit PIN.": "請輸入有效的電話號碼和 4 位數 PIN。",
+  "PIN (4 digits)": "PIN（4 位數）",
+  "Phone & PIN": "電話與 PIN",
+  "Phone number": "電話號碼",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "選擇名稱、電話號碼和 4 位數 PIN。後兩者用來登入。號碼不會驗證：不會發送簡訊。",
+  "Repeat the PIN": "再次輸入 PIN",
+  "Sign in with phone number": "以電話號碼登入",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "這個 PIN 太容易猜到。請避免 1234、0000 等。",
+  "The two PINs are not the same.": "兩次輸入的 PIN 不一致。",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "此瀏覽器不支援密碼金鑰。請改用電話號碼和 PIN 登入。",
+  "Use your phone number and your 4-digit PIN.": "請使用您的電話號碼和 4 位數 PIN。",
+  "Wrong phone number or PIN.": "電話號碼或 PIN 錯誤。",
 }

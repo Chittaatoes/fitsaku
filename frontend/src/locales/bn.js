@@ -2681,4 +2681,18 @@ export default {
   "Log weight": "ওজন লগ করুন",
   "Quick start": "দ্রুত শুরু",
   "Became owner with the one-time bootstrap secret": "এককালীন বুটস্ট্র্যাপ সিক্রেট দিয়ে মালিক হয়েছেন",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "অন্য একটি প্রোফাইল এই ফোন নম্বর ব্যবহার করছে।",
+  "Enter a valid phone number and a 4-digit PIN.": "একটি বৈধ ফোন নম্বর ও ৪ অঙ্কের PIN দিন।",
+  "PIN (4 digits)": "PIN (৪ অঙ্ক)",
+  "Phone & PIN": "ফোন ও PIN",
+  "Phone number": "ফোন নম্বর",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "একটি নাম, ফোন নম্বর ও ৪ অঙ্কের PIN বেছে নিন। শেষ দুটি দিয়ে সাইন ইন করবেন। নম্বরটি যাচাই করা হয় না: কোনো SMS পাঠানো হয় না।",
+  "Repeat the PIN": "PIN আবার দিন",
+  "Sign in with phone number": "ফোন নম্বর দিয়ে সাইন ইন করুন",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "এই PIN অনুমান করা খুব সহজ। 1234, 0000 ইত্যাদি এড়িয়ে চলুন।",
+  "The two PINs are not the same.": "দুটি PIN মেলেনি।",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "এই ব্রাউজার পাসকি সমর্থন করে না। এর বদলে ফোন নম্বর ও PIN দিয়ে সাইন ইন করুন।",
+  "Use your phone number and your 4-digit PIN.": "আপনার ফোন নম্বর ও ৪ অঙ্কের PIN ব্যবহার করুন।",
+  "Wrong phone number or PIN.": "ফোন নম্বর বা PIN ভুল।",
 }

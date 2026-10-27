@@ -2625,4 +2625,18 @@ export default {
   "Log weight": "Catat berat badan",
   "Quick start": "Mulai cepat",
   "Became owner with the one-time bootstrap secret": "Menjadi pemilik dengan rahasia bootstrap sekali pakai",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "Profil lain sudah memakai nomor telepon ini.",
+  "Enter a valid phone number and a 4-digit PIN.": "Masukkan nomor telepon yang valid dan PIN 4 digit.",
+  "PIN (4 digits)": "PIN (4 digit)",
+  "Phone & PIN": "Telepon & PIN",
+  "Phone number": "Nomor telepon",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "Pilih nama, nomor telepon, dan PIN 4 digit. Kamu masuk dengan dua yang terakhir. Nomor tidak diverifikasi: tidak ada SMS yang dikirim.",
+  "Repeat the PIN": "Ulangi PIN",
+  "Sign in with phone number": "Masuk dengan nomor telepon",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "PIN itu terlalu mudah ditebak. Hindari 1234, 0000, dan sejenisnya.",
+  "The two PINs are not the same.": "Kedua PIN tidak sama.",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Browser ini tidak mendukung passkey. Masuklah dengan nomor telepon dan PIN.",
+  "Use your phone number and your 4-digit PIN.": "Gunakan nomor telepon dan PIN 4 digitmu.",
+  "Wrong phone number or PIN.": "Nomor telepon atau PIN salah.",
 }

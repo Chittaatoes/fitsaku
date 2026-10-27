@@ -2599,4 +2599,18 @@ export default {
   "Log weight": "Записати вагу",
   "Quick start": "Швидкий старт",
   "Became owner with the one-time bootstrap secret": "Став власником за одноразовим секретом початкового налаштування",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "Інший профіль уже використовує цей номер телефону.",
+  "Enter a valid phone number and a 4-digit PIN.": "Введіть дійсний номер телефону та 4-значний PIN-код.",
+  "PIN (4 digits)": "PIN-код (4 цифри)",
+  "Phone & PIN": "Телефон і PIN",
+  "Phone number": "Номер телефону",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "Виберіть імʼя, номер телефону та 4-значний PIN-код. Входити ви будете за останніми двома. Номер не перевіряється: SMS не надсилається.",
+  "Repeat the PIN": "Повторіть PIN-код",
+  "Sign in with phone number": "Увійти за номером телефону",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "Цей PIN-код надто легко вгадати. Уникайте 1234, 0000 та подібних.",
+  "The two PINs are not the same.": "PIN-коди не збігаються.",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Цей браузер не підтримує ключі доступу. Увійдіть за номером телефону та PIN-кодом.",
+  "Use your phone number and your 4-digit PIN.": "Використовуйте номер телефону та 4-значний PIN-код.",
+  "Wrong phone number or PIN.": "Неправильний номер телефону або PIN-код.",
 }

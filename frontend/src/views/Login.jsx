@@ -10,6 +10,7 @@ import Icon from '../components/Icon.jsx'
 import { Button, Segmented } from '../components/ui.jsx'
 import { askAddDeviceData } from '../sheets.jsx'
 import { passwordOn, PasswordRegisterForm, openPasswordSignIn } from '../components/PasswordAuth.jsx'
+import { phoneOn, PhoneRegisterForm, openPhoneSignIn } from '../components/PhonePinAuth.jsx'
 import { openDeviceLinkRedeem } from '../components/Passkeys.jsx'
 
 function RegisterSheet({ close }) {
@@ -21,7 +22,8 @@ function RegisterSheet({ close }) {
   // A password is offered only where the instance allows it (#118), and is the only choice in a
   // browser that cannot make a passkey. Where both work, the passkey stays the first one.
   const pwOn = passwordOn(config)
-  const [how, setHow] = useState(webauthnOK() ? 'passkey' : 'password')
+  const phOn = phoneOn(config)
+  const [how, setHow] = useState(webauthnOK() ? 'passkey' : pwOn ? 'password' : phOn ? 'phone' : 'passkey')
   const ref = useRef(null)
   useEffect(() => { setTimeout(() => ref.current?.focus(), 250) }, [])
   // Boot already fetched this; retry here only if that attempt failed, so the invite field still
@@ -38,10 +40,20 @@ function RegisterSheet({ close }) {
       else { await pullState(); useUI.getState().toast(t('Welcome, {0}', u.name)) }
     } catch (e) { if (e.name !== 'NotAllowedError' && e.name !== 'AbortError') useUI.getState().toast(passkeyError(e, t('Registration failed'))) }
   }
-  const choose = pwOn && webauthnOK() && <>
-    <Segmented options={[{ value: 'passkey', label: t('Passkey'), icon: 'fingerprint' }, { value: 'password', label: t('Password'), icon: 'key' }]}
-      value={how} onChange={setHow} />
+  const ways = [
+    ...(webauthnOK() ? [{ value: 'passkey', label: t('Passkey'), icon: 'fingerprint' }] : []),
+    ...(pwOn ? [{ value: 'password', label: t('Password'), icon: 'key' }] : []),
+    ...(phOn ? [{ value: 'phone', label: t('Phone & PIN'), icon: 'phoneScreen' }] : []),
+  ]
+  const choose = ways.length > 1 && <>
+    <Segmented options={ways} value={how} onChange={setHow} />
     <div style={{ height: 12 }} />
+  </>
+  if (phOn && how === 'phone') return <>
+    <h3>{t('Create your profile')}</h3>
+    {choose}
+    <div className="muted small" style={{ marginBottom: 14 }}>{t('Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.')}</div>
+    <PhoneRegisterForm close={close} inviteOnly={inviteOnly} name={name} setName={setName} code={code} setCode={setCode} />
   </>
   if (pwOn && how === 'password') return <>
     <h3>{t('Create your profile')}</h3>
@@ -70,6 +82,7 @@ export default function Login() {
   const config = useStore(s => s.config)
   const canGuest = guestAllowed(config)
   const pwOn = passwordOn(config)
+  const phOn = phoneOn(config)
   const register = () => useUI.getState().openSheet(close => <RegisterSheet close={close} />)
   const signIn = async () => {
     try { const u = await passkeyLogin(); setUser(u, { adopt: true }); await adoptProfile(askAddDeviceData); useUI.getState().toast(t('Welcome back, {0}', u.name)) }
@@ -104,17 +117,25 @@ export default function Login() {
         <Button variant="primary" icon="fingerprint" onClick={signIn}>{t('Sign in with passkey')}</Button>
         <div style={{ height: 10 }} />
         {pwOn && <><Button icon="key" onClick={() => openPasswordSignIn()}>{t('Sign in with password')}</Button><div style={{ height: 10 }} /></>}
+        {phOn && <><Button icon="phoneScreen" onClick={openPhoneSignIn}>{t('Sign in with phone number')}</Button><div style={{ height: 10 }} /></>}
         <Button icon="plusCircle" onClick={register}>{t('Create new profile')}</Button>
         {/* Already signed in on another device: a code from there gives this one a passkey of
             its own (#95), instead of a new, empty profile. */}
         <div style={{ height: 10 }} />
         <Button variant="ghost" className="dim" icon="qr" onClick={openDeviceLinkRedeem}>{t('Use a code from your other device')}</Button>
         {canGuest && <div style={{ height: 4 }} />}
+      </> : phOn && !pwOn ? <>
+        <div className="card small muted" style={{ textAlign: 'start', marginBottom: 14 }}>{t("This browser doesn't support passkeys. Sign in with your phone number and PIN instead.")}</div>
+        <Button variant="primary" icon="phoneScreen" onClick={openPhoneSignIn}>{t('Sign in with phone number')}</Button>
+        <div style={{ height: 10 }} />
+        <Button icon="plusCircle" onClick={register}>{t('Create new profile')}</Button>
+        {canGuest && <div style={{ height: 10 }} />}
       </> : pwOn ? <>
         {/* Plain http on a LAN address, or a browser without passkey support: the password is
             the way in, and the only way to create a profile from here. */}
         <div className="card small muted" style={{ textAlign: 'start', marginBottom: 14 }}>{t("This browser doesn't support passkeys. Sign in with your name and password instead.")}</div>
         <Button variant="primary" icon="key" onClick={() => openPasswordSignIn()}>{t('Sign in with password')}</Button>
+        {phOn && <><div style={{ height: 10 }} /><Button icon="phoneScreen" onClick={openPhoneSignIn}>{t('Sign in with phone number')}</Button></>}
         <div style={{ height: 10 }} />
         <Button icon="plusCircle" onClick={register}>{t('Create new profile')}</Button>
         {canGuest && <div style={{ height: 10 }} />}

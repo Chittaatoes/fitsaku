@@ -53,5 +53,5 @@ describe('a folder that would be published', () => {
     const dist = path.join(ROOT, 'frontend', 'dist')
     if (!fs.existsSync(dist)) return
     expect(auditDir(dist, restrictedHashes(ROOT))).toEqual([])
-  })
+  }, 120000)      // hashes every restricted file present in a full checkout (hundreds of MB)
 })

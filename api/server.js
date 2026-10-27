@@ -39,6 +39,7 @@ import { atomicWrite as durableWrite } from './durable.js';
 import { excusedOn, nudgeFor, nudgeWindowOpen, toneOf } from './nudge.js';
 import { poolFromEnv, openPgStore } from './pg-store.js';
 import { rt } from './runtime-store.js';
+import { normalizePhone, defaultCountry, pinProblem, pinSecret, pinLockSeconds } from './phone-pin.js';
 
 const PORT = +(process.env.PORT || 3000);
 const DATA = process.env.DATA_DIR || '/data';
@@ -75,6 +76,9 @@ const ALLOW_GUEST = !/^(0|false|no|off)$/i.test(process.env.ALLOW_GUEST || '');
 // every account that opts in, so an instance has to ask for it. While it is off every password
 // route answers 404 and the app shows none of it; hashes already stored stay where they are.
 const PASSWORD_LOGIN = /^(1|true|yes|on)$/i.test(process.env.PASSWORD_LOGIN || '');
+// Phone number + 4-digit PIN sign-in (phone-pin.js). Off unless asked for; the signup rules (INVITE_ONLY ...) apply to it too.
+const PHONE_LOGIN = /^(1|true|yes|on)$/i.test(process.env.PHONE_LOGIN || '');
+const PHONE_CC = defaultCountry(process.env);
 // The language the sign-in screen, and every profile that never picked one, starts in (#303) —
 // for an instance whose people share a language. Only a tag's shape is checked here; the app
 // matches it against the languages it has and ignores one it does not know. Unset, it is left
@@ -857,6 +861,7 @@ const PASSKEY_ROUTES = new Set([
 // device code in the body is the credential, never a Bearer.
 const SIGN_IN_ROUTES = new Set([
   'POST /api/login/password', 'POST /api/register/password', 'POST /api/login/password-reset',
+  'POST /api/login/phone', 'POST /api/register/phone',
   'POST /api/device-link/options', 'POST /api/device-link/verify'
 ]);
 const originsMatch = (a, b) => a.replace(/\/+$/, '') === b.replace(/\/+$/, '');
@@ -1192,6 +1197,7 @@ setInterval(() => { AUTH_BURST.sweep(); ADDR_FAILS.sweep(); ACCOUNT_FAILS.sweep(
 const THROTTLED = {
   'POST /api/login/password': 'password', 'POST /api/login/password-reset': 'password',
   'POST /api/register/password': 'signup',
+  'POST /api/login/phone': 'password', 'POST /api/register/phone': 'signup', 'POST /api/account/pin': 'password',
   'POST /api/account/password': 'password', 'DELETE /api/account/password': null,
   // Setting an e-mail only spends the budget and asks the address's e-mail pause; an address
   // already in use counts against it (see POST /api/account/email).
@@ -1497,6 +1503,138 @@ function removeAccount(u) {
   try { MEDIA.removeUser(u.id); } catch (e) { console.error('media: could not remove uploads of', u.id, e.message); }
   saveDb();
 }
+
+/* ---------- phone number + PIN ---------- */
+const hasPin = u => !!(u && u.pin && typeof u.pin.h === 'string');
+const phoneHolder = n => db.users.find(u => u.phone === n) || null;
+const PIN_WRONG = { error: 'wrong phone number or PIN', code: 'bad-credentials' };
+const PIN_ERRORS = {
+  'phone-invalid': 'enter a valid phone number',
+  'pin-format': 'the PIN is 4 digits',
+  'pin-weak': 'this PIN is too easy to guess'
+};
+// A wrong PIN counted on the account record itself, so the pause survives a restart.
+function noteWrongPin(rec) {
+  rec.n = (rec.n || 0) + 1;
+  const lock = pinLockSeconds(rec.n);
+  if (lock) rec.until = Date.now() + lock * 1000;
+  saveDb();
+}
+const phoneRoutes = {
+  'POST /api/login/phone': async (req, res) => {
+    const body = await readBody(req);
+    const phone = normalizePhone(body.phone, PHONE_CC);
+    const pin = typeof body.pin === 'string' ? body.pin : '';
+    if (!phone || !/^\d{4}$/.test(pin)) return json(res, 400, { error: 'phone number and 4-digit PIN required', code: 'missing' });
+    const user = phoneHolder(phone);
+    // A known account is paused by its own persistent counter; an unknown number by an in-memory one
+    // that behaves the same way, so a pause does not tell the two apart.
+    const key = user ? 'pin:' + user.id : 'pin:phone:' + phone;
+    const rec = hasPin(user) ? user.pin : null;
+    const lockedFor = rec && rec.until > Date.now() ? Math.ceil((rec.until - Date.now()) / 1000) : 0;
+    if (lockedFor) { audit(req, 'auth.password.locked', { ok: false, user }); return tooMany(res, lockedFor); }
+    const check = passwordAttempt(req, res, key);
+    if (!check) return;
+    const ok = await check.verify(user ? pinSecret(SECRET, user.id, pin) : pin, rec?.h);
+    if (!ok) {
+      check.failed(user, 'bad-pin', 'unknown-phone');
+      if (rec) noteWrongPin(rec);
+      return json(res, 401, PIN_WRONG);
+    }
+    // Right for the record read before the await; a PIN changed or removed since gets nothing.
+    if (!hasPin(user) || user.pin !== rec) { check.void(); return json(res, 401, PIN_WRONG); }
+    if (user.disabled) {
+      check.void();
+      audit(req, 'auth.password.fail', { ok: false, user, msg: 'account-disabled' });
+      return json(res, 403, { error: 'this account has been disabled', code: 'disabled' });
+    }
+    check.ok();
+    if (rec.n || rec.until) { rec.n = 0; rec.until = 0; saveDb(); }
+    audit(req, 'auth.password.ok', { user, msg: 'phone' });
+    json(res, 200, { user: publicUser(user) }, { 'Set-Cookie': sessionCookie(user) });
+  },
+
+  // Same invite rules as the other ways to register (INVITE_ONLY, the bootstrap secret in the code field).
+  'POST /api/register/phone': async (req, res) => {
+    const body = await readBody(req);
+    const name = text(body.name).trim().slice(0, 40);
+    if (!name) return json(res, 400, { error: 'name required', code: 'missing' });
+    const phone = normalizePhone(body.phone, PHONE_CC);
+    if (!phone) return json(res, 400, { error: PIN_ERRORS['phone-invalid'], code: 'phone-invalid' });
+    const pinBad = pinProblem(typeof body.pin === 'string' ? body.pin : '');
+    if (pinBad) return json(res, 400, { error: PIN_ERRORS[pinBad], code: pinBad });
+    const code = text(body.code).trim().toUpperCase();
+    const invite = () => db.invites.find(i => i.code === code && !i.usedBy && !i.revoked);
+    if (INVITE_ONLY && addressPaused(req, res, 'signup')) return;
+    const boot = bootstrapMatches(text(body.bootstrap || body.code));
+    if (INVITE_ONLY && !boot && !invite()) {
+      audit(req, 'auth.register.denied', { ok: false, name, msg: 'invite-rejected' });
+      strikeAddress(req, 'signup');
+      return json(res, 403, { error: 'a valid invite code is required', code: 'invite' });
+    }
+    if (addressPaused(req, res, 'email')) return;
+    const nameUsed = () => json(res, 409, { error: 'another profile already signs in with this name', code: 'name-taken' });
+    if (nameTaken(name)) return nameUsed();
+    const uid = crypto.randomBytes(12).toString('base64url');
+    const h = await hashPassword(pinSecret(SECRET, uid, body.pin));
+    let inv = null;
+    if (INVITE_ONLY && !boot) {
+      inv = invite();
+      if (!inv) {
+        audit(req, 'auth.register.fail', { ok: false, name, msg: 'invite-invalid' });
+        return json(res, 403, { error: 'invite code is no longer valid, ask for a new one', code: 'invite' });
+      }
+    }
+    // No await from here to the push: nothing can take the name or the number in between.
+    if (nameTaken(name)) return nameUsed();
+    if (phoneHolder(phone)) {
+      strikeAddress(req, 'email');
+      audit(req, 'auth.register.fail', { ok: false, name, msg: 'phone-taken' });
+      return json(res, 409, { error: 'another profile already uses this phone number', code: 'phone-taken' });
+    }
+    const created = new Date().toISOString();
+    const user = { id: uid, name, created, phone, pin: { h, set: created, n: 0, until: 0 } };
+    if (inv) { user.invitedBy = inv.code; inv.usedBy = user.id; inv.usedAt = created; }
+    if (boot && !claimBootstrap(req, user)) return json(res, 403, { error: 'bootstrap is closed', code: 'invite' });
+    claimFirstAdmin(req, user);
+    db.users.push(user);
+    saveDb();
+    audit(req, 'auth.register.ok', { user, msg: inv ? inv.code + ' · phone' : 'phone' });
+    json(res, 200, { user: publicUser(user) }, { 'Set-Cookie': sessionCookie(user) });
+  },
+
+  // Change the PIN: the current one is the proof (a session alone may be a cookie someone walked off with).
+  // Ends every other session of the account, like a new password does.
+  'POST /api/account/pin': async (req, res) => {
+    const user = readSession(req);
+    if (!user) return json(res, 401, { error: 'not signed in' });
+    if (!hasPin(user)) return json(res, 400, { error: 'this account has no PIN', code: 'no-pin' });
+    const body = await readBody(req);
+    const pinBad = pinProblem(typeof body.pin === 'string' ? body.pin : '');
+    if (pinBad) return json(res, 400, { error: PIN_ERRORS[pinBad], code: pinBad });
+    const rec = user.pin;
+    const lockedFor = rec.until > Date.now() ? Math.ceil((rec.until - Date.now()) / 1000) : 0;
+    if (lockedFor) return tooMany(res, lockedFor);
+    const check = passwordAttempt(req, res, 'pin:' + user.id);
+    if (!check) return;
+    const cur = typeof body.current === 'string' ? body.current : '';
+    if (!(await check.verify(pinSecret(SECRET, user.id, cur), rec.h))) {
+      check.failed(user, 'bad-pin', 'unknown-phone', { ev: 'auth.password.fail', act: 'pin-change' });
+      noteWrongPin(rec);
+      return json(res, 401, { error: 'the current PIN is not right', code: 'current-wrong' });
+    }
+    check.ok();
+    const h = await hashPassword(pinSecret(SECRET, user.id, body.pin));
+    if (user.pin !== rec) return json(res, 409, { error: 'the PIN changed meanwhile', code: 'conflict' });
+    user.pin = { h, set: new Date().toISOString(), n: 0, until: 0 };
+    user.sv = sessionVersion(user) + 1;
+    for (const [k, v] of pairings) if (v.uid === user.id) pairings.delete(k);
+    dropDeviceLinks(db, user.id);
+    saveDb();
+    audit(req, 'auth.password.change', { user, msg: 'pin' });
+    json(res, 200, { ok: true }, { 'Set-Cookie': sessionCookie(user) });
+  }
+};
 
 const passwordRoutes = {
   'POST /api/login/password': async (req, res) => {
@@ -2243,6 +2381,7 @@ const routes = {
       invite_only: INVITE_ONLY, allow_guest: ALLOW_GUEST,
       // Only when on, so an instance without passwords answers exactly as it did before (#118).
       ...(PASSWORD_LOGIN ? { password_login: true } : {}),
+      ...(PHONE_LOGIN ? { phone_login: true } : {}),
       // Public: the sign-in screen is the first thing that reads it.
       ...(DEFAULT_LANG ? { default_lang: DEFAULT_LANG } : {}),
       // Public like the two flags above: the caps are not a secret, and the absence of the
@@ -2514,6 +2653,7 @@ const routes = {
 
   // Absent entirely while PASSWORD_LOGIN is off, so each of them is a plain 404.
   ...(PASSWORD_LOGIN ? passwordRoutes : {}),
+  ...(PHONE_LOGIN ? phoneRoutes : {}),
 
   // Always there: more passkeys and device links need nothing an instance has to switch on.
   ...passkeyRoutes,

@@ -2602,4 +2602,18 @@ export default {
   "Log weight": "वज़न दर्ज करें",
   "Quick start": "झटपट शुरू करें",
   "Became owner with the one-time bootstrap secret": "एक-बार के बूटस्ट्रैप सीक्रेट से मालिक बना",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "कोई अन्य प्रोफ़ाइल यह फ़ोन नंबर पहले से इस्तेमाल कर रही है।",
+  "Enter a valid phone number and a 4-digit PIN.": "एक मान्य फ़ोन नंबर और 4 अंकों का PIN दर्ज करें।",
+  "PIN (4 digits)": "PIN (4 अंक)",
+  "Phone & PIN": "फ़ोन और PIN",
+  "Phone number": "फ़ोन नंबर",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "एक नाम, फ़ोन नंबर और 4 अंकों का PIN चुनें। आप आख़िरी दो से साइन इन करते हैं। नंबर सत्यापित नहीं होता: कोई SMS नहीं भेजा जाता।",
+  "Repeat the PIN": "PIN दोबारा दर्ज करें",
+  "Sign in with phone number": "फ़ोन नंबर से साइन इन करें",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "यह PIN अनुमान लगाने में बहुत आसान है। 1234, 0000 जैसे PIN से बचें।",
+  "The two PINs are not the same.": "दोनों PIN एक जैसे नहीं हैं।",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "यह ब्राउज़र पासकी को सपोर्ट नहीं करता। इसके बजाय अपने फ़ोन नंबर और PIN से साइन इन करें।",
+  "Use your phone number and your 4-digit PIN.": "अपना फ़ोन नंबर और 4 अंकों का PIN इस्तेमाल करें।",
+  "Wrong phone number or PIN.": "फ़ोन नंबर या PIN ग़लत है।",
 }

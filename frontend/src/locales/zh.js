@@ -2602,4 +2602,18 @@ export default {
   "Log weight": "记录体重",
   "Quick start": "快速开始",
   "Became owner with the one-time bootstrap secret": "以一次性引导密钥成为所有者",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "另一个资料已在使用这个手机号。",
+  "Enter a valid phone number and a 4-digit PIN.": "请输入有效的手机号和 4 位数字 PIN。",
+  "PIN (4 digits)": "PIN（4 位数字）",
+  "Phone & PIN": "手机号与 PIN",
+  "Phone number": "手机号",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "选择名称、手机号和 4 位数字 PIN。用后两者登录。号码不会验证：不会发送短信。",
+  "Repeat the PIN": "再次输入 PIN",
+  "Sign in with phone number": "使用手机号登录",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "这个 PIN 太容易猜到。请避免 1234、0000 等。",
+  "The two PINs are not the same.": "两次输入的 PIN 不一致。",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "此浏览器不支持通行密钥。请改用手机号和 PIN 登录。",
+  "Use your phone number and your 4-digit PIN.": "请使用你的手机号和 4 位数字 PIN。",
+  "Wrong phone number or PIN.": "手机号或 PIN 错误。",
 }

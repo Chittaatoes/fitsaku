@@ -2602,4 +2602,18 @@ export default {
   "Log weight": "Zapisz wagę",
   "Quick start": "Szybki start",
   "Became owner with the one-time bootstrap secret": "Został właścicielem dzięki jednorazowemu sekretowi startowemu",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "Inny profil już używa tego numeru telefonu.",
+  "Enter a valid phone number and a 4-digit PIN.": "Podaj prawidłowy numer telefonu i 4-cyfrowy PIN.",
+  "PIN (4 digits)": "PIN (4 cyfry)",
+  "Phone & PIN": "Telefon i PIN",
+  "Phone number": "Numer telefonu",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "Wybierz nazwę, numer telefonu i 4-cyfrowy PIN. Logujesz się dwoma ostatnimi. Numer nie jest weryfikowany: nie wysyłamy SMS-a.",
+  "Repeat the PIN": "Powtórz PIN",
+  "Sign in with phone number": "Zaloguj się numerem telefonu",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "Ten PIN jest zbyt łatwy do odgadnięcia. Unikaj 1234, 0000 i podobnych.",
+  "The two PINs are not the same.": "Oba kody PIN nie są takie same.",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Ta przeglądarka nie obsługuje kluczy dostępu. Zaloguj się numerem telefonu i PIN-em.",
+  "Use your phone number and your 4-digit PIN.": "Użyj numeru telefonu i 4-cyfrowego PIN-u.",
+  "Wrong phone number or PIN.": "Błędny numer telefonu lub PIN.",
 }

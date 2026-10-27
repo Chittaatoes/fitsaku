@@ -2602,4 +2602,18 @@ export default {
   "Log weight": "체중 기록",
   "Quick start": "빠른 시작",
   "Became owner with the one-time bootstrap secret": "일회용 부트스트랩 비밀로 소유자가 됨",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "다른 프로필이 이미 이 전화번호를 사용하고 있습니다.",
+  "Enter a valid phone number and a 4-digit PIN.": "올바른 전화번호와 4자리 PIN을 입력하세요.",
+  "PIN (4 digits)": "PIN (4자리)",
+  "Phone & PIN": "전화번호 및 PIN",
+  "Phone number": "전화번호",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "이름, 전화번호, 4자리 PIN을 정하세요. 마지막 두 가지로 로그인합니다. 번호는 인증하지 않으며 SMS도 보내지 않습니다.",
+  "Repeat the PIN": "PIN 다시 입력",
+  "Sign in with phone number": "전화번호로 로그인",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "이 PIN은 추측하기 너무 쉽습니다. 1234, 0000 같은 번호는 피하세요.",
+  "The two PINs are not the same.": "두 PIN이 같지 않습니다.",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "이 브라우저는 패스키를 지원하지 않습니다. 대신 전화번호와 PIN으로 로그인하세요.",
+  "Use your phone number and your 4-digit PIN.": "전화번호와 4자리 PIN을 사용하세요.",
+  "Wrong phone number or PIN.": "전화번호 또는 PIN이 올바르지 않습니다.",
 }

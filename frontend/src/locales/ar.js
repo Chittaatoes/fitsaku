@@ -2657,4 +2657,18 @@ export default {
   "Log weight": "تسجيل الوزن",
   "Quick start": "بدء سريع",
   "Became owner with the one-time bootstrap secret": "أصبح المالك باستخدام سر التهيئة لمرة واحدة",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "يستخدم ملف شخصي آخر رقم الهاتف هذا.",
+  "Enter a valid phone number and a 4-digit PIN.": "أدخل رقم هاتف صالحًا ورمز PIN من 4 أرقام.",
+  "PIN (4 digits)": "رمز PIN (4 أرقام)",
+  "Phone & PIN": "الهاتف و PIN",
+  "Phone number": "رقم الهاتف",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "اختر اسمًا ورقم هاتف ورمز PIN من 4 أرقام. تسجّل الدخول بالأخيرين. الرقم غير موثّق: لا تُرسل رسالة SMS.",
+  "Repeat the PIN": "أعد إدخال PIN",
+  "Sign in with phone number": "تسجيل الدخول برقم الهاتف",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "رمز PIN هذا سهل التخمين. تجنّب 1234 و 0000 وما شابه.",
+  "The two PINs are not the same.": "رمزا PIN غير متطابقين.",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "هذا المتصفح لا يدعم مفاتيح المرور. سجّل الدخول برقم هاتفك ورمز PIN بدلًا من ذلك.",
+  "Use your phone number and your 4-digit PIN.": "استخدم رقم هاتفك ورمز PIN من 4 أرقام.",
+  "Wrong phone number or PIN.": "رقم الهاتف أو رمز PIN غير صحيح.",
 }

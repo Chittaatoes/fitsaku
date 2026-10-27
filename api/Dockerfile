@@ -53,7 +53,7 @@ RUN npm ci --omit=dev --omit=optional && npm cache clean --force
 
 # Every module server.js imports from the api root has to be named here: the image carries nothing
 # else, and one that is missing only shows at boot, as ERR_MODULE_NOT_FOUND.
-COPY server.js pg-store.js runtime-store.js push-messages.js nudge.js nudge-copy.js verify-error.js password.js rate-limit.js passkeys-store.js device-link.js media.js queue.js sync-stamps.js durable.js spotify.js spotify-vault.js win-acl.js ./
+COPY server.js pg-store.js runtime-store.js phone-pin.js push-messages.js nudge.js nudge-copy.js verify-error.js password.js rate-limit.js passkeys-store.js device-link.js media.js queue.js sync-stamps.js durable.js spotify.js spotify-vault.js win-acl.js ./
 COPY coach ./coach
 COPY migrations ./migrations
 ENV NODE_ENV=production

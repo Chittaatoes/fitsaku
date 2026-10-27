@@ -31,6 +31,8 @@ services:
         value: "1"
       - key: INVITE_ONLY        # explicit; a database deployment is invite-only anyway unless PUBLIC_SIGNUP=1 and an admin exists
         value: "1"
+      - key: PHONE_LOGIN        # phone number + 4-digit PIN sign-in (signup stays invite-only)
+        value: "1"
       - key: BOOTSTRAP_SECRET   # one-time owner bootstrap; delete it after the owner exists (docs/DEPLOYMENT.md)
         sync: false
       - key: MEDIA_UPLOADS      # uploads would live on a disk Render does not keep

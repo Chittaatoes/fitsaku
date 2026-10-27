@@ -2606,4 +2606,18 @@ export default {
   "Log weight": "Записать вес",
   "Quick start": "Быстрый старт",
   "Became owner with the one-time bootstrap secret": "Стал владельцем по одноразовому секрету начальной настройки",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "Другой профиль уже использует этот номер телефона.",
+  "Enter a valid phone number and a 4-digit PIN.": "Введите действительный номер телефона и 4-значный PIN-код.",
+  "PIN (4 digits)": "PIN-код (4 цифры)",
+  "Phone & PIN": "Телефон и PIN",
+  "Phone number": "Номер телефона",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "Выберите имя, номер телефона и 4-значный PIN-код. Входить вы будете по последним двум. Номер не проверяется: SMS не отправляется.",
+  "Repeat the PIN": "Повторите PIN-код",
+  "Sign in with phone number": "Войти по номеру телефона",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "Этот PIN-код слишком легко угадать. Избегайте 1234, 0000 и подобных.",
+  "The two PINs are not the same.": "PIN-коды не совпадают.",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Этот браузер не поддерживает ключи доступа. Войдите по номеру телефона и PIN-коду.",
+  "Use your phone number and your 4-digit PIN.": "Используйте номер телефона и 4-значный PIN-код.",
+  "Wrong phone number or PIN.": "Неверный номер телефона или PIN-код.",
 }

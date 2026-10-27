@@ -2613,4 +2613,18 @@ export default {
   "Log weight": "บันทึกน้ำหนัก",
   "Quick start": "เริ่มเร็ว",
   "Became owner with the one-time bootstrap secret": "กลายเป็นเจ้าของด้วยรหัสลับเริ่มต้นแบบใช้ครั้งเดียว",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "โปรไฟล์อื่นใช้หมายเลขโทรศัพท์นี้อยู่แล้ว",
+  "Enter a valid phone number and a 4-digit PIN.": "ใส่หมายเลขโทรศัพท์ที่ถูกต้องและ PIN 4 หลัก",
+  "PIN (4 digits)": "PIN (4 หลัก)",
+  "Phone & PIN": "โทรศัพท์และ PIN",
+  "Phone number": "หมายเลขโทรศัพท์",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "ตั้งชื่อ หมายเลขโทรศัพท์ และ PIN 4 หลัก คุณเข้าสู่ระบบด้วยสองอย่างหลัง หมายเลขไม่ได้รับการยืนยัน: ไม่มีการส่ง SMS",
+  "Repeat the PIN": "ใส่ PIN อีกครั้ง",
+  "Sign in with phone number": "เข้าสู่ระบบด้วยหมายเลขโทรศัพท์",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "PIN นี้เดาง่ายเกินไป หลีกเลี่ยง 1234, 0000 และแบบเดียวกัน",
+  "The two PINs are not the same.": "PIN ทั้งสองไม่ตรงกัน",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "เบราว์เซอร์นี้ไม่รองรับพาสคีย์ ให้เข้าสู่ระบบด้วยหมายเลขโทรศัพท์และ PIN แทน",
+  "Use your phone number and your 4-digit PIN.": "ใช้หมายเลขโทรศัพท์และ PIN 4 หลักของคุณ",
+  "Wrong phone number or PIN.": "หมายเลขโทรศัพท์หรือ PIN ไม่ถูกต้อง",
 }

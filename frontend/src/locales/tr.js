@@ -2602,4 +2602,18 @@ export default {
   "Log weight": "Kilo kaydet",
   "Quick start": "Hızlı başlat",
   "Became owner with the one-time bootstrap secret": "Tek kullanımlık başlatma sırrıyla sahip oldu",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "Başka bir profil bu telefon numarasını zaten kullanıyor.",
+  "Enter a valid phone number and a 4-digit PIN.": "Geçerli bir telefon numarası ve 4 haneli PIN girin.",
+  "PIN (4 digits)": "PIN (4 hane)",
+  "Phone & PIN": "Telefon ve PIN",
+  "Phone number": "Telefon numarası",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "Bir ad, telefon numarası ve 4 haneli PIN seçin. Son ikisiyle giriş yaparsınız. Numara doğrulanmaz: SMS gönderilmez.",
+  "Repeat the PIN": "PIN’i tekrarlayın",
+  "Sign in with phone number": "Telefon numarasıyla giriş yap",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "Bu PIN tahmin etmesi çok kolay. 1234, 0000 gibilerden kaçının.",
+  "The two PINs are not the same.": "İki PIN aynı değil.",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Bu tarayıcı geçiş anahtarlarını desteklemiyor. Bunun yerine telefon numaranız ve PIN ile giriş yapın.",
+  "Use your phone number and your 4-digit PIN.": "Telefon numaranızı ve 4 haneli PIN’inizi kullanın.",
+  "Wrong phone number or PIN.": "Telefon numarası veya PIN yanlış.",
 }

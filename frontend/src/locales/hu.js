@@ -2605,4 +2605,18 @@ export default {
   "Log weight": "Testsúly rögzítése",
   "Quick start": "Gyorsindítás",
   "Became owner with the one-time bootstrap secret": "Tulajdonos lett az egyszeri indítókulccsal",
+  // --- Phone & PIN sign-in ---
+  "Another profile already uses this phone number.": "Egy másik profil már használja ezt a telefonszámot.",
+  "Enter a valid phone number and a 4-digit PIN.": "Adj meg érvényes telefonszámot és 4 számjegyű PIN-kódot.",
+  "PIN (4 digits)": "PIN (4 számjegy)",
+  "Phone & PIN": "Telefon és PIN",
+  "Phone number": "Telefonszám",
+  "Pick a name, a phone number and a 4-digit PIN. You sign in with the last two. The number is not verified: no SMS is sent.": "Válassz nevet, telefonszámot és 4 számjegyű PIN-kódot. Az utolsó kettővel jelentkezel be. A számot nem ellenőrizzük: nem küldünk SMS-t.",
+  "Repeat the PIN": "PIN megismétlése",
+  "Sign in with phone number": "Bejelentkezés telefonszámmal",
+  "That PIN is too easy to guess. Avoid 1234, 0000 and the like.": "Ez a PIN túl könnyen kitalálható. Kerüld az 1234-et, a 0000-t és hasonlókat.",
+  "The two PINs are not the same.": "A két PIN nem egyezik.",
+  "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Ez a böngésző nem támogatja a hozzáférési kulcsokat. Jelentkezz be inkább telefonszámmal és PIN-kóddal.",
+  "Use your phone number and your 4-digit PIN.": "Használd a telefonszámodat és a 4 számjegyű PIN-kódodat.",
+  "Wrong phone number or PIN.": "Hibás telefonszám vagy PIN.",
 }

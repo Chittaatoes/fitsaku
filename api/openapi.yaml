@@ -253,6 +253,148 @@ paths:
         '503':
           description: The database cannot be reached, or another instance changed the data.
 
+  /api/register/phone:
+    post:
+      tags: [password]
+      operationId: registerPhone
+      summary: Create a profile with a phone number and a 4-digit PIN
+      description: |
+        Only with `PHONE_LOGIN=1`; otherwise a plain 404. Creates the profile and signs it in. The number is
+        folded to E.164 (`0812 3456 7890`, `+62 812-3456-7890` and `6281234567890` are one number; the default
+        country is `PHONE_DEFAULT_COUNTRY`, 62). It is **not verified**: no SMS is sent. The PIN is 4 digits and
+        not a trivial one (`0000`, `1234`, `4321`, ...); it is keyed with the server secret and hashed with scrypt,
+        never stored in the clear. The same invite rules as the other registrations apply (`INVITE_ONLY`, the
+        bootstrap secret in `code`). **Not** CSRF-exempt.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, phone, pin]
+              properties:
+                name: { type: string, maxLength: 40 }
+                phone: { type: string, maxLength: 40 }
+                pin: { type: string, pattern: '^[0-9]{4}$' }
+                code: { type: string, description: Invite code (INVITE_ONLY only). }
+            example: { name: "Ana", phone: "0812 3456 7890", pin: "4827", code: "3F9C21A07B54D688" }
+      responses:
+        '200':
+          description: Registered and signed in. The session cookie is set.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user: { $ref: '#/components/schemas/SessionUser' }
+        '400':
+          description: '`phone-invalid`, `pin-format`, `pin-weak`, or a field is `missing`.'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '403':
+          description: Invite-only and the code is missing, used or revoked.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '409':
+          description: '`phone-taken`: another profile already uses this number.'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /api/login/phone:
+    post:
+      tags: [password]
+      operationId: loginPhone
+      summary: Sign in with a phone number and PIN
+      description: |
+        Only with `PHONE_LOGIN=1`. A 4-digit PIN has 10,000 values, so guessing is limited: five wrong PINs
+        in a row pause the **account** (5 minutes, then 15, then an hour, up to 24 hours), the count is kept
+        on the account record and survives a restart, and each wrong answer also counts against the caller's
+        address. An unknown number is paused the same way, and a wrong PIN and an unknown number get the
+        same `401 bad-credentials`. While an account is paused even the right PIN gets `429` with `Retry-After`.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [phone, pin]
+              properties:
+                phone: { type: string, maxLength: 40 }
+                pin: { type: string, pattern: '^[0-9]{4}$' }
+            example: { phone: "0812 3456 7890", pin: "4827" }
+      responses:
+        '200':
+          description: Signed in. The session cookie is set.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user: { $ref: '#/components/schemas/SessionUser' }
+        '400':
+          description: Number or PIN missing or malformed (`missing`).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '401':
+          description: Wrong phone number or PIN (`bad-credentials`).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '403':
+          description: The account is disabled (`disabled`).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429':
+          description: Paused after repeated failures; `Retry-After` says for how long.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
+  /api/account/pin:
+    post:
+      tags: [password]
+      operationId: changePin
+      summary: Change the PIN
+      description: |
+        Only with `PHONE_LOGIN=1`, for a profile that has a PIN. Needs the session **and** the current PIN
+        (a wrong one counts like a wrong sign-in and is paused the same way). Ends every other session of the
+        account, like a new password; the caller gets a fresh cookie.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [current, pin]
+              properties:
+                current: { type: string, pattern: '^[0-9]{4}$' }
+                pin: { type: string, pattern: '^[0-9]{4}$' }
+      responses:
+        '200':
+          description: Changed. A new session cookie is set.
+        '400':
+          description: '`pin-format`, `pin-weak` or `no-pin` (this account has no PIN).'
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '401':
+          description: Not signed in, or the current PIN is wrong (`current-wrong`).
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+        '429':
+          description: Paused after repeated wrong PINs.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Error' }
+
   /api/config:
     get:
       tags: [meta]
