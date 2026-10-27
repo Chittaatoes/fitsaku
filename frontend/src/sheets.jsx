@@ -9,6 +9,7 @@ import { usesBar, hasBarOverride, isNoBar, barTypeWeight, ownBarDefault, barPick
 import { PLATE_SIZES, pairsOf, ownsPlates, withPlatePairs, withStandardPlates, withLoadKind, loadKindFor, baseWeightFor, dropGrid } from './lib/plates.js'
 import { toScale, rirOf, EFFORT_PRESETS, effortColor } from './lib/effort.js'
 import { beep, vibrate } from './lib/sound.js'
+import { actionSound, playSfx } from './lib/action-sound.js'
 import { t, tn, dateLocale, instrFor, instrTranslated, descFor, exerciseNameFor, exerciseNameClass, getLang, useLang } from './lib/i18n.js'
 import { nav, closeThenNav, navToWorkout } from './lib/nav.js'
 import { buildStarterPlan, starterPlanDays, starterPlanOptions } from './lib/starter.js'
@@ -1159,6 +1160,7 @@ function AddToRoutine({ ex, close }) {
       })
       const r = isNew ? S().routines[S().routines.length - 1] : st.routines.find(x => x.id === rid)
       toast(t('“{0}” added to {1}', exerciseNameText(ex), r ? r.name : t('routine')))
+      actionSound('add')
       if (isNew && r) nav('/plan/r/' + r.id)
     }, null, isNew ? null : st.routines.find(x => x.id === rid))
   }
@@ -1327,6 +1329,7 @@ export function deleteCustomEx(ex, afterDelete) {
         s.favEx = (s.favEx || []).filter(id => id !== ex.id)
       })
       toast(t('Exercise deleted'))
+      actionSound('delete')
       afterDelete && afterDelete()
     }
   })
@@ -2769,7 +2772,7 @@ function WorkoutDetail({ w, close }) {
     <div style={{ height: 10 }} />
     {/* Matched the way the edits above are, not by id: a workout from before ids has none, and
         filtering on `x.id !== undefined` took every other one of them with it. */}
-    <Button variant="danger" onClick={() => confirmSheet({ title: t('Delete workout?'), message: t('This removes it from your history for good.') + mediaGoesToo(S().workouts.find(x => sameWorkout(x, w))), confirmText: t('Delete'), danger: true, onConfirm: () => { update(s => { s.workouts = s.workouts.filter(x => !sameWorkout(x, w)) }); close(); toast(t('Workout deleted')) } })}>{t('Delete workout')}</Button>
+    <Button variant="danger" onClick={() => confirmSheet({ title: t('Delete workout?'), message: t('This removes it from your history for good.') + mediaGoesToo(S().workouts.find(x => sameWorkout(x, w))), confirmText: t('Delete'), danger: true, onConfirm: () => { update(s => { s.workouts = s.workouts.filter(x => !sameWorkout(x, w)) }); close(); toast(t('Workout deleted')); actionSound('delete') } })}>{t('Delete workout')}</Button>
   </>
 }
 // "Share as image" (#453): the card lib/workout-card.js lays out, painted in the theme and accent
@@ -2798,7 +2801,25 @@ function ShareWorkoutImage({ w, nameOf, close }) {
     return () => { alive = false }
   }, [model, withMap, st.body])
   useEffect(() => () => { if (shown.current) URL.revokeObjectURL(shown.current) }, [])
-  const name = 'opengym-workout-' + (workoutDay(w) || todayISO()) + '.png'
+  const name = shareFileName(w)
+  const summary = () => t('I just finished “{0}” with FitSaku 💪', w.name || t('my workout')) + '\n' +
+    [t('Duration') + ' ' + fmtDur(w.end - w.start), t('Volume') + ' ' + fmtVol(w.vol, st.unit), t('Sets') + ' ' + setsDone(w)].join(' · ')
+  // WhatsApp: the picture goes through the system share sheet where the browser can send files (then WhatsApp is one
+  // of its choices); everywhere else its link opens with the message text and the picture is saved to attach.
+  const shareWhatsApp = async () => {
+    const file = typeof File === 'function' && img?.blob ? new File([img.blob], name, { type: 'image/png' }) : null
+    if (!MOBILE && file && navigator.canShare?.({ files: [file] })) {
+      try { await navigator.share({ files: [file], text: summary(), title: w.name || 'FitSaku' }) } catch (e) { /* dismissed */ }
+      return
+    }
+    if (img?.blob) await saveImage(img.blob, name)
+    window.open('https://wa.me/?text=' + encodeURIComponent(summary()), '_blank', 'noopener')
+  }
+  const saveThenOpen = async (scheme, web) => {
+    if (img?.blob) await saveImage(img.blob, name)
+    toast(t('Saved. Pick it from your photos.'))
+    openApp(scheme, web)
+  }
   const share = async () => {
     setBusy(true)
     await shareImage(img.blob, name, w.name || 'FitSaku')
@@ -2819,6 +2840,13 @@ function ShareWorkoutImage({ w, nameOf, close }) {
       </Row>
     </div>}
     <Button variant="primary" icon="share" disabled={!img?.blob || busy} onClick={share}>{t('Share')}</Button>
+    <div className="share-apps" role="group" aria-label={t('Share')}>
+      <button type="button" className="share-app wa" disabled={!img?.blob} onClick={shareWhatsApp}><span className="ic" aria-hidden="true">W</span>WhatsApp</button>
+      <button type="button" className="share-app ig" disabled={!img?.blob} onClick={() => saveThenOpen('instagram://story-camera', 'https://www.instagram.com/')}><span className="ic" aria-hidden="true">I</span>Instagram</button>
+      <button type="button" className="share-app tt" disabled={!img?.blob} onClick={() => saveThenOpen('tiktok://', 'https://www.tiktok.com/')}><span className="ic" aria-hidden="true">T</span>TikTok</button>
+      <button type="button" className="share-app sv" disabled={!img?.blob} onClick={async () => { await saveImage(img.blob, name) }}><span className="ic" aria-hidden="true"><Icon name="image" /></span>{t('Save as photo')}</button>
+    </div>
+    <div className="dim small" style={{ marginTop: 8 }}>{t('Instagram and TikTok open once the image is saved; pick it from your photos.')}</div>
   </>
 }
 async function workoutCardImage(model, { map, body }) {
@@ -3133,6 +3161,7 @@ function AddRoutineToSession({ close }) {
     })
     close()
     toast(t('{0} added ({1})', r.name, exCount(r.ex.length)))
+    actionSound('add')
   }
   return <>
     <h3>{t('Add routine')}</h3>
@@ -3389,6 +3418,7 @@ export function saveWorkoutEdits(onExit = () => nav('/history')) {
         useUI.getState().stopWork()
         useStore.getState().autoBackupNow()
         toast(t('Workout deleted'))
+        actionSound('delete')
         onExit()
       },
     })
@@ -3535,8 +3565,43 @@ function FinishSummary({ w, prs, e1prs = [], close }) {
           what is added here goes straight onto its record. */}
       <div style={{ textAlign: 'start' }}><WorkoutMediaSection w={w} hint /></div>
     </div>
-    <div className="fin-foot"><Button variant="primary" onClick={() => closeThenNav(close, '/home')}>{t('Done')}</Button></div>
+    <div className="fin-foot">
+      {/* Share the result before leaving: the card (previewed, with the WhatsApp / Instagram / TikTok shortcuts) or
+          straight to a photo. The workout is already saved either way. */}
+      <div className="fin-share">
+        <button type="button" className="fin-sbtn" onClick={() => openShareWorkout(w, nm)}><Icon name="share" /><span>{t('Share')}</span></button>
+        <button type="button" className="fin-sbtn" onClick={() => saveWorkoutPhoto(w, nm, st)}><Icon name="image" /><span>{t('Save as photo')}</span></button>
+      </div>
+      <Button variant="primary" onClick={() => closeThenNav(close, '/home')}>{t('Done')}</Button>
+    </div>
   </div>
+}
+// Opens the share sheet for a saved workout from the finish screen (the same sheet the history uses).
+function openShareWorkout(w, nameOf) { ui().openSheet(close => <ShareWorkoutImage w={w} nameOf={nameOf} close={close} />) }
+// "Save as photo": the card is drawn and handed over as a PNG: a download in a browser, the share sheet in the
+// phone app (where Save Image is one tap).
+async function saveWorkoutPhoto(w, nameOf, st) {
+  try {
+    const model = workoutCardModel(w, { unit: st.unit, nameOf })
+    const blob = await workoutCardImage(model, { map: st.shareMap !== false, body: st.body })
+    if (!blob) { toast(t('Could not create the image')); return }
+    await saveImage(blob, shareFileName(w))
+  } catch (e) { toast(t('Could not create the image')) }
+}
+const shareFileName = w => 'fitsaku-workout-' + (workoutDay(w) || todayISO()) + '.png'
+// A download in a browser, the OS share sheet in the phone app; true when something was saved or handed over.
+async function saveImage(blob, name) {
+  if (MOBILE) { try { await shareExportBlob(blob, name) } catch (e) { /* share sheet dismissed */ } return true }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove()
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000)
+  toast(t('Image saved'))
+  return true
+}
+// Tries the app's own address, and the website if nothing took the page over (the app is not installed, a desktop).
+function openApp(scheme, web) {
+  const t0 = Date.now()
+  try { window.location.href = scheme } catch (e) { /* blocked */ }
+  setTimeout(() => { if (!document.hidden && Date.now() - t0 < 2500) window.open(web, '_blank', 'noopener') }, 1200)
 }
 export function finishWorkout() {
   if (S().active?.editingWorkoutId) { saveWorkoutEdits(); return }
@@ -3628,6 +3693,7 @@ function doFinishWorkout() {
   // on Discard: its bar is app-wide and would chime over the summary, and its callback writes
   // into s.active, which is gone. What it held is not logged, like any set left unchecked.
   useUI.getState().stopWork()
-  beep(snd(), 880, 0.15); beep(snd(), 1100, 0.15, 0.18); beep(snd(), 1320, 0.3, 0.36)
+  // The finish fanfare follows Sounds, like the three beeps it replaces: a rising run and a bell, much louder.
+  playSfx(snd(), 'finish')
   ui().openSheet(close => <FinishSummary w={shown} prs={prs} e1prs={e1prs} close={close} />, { kind: 'center', locked: true })
 }

@@ -2616,4 +2616,15 @@ export default {
   // --- HD sharpening ---
   "HD sharpening": "HD-різкість",
   "Makes the exercise pictures and animations crisper and clearer.": "Робить зображення й анімації вправ чіткішими та яснішими.",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "Короткий звук, коли ви додаєте або видаляєте вправу чи тренування.",
+  "Action sounds": "Звуки дій",
+  "I just finished “{0}” with FitSaku 💪": "Я щойно завершив(ла) «{0}» з FitSaku 💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "Instagram і TikTok відкриються після збереження зображення; виберіть його у фото.",
+  "Loud": "Гучно",
+  "Normal": "Звичайно",
+  "Save as photo": "Зберегти як фото",
+  "Saved. Pick it from your photos.": "Збережено. Виберіть його у фото.",
+  "Volume boost": "Підсилення гучності",
+  "my workout": "моє тренування",
 }

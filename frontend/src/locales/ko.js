@@ -2619,4 +2619,15 @@ export default {
   // --- HD sharpening ---
   "HD sharpening": "HD 선명화",
   "Makes the exercise pictures and animations crisper and clearer.": "운동 이미지와 애니메이션을 더 또렷하고 선명하게 만듭니다.",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "운동이나 워크아웃을 추가하거나 삭제할 때 나는 짧은 소리입니다.",
+  "Action sounds": "동작 소리",
+  "I just finished “{0}” with FitSaku 💪": "FitSaku로 “{0}”을(를) 방금 마쳤어요 💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "이미지를 저장한 뒤 Instagram과 TikTok이 열립니다. 사진에서 선택하세요.",
+  "Loud": "크게",
+  "Normal": "보통",
+  "Save as photo": "사진으로 저장",
+  "Saved. Pick it from your photos.": "저장했습니다. 사진에서 선택하세요.",
+  "Volume boost": "볼륨 부스트",
+  "my workout": "내 운동",
 }

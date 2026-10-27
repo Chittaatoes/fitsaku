@@ -2674,4 +2674,15 @@ export default {
   // --- HD sharpening ---
   "HD sharpening": "تحسين الوضوح HD",
   "Makes the exercise pictures and animations crisper and clearer.": "يجعل صور التمارين ورسومها المتحركة أكثر حدة ووضوحًا.",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "صوت قصير عند إضافة أو حذف تمرين أو جلسة.",
+  "Action sounds": "أصوات الإجراءات",
+  "I just finished “{0}” with FitSaku 💪": "أنهيت للتو «{0}» مع FitSaku 💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "يفتح Instagram و TikTok بعد حفظ الصورة؛ اخترها من صورك.",
+  "Loud": "عالٍ",
+  "Normal": "عادي",
+  "Save as photo": "حفظ كصورة",
+  "Saved. Pick it from your photos.": "تم الحفظ. اخترها من صورك.",
+  "Volume boost": "رفع الصوت",
+  "my workout": "تمريني",
 }

@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { useStore } from '../store/useStore.js'
 import { useUI } from '../store/useUI.js'
+import { actionSound } from '../lib/action-sound.js'
 import { exOr } from '../lib/exercises.js'
 import { activeProfile, exAvailable } from '../lib/equipment.js'
 import { uid, exerciseNameText } from '../lib/format.js'
@@ -342,6 +343,7 @@ export function removeRoutineExercise(routineId, i) {
   const now = useStore.getState().S.routines.find(x => x.id === routineId)
   const after = JSON.stringify(now?.ex)
   const del = Number(now?._f?.ex) || 0
+  actionSound('delete')
   useUI.getState().toast(t('“{0}” left the routine.', exerciseNameText(exOr(slot.id))),
     { action: t('Undo'), onAction: () => undoRemoveRoutineExercise({ routineId, i, before, after, base, del }) })
   return true
@@ -440,6 +442,7 @@ export default function RoutineEdit() {
     if (quick) {
       edit(x => x.push({ id: ex.id, ...defaultConfig(ex.id) }))
       toast(t('“{0}” added to {1}', exerciseNameText(ex), r.name))
+      actionSound('add')
     } else {
       exConfigSheet(ex, null, cfg => edit(x => { x.push({ id: ex.id, ...cfg }) }), null, r, null, null, undefined, { backups: true })
     }
@@ -594,6 +597,7 @@ export default function RoutineEdit() {
       title: t('Delete routine?'), message: t('“{0}” and its exercises will be removed.', r.name), confirmText: t('Delete'), danger: true,
       onConfirm: () => {
         update(s => { deleteRoutine(s, id) })
+        actionSound('delete')
         nav('/plan')
       }
     })}>{t('Delete routine')}</Button>

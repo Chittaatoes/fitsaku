@@ -2619,4 +2619,15 @@ export default {
   // --- HD sharpening ---
   "HD sharpening": "HD 锐化",
   "Makes the exercise pictures and animations crisper and clearer.": "让动作图片和动画更清晰锐利。",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "添加或删除动作或训练时播放的短音效。",
+  "Action sounds": "操作音效",
+  "I just finished “{0}” with FitSaku 💪": "我刚用 FitSaku 完成了“{0}”💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "图片保存后会打开 Instagram 和 TikTok；请从相册中选取。",
+  "Loud": "大声",
+  "Normal": "正常",
+  "Save as photo": "保存为照片",
+  "Saved. Pick it from your photos.": "已保存。请从相册中选取。",
+  "Volume boost": "音量增强",
+  "my workout": "我的训练",
 }

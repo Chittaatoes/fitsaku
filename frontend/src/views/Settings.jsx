@@ -17,7 +17,7 @@ import { figureOf, BUILTIN_MEDIA } from '../lib/exercises.js'
 
 // Where the source of this build is offered (AGPL §13). Set VITE_SOURCE_URL to the fork's address.
 const SOURCE_URL = import.meta.env?.VITE_SOURCE_URL || 'https://github.com/DuarteSantos8/openGym'
-import { unlock, chime, playOnSilentSupported, vibrateSupported, appleTouchDevice } from '../lib/sound.js'
+import { unlock, chime, sfx, setLoudness, playOnSilentSupported, vibrateSupported, appleTouchDevice } from '../lib/sound.js'
 import { REST_SOUND_IDS, restSoundOf } from '../lib/rest-sounds.js'
 import { scheduleModeOf, chooseFixedWeek, chooseRotation } from '../lib/rotation.js'
 import { queueOf } from '../lib/queue.js'
@@ -640,6 +640,20 @@ export default function Settings({ page = null, find = null, via = null, entryKe
                 before the next set check can already sound (iOS, #152). */}
             <Switch checked={!!S.sound} onChange={v => { if (v) unlock(true); update(s => { s.sound = v }) }} />
           </Row>
+          {/* How loud: every tone is lifted and then limited (lib/sound.js), so Loud is the default and Max is for a noisy
+              gym. Each tap plays the end-of-rest chime at that level so the choice can be heard. */}
+          {S.sound && <Row icon="speaker" iconTint="var(--pink)" title={t('Volume boost')}>
+            <Segmented className="seg-inline"
+              options={[{ value: 'normal', label: t('Normal') }, { value: 'loud', label: t('Loud') }, { value: 'max', label: t('Max') }]}
+              value={S.soundLevel === 'normal' || S.soundLevel === 'max' ? S.soundLevel : 'loud'}
+              onChange={v => { setLoudness(v); unlock(true); chime(true, restSoundOf(S)); update(s => { s.soundLevel = v }) }} />
+          </Row>}
+          {/* The short sounds for adding or deleting an exercise or a workout (lib/action-sound.js); finishing one
+              plays its fanfare with Sounds on, whatever this says. */}
+          {S.sound && <Row icon="sparkles" iconTint="var(--pink)" title={t('Action sounds')}
+            subtitle={t('A short sound when you add or delete an exercise or a workout.')}>
+            <Switch checked={S.actionSounds !== false} onChange={v => { if (v) sfx(true, 'add'); update(s => { s.actionSounds = v }) }} />
+          </Row>}
           {/* The chime that replaced the original three beeps (Discord: "too quiet under music")
               is not an improvement for everyone: louder is a cost with headphones or in a quiet
               room, and some want a sound that feels like theirs (#306). The chime by default; the

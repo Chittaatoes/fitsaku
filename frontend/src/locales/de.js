@@ -2639,4 +2639,15 @@ export default {
   // --- HD sharpening ---
   "HD sharpening": "HD-Schärfung",
   "Makes the exercise pictures and animations crisper and clearer.": "Macht die Übungsbilder und Animationen schärfer und klarer.",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "Ein kurzer Ton, wenn du eine Übung oder ein Training hinzufügst oder löschst.",
+  "Action sounds": "Aktionstöne",
+  "I just finished “{0}” with FitSaku 💪": "Ich habe gerade „{0}“ mit FitSaku beendet 💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "Instagram und TikTok öffnen sich, sobald das Bild gespeichert ist; wähle es aus deinen Fotos.",
+  "Loud": "Laut",
+  "Normal": "Normal",
+  "Save as photo": "Als Foto speichern",
+  "Saved. Pick it from your photos.": "Gespeichert. Wähle es aus deinen Fotos.",
+  "Volume boost": "Lautstärke-Boost",
+  "my workout": "mein Training",
 }

@@ -1716,6 +1716,17 @@ export const PT_BR_OVERRIDES = {
   // --- HD sharpening ---
   "HD sharpening": "Nitidez HD",
   "Makes the exercise pictures and animations crisper and clearer.": "Deixa as imagens e animações dos exercícios mais nítidas e claras.",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "Um som curto ao adicionar ou excluir um exercício ou um treino.",
+  "Action sounds": "Sons de ação",
+  "I just finished “{0}” with FitSaku 💪": "Acabei de terminar “{0}” com o FitSaku 💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "O Instagram e o TikTok abrem depois que a imagem é salva; escolha nas suas fotos.",
+  "Loud": "Alto",
+  "Normal": "Normal",
+  "Save as photo": "Salvar como foto",
+  "Saved. Pick it from your photos.": "Salva. Escolha nas suas fotos.",
+  "Volume boost": "Reforço de volume",
+  "my workout": "meu treino",
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

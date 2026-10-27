@@ -2619,4 +2619,15 @@ export default {
   // --- HD sharpening ---
   "HD sharpening": "HD शार्पनिंग",
   "Makes the exercise pictures and animations crisper and clearer.": "व्यायाम की तस्वीरों और एनिमेशन को ज़्यादा साफ़ और तीखा बनाता है।",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "किसी व्यायाम या वर्कआउट को जोड़ने या हटाने पर एक छोटी आवाज़।",
+  "Action sounds": "एक्शन साउंड",
+  "I just finished “{0}” with FitSaku 💪": "मैंने अभी FitSaku के साथ “{0}” पूरा किया 💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "तस्वीर सहेजने के बाद Instagram और TikTok खुलते हैं; इसे अपनी फ़ोटो से चुनें।",
+  "Loud": "तेज़",
+  "Normal": "सामान्य",
+  "Save as photo": "फ़ोटो के रूप में सहेजें",
+  "Saved. Pick it from your photos.": "सहेजा गया। इसे अपनी फ़ोटो से चुनें।",
+  "Volume boost": "वॉल्यूम बूस्ट",
+  "my workout": "मेरा वर्कआउट",
 }

@@ -2642,4 +2642,15 @@ export default {
   // --- HD sharpening ---
   "HD sharpening": "Penajaman HD",
   "Makes the exercise pictures and animations crisper and clearer.": "Membuat gambar dan animasi latihan lebih tajam dan jelas.",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "Suara singkat saat kamu menambah atau menghapus latihan atau sesi latihan.",
+  "Action sounds": "Suara aksi",
+  "I just finished “{0}” with FitSaku 💪": "Aku baru saja menyelesaikan “{0}” dengan FitSaku 💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "Instagram dan TikTok terbuka setelah gambar disimpan; pilih dari foto kamu.",
+  "Loud": "Keras",
+  "Normal": "Normal",
+  "Save as photo": "Simpan sebagai foto",
+  "Saved. Pick it from your photos.": "Tersimpan. Pilih dari foto kamu.",
+  "Volume boost": "Penguat volume",
+  "my workout": "latihanku",
 }

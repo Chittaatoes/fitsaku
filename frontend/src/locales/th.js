@@ -2630,4 +2630,15 @@ export default {
   // --- HD sharpening ---
   "HD sharpening": "เพิ่มความคมชัด HD",
   "Makes the exercise pictures and animations crisper and clearer.": "ทำให้รูปภาพและแอนิเมชันท่าออกกำลังกายคมชัดและชัดเจนขึ้น",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "เสียงสั้นเมื่อเพิ่มหรือลบท่าออกกำลังกายหรือเซสชัน",
+  "Action sounds": "เสียงการกระทำ",
+  "I just finished “{0}” with FitSaku 💪": "ฉันเพิ่งทำ “{0}” เสร็จด้วย FitSaku 💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "Instagram และ TikTok จะเปิดหลังจากบันทึกรูป เลือกรูปจากอัลบั้มของคุณ",
+  "Loud": "ดัง",
+  "Normal": "ปกติ",
+  "Save as photo": "บันทึกเป็นรูปภาพ",
+  "Saved. Pick it from your photos.": "บันทึกแล้ว เลือกจากอัลบั้มของคุณ",
+  "Volume boost": "เพิ่มระดับเสียง",
+  "my workout": "การออกกำลังกายของฉัน",
 }

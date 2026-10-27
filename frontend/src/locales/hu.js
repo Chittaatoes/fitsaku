@@ -2622,4 +2622,15 @@ export default {
   // --- HD sharpening ---
   "HD sharpening": "HD élesítés",
   "Makes the exercise pictures and animations crisper and clearer.": "Élesebbé és világosabbá teszi a gyakorlatok képeit és animációit.",
+  // --- Share, save, sounds ---
+  "A short sound when you add or delete an exercise or a workout.": "Rövid hang, amikor gyakorlatot vagy edzést adsz hozzá vagy törölsz.",
+  "Action sounds": "Műveleti hangok",
+  "I just finished “{0}” with FitSaku 💪": "Most fejeztem be a(z) „{0}” edzést a FitSakuval 💪",
+  "Instagram and TikTok open once the image is saved; pick it from your photos.": "Az Instagram és a TikTok a kép mentése után nyílik meg; válaszd ki a fotóid közül.",
+  "Loud": "Hangos",
+  "Normal": "Normál",
+  "Save as photo": "Mentés fotóként",
+  "Saved. Pick it from your photos.": "Mentve. Válaszd ki a fotóid közül.",
+  "Volume boost": "Hangerő-erősítés",
+  "my workout": "az edzésem",
 }

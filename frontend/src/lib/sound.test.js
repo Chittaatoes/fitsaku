@@ -38,12 +38,15 @@ class FakeCtx {
     return o
   }
   createPeriodicWave(real, imag) { this.waves++; return { real: [...real], imag: [...imag] } }
+  createDynamicsCompressor() { this.limiters = (this.limiters || 0) + 1; const p = () => ({ value: 0 }); return { threshold: p(), knee: p(), ratio: p(), attack: p(), release: p(), connect() {} } }
 }
 FakeCtx.instances = []
 
 let sound
 let session
 const ctx = () => FakeCtx.instances[0]
+// The tones' own gains: the context also holds the output bus (a lift and a limiter, lib/sound.js bus()), which never ramps.
+const toneGains = () => ctx().gains.filter(events => events.length)
 const IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'
 const MAC = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15'
 const setDevice = (userAgent, maxTouchPoints = 0) => {
@@ -234,9 +237,9 @@ describe('the chime at the end of a rest or a hold', () => {
 
   it('peaks well above a beep and below the point where the output clips', () => {
     sound.beep(true, 660, 0.1)
-    const beepPeak = peakOf(ctx().gains[0])
+    const beepPeak = peakOf(toneGains()[0])
     sound.chime(true)
-    const chimePeaks = ctx().gains.slice(1).map(peakOf)
+    const chimePeaks = toneGains().slice(1).map(peakOf)
     expect(beepPeak).toBe(0.35)
     for (const p of chimePeaks) {
       expect(p).toBe(sound.CHIME_PEAK)
@@ -253,7 +256,7 @@ describe('the chime at the end of a rest or a hold', () => {
 
   it('holds its peak for most of each note instead of fading from the start', () => {
     sound.chime(true)
-    const first = ctx().gains[0]
+    const first = toneGains()[0]
     const held = first.find(([kind, v, at]) => kind === 'set' && v === sound.CHIME_PEAK && at > 0.05)
     expect(held).toBeTruthy()
   })
@@ -307,12 +310,12 @@ describe('chime(enabled, classic) — the original three beeps', () => {
   it('peaks at a plain beep\'s level, not the louder chime\'s', () => {
     sound.chime(true, true)
     const peakOf = events => Math.max(...events.map(([, v]) => v))
-    for (const gain of ctx().gains) expect(peakOf(gain)).toBe(0.35)
+    for (const gain of toneGains()) expect(peakOf(gain)).toBe(0.35)
   })
 
   it('fades from the start instead of holding its peak', () => {
     sound.chime(true, true)
-    const first = ctx().gains[0]
+    const first = toneGains()[0]
     const held = first.find(([kind, v, at]) => kind === 'set' && v === 0.35 && at > 0.05)
     expect(held).toBeFalsy()
   })
@@ -362,12 +365,12 @@ describe('the end-of-rest sounds (Settings → Sound)', () => {
 
   it('plays each note at its own peak, in its own timbre', () => {
     sound.chime(true, 'bell')
-    expect(ctx().gains.map(peakOf)).toEqual([0.55, 0.55])
+    expect(toneGains().map(peakOf)).toEqual([0.55, 0.55])
     expect(ctx().oscs.every(o => o.wave && o.wave.imag[3] === 0.5)).toBe(true)   // the bell's strong 3rd
     fresh()
     sound.chime(true, 'soft')
     expect(ctx().oscs.every(o => o.type === 'sine')).toBe(true)
-    expect(Math.max(...ctx().gains.map(peakOf))).toBeLessThan(sound.CHIME_PEAK / 2)
+    expect(Math.max(...toneGains().map(peakOf))).toBeLessThan(sound.CHIME_PEAK / 2)
   })
 
   it('glides the whistle upwards, and nothing else', () => {
@@ -500,5 +503,37 @@ describe('alertBuzz', () => {
     await flush()
     expect(native).not.toHaveBeenCalled()
     expect(calls).toEqual([])
+  })
+})
+
+describe('loudness and the action sounds', () => {
+  it('lifts every tone through one bus with a limiter, so it is loud without clipping', () => {
+    sound.beep(true, 880, 0.2)
+    sound.chime(true, 'chime')
+    expect(ctx().limiters).toBe(1)                       // one bus for all of them, not one per tone
+    expect(sound.LOUDNESS.normal).toBeGreaterThan(1)
+    expect(sound.LOUDNESS.loud).toBeGreaterThan(sound.LOUDNESS.normal)
+    expect(sound.LOUDNESS.max).toBeGreaterThan(sound.LOUDNESS.loud)
+    expect(sound.LOUDNESS.max).toBeLessThanOrEqual(4)
+  })
+  it('ignores a level it does not know', () => {
+    expect(() => sound.setLoudness('deafening')).not.toThrow()
+    expect(() => sound.setLoudness('max')).not.toThrow()
+  })
+  it('plays each action sound as its own few notes, and nothing when sounds are off or the kind is unknown', () => {
+    sound.sfx(false, 'add'); sound.sfx(true, 'nope')
+    expect(ctx()).toBeUndefined()
+    const counts = {}
+    for (const kind of Object.keys(sound.SFX)) {
+      const before = (ctx()?.tones || []).length
+      sound.sfx(true, kind)
+      counts[kind] = ctx().tones.length - before
+    }
+    expect(counts).toEqual({ add: 2, delete: 2, finish: 6 })
+    // the delete sound falls, the add sound rises, the finish one climbs
+    const f = k => sound.SFX[k].notes.map(n => n[0])
+    expect(f('add')[1]).toBeGreaterThan(f('add')[0])
+    expect(f('delete')[1]).toBeLessThan(f('delete')[0])
+    expect(f('finish').slice(0, 4)).toEqual([...f('finish').slice(0, 4)].sort((a, b) => a - b))
   })
 })

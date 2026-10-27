@@ -10,6 +10,7 @@ import { accentValue, applyAccent } from './lib/accent.js'
 import { setLang, useLang, baseLang } from './lib/i18n.js'
 import { effectiveLang } from './lib/default-lang.js'
 import { setPlayOnSilent, setVibrate, setAlarmBuzzer, setNativeBuzzer } from './lib/sound.js'
+import { applyLoudness } from './lib/action-sound.js'
 import { buzzAsAlarm } from './lib/rest-alert.js'
 import { setNav, notePath, keyBefore, navToWorkout } from './lib/nav.js'
 import { workoutVolume } from './lib/history.js'
@@ -350,6 +351,9 @@ export default function App() {
   useEffect(() => { boot() }, [boot])
   // "HD sharpening" of the exercise pictures: on unless the person turned it off (index.css [data-media-hd]).
   const mediaHd = useStore(s => s.S.mediaHd !== false)
+  // How much the timer and action sounds are lifted (lib/sound.js bus): loud unless the person chose another level.
+  const soundLevel = useStore(s => s.S.soundLevel)
+  useEffect(() => { applyLoudness(soundLevel || 'loud') }, [soundLevel])
   useEffect(() => { document.documentElement.dataset.mediaHd = mediaHd ? '1' : '0' }, [mediaHd])
   useEffect(() => prefetchViews(), [])
   // Android system back — sheet, then page, then press-again-to-exit (see lib/back.js)

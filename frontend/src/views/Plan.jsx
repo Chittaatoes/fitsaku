@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore.js'
 import { useUI } from '../store/useUI.js'
+import { actionSound } from '../lib/action-sound.js'
 import { DAYN, DAYS, weekOrder, weekStartOf, uid, exCount, routineCount, todayISO, fmtDate } from '../lib/format.js'
 import { t } from '../lib/i18n.js'
 import {
@@ -46,6 +47,7 @@ export function deleteRoutineWithUndo(id) {
   if (!snap) return false
   const before = st.S
   st.update(s => { deleteRoutine(s, id) })
+  actionSound('delete')
   // What the removal moved (weekdays, reschedules, the loop), for the Undo to mark as put back:
   // a change another device made to one of them before it saw the removal then still wins.
   snap.marks = undoMarks(before, useStore.getState().S)

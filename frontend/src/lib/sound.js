@@ -49,6 +49,34 @@ const sleepAfter = endSec => {
   }, at - Date.now())
 }
 
+// Loudness. Every tone goes through one bus: a gain that lifts it, then a limiter (a fast, hard
+// compressor) that catches the peaks. A beep at the old 0.35 peak left most of the output range unused,
+// which is why the timer was faint on a phone at full volume; the lift uses that range, and the limiter
+// keeps notes that overlap, or a loud level, from clipping into a crackle. `setLoudness` picks the lift
+// (Settings > Timer alerts > Volume). A browser without a compressor gets the lift alone, kept lower.
+export const LOUDNESS = { normal: 1.5, loud: 2.4, max: 3.4 }
+let loudness = 'loud'
+let busCtx = null, busGain = null
+export function setLoudness(level) {
+  if (!Object.hasOwn(LOUDNESS, level)) return
+  loudness = level
+  if (busGain) { try { busGain.gain.value = lift() } catch (e) { /* */ } }
+}
+const lift = () => (busGain && busGain.limited === false ? Math.min(LOUDNESS[loudness], 1.3) : LOUDNESS[loudness])
+function bus(ctx) {
+  if (busCtx === ctx && busGain) return busGain
+  busCtx = ctx
+  busGain = ctx.createGain()
+  busGain.limited = typeof ctx.createDynamicsCompressor === 'function'
+  busGain.gain.value = lift()
+  if (busGain.limited) {
+    const lim = ctx.createDynamicsCompressor()
+    lim.threshold.value = -8; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.002; lim.release.value = 0.12
+    busGain.connect(lim); lim.connect(ctx.destination)
+  } else busGain.connect(ctx.destination)
+  return busGain
+}
+
 // Timbres richer than a sine, as the strengths of the fundamental and its harmonics. `bright`
 // (the fundamental plus three falling harmonics) carries over music and through a phone
 // speaker's weak low end without a square wave's buzz; `bell` leans on the 3rd and 5th for a
@@ -75,7 +103,7 @@ const setTimbre = (ctx, o, name) => {
 const tone = (freq, dur, when, { peak = 0.35, hold = 0, bright = false, timbre = bright ? 'bright' : null, glide = 0 } = {}) => {
   const ctx = wake()
   const o = ctx.createOscillator(), g = ctx.createGain()
-  o.connect(g); g.connect(ctx.destination)
+  o.connect(g); g.connect(bus(ctx))
   if (timbre && TIMBRES[timbre]) setTimbre(ctx, o, timbre); else o.type = 'sine'
   const t0 = ctx.currentTime + when
   o.frequency.value = freq
@@ -130,6 +158,20 @@ export function chime(enabled, kind) {
       tone(freq, dur, when, snd === REST_SOUNDS.classic ? {} : { peak: snd.peak, hold: snd.hold, timbre: snd.timbre, glide })
     }
   } catch (e) { /* */ }
+}
+
+// Short sounds for the things you do (adding or deleting an exercise or a workout, finishing one) so the app
+// answers you. Each is a few notes of [freq, dur, when, glide] in one shape; Settings > Timer alerts >
+// "Action sounds" turns them off, and they follow the Sounds switch like every other tone here.
+export const SFX = {
+  add: { peak: 0.55, hold: 0.5, timbre: 'bright', notes: [[660, 0.09, 0], [990, 0.16, 0.08]] },
+  delete: { peak: 0.55, hold: 0.4, timbre: 'bright', notes: [[520, 0.1, 0, 300], [330, 0.2, 0.09, 180]] },
+  finish: { peak: 0.6, hold: 0.55, timbre: 'bell', notes: [[523, 0.16, 0], [659, 0.16, 0.14], [784, 0.16, 0.28], [1047, 0.7, 0.42], [1568, 0.4, 0.5], [2093, 0.5, 0.62]] },
+}
+export function sfx(enabled, kind) {
+  if (!enabled || !Object.hasOwn(SFX, kind)) return
+  const s = SFX[kind]
+  try { for (const [freq, dur, when, glide] of s.notes) tone(freq, dur, when, { peak: s.peak, hold: s.hold, timbre: s.timbre, glide: glide || 0 }) } catch (e) { /* */ }
 }
 
 // Call from inside a tap. Gets the context created and running while the browser still counts

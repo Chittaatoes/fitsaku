@@ -35,6 +35,8 @@ const clamp01 = v => (Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0)
 export function createAmbient({ ctxFactory, setIntervalFn = setInterval, clearIntervalFn = clearInterval, random = Math.random } = {}) {
   let ctx = null, master = null
   let volume = 0.5
+  let limited = false
+  const headroom = () => (limited ? 1.15 : 0.5)
   const voices = new Set()
   let current = null            // the voice that is playing now
 
@@ -48,8 +50,15 @@ export function createAmbient({ ctxFactory, setIntervalFn = setInterval, clearIn
     ctx = makeCtx()
     if (!ctx) return null
     master = ctx.createGain()
-    master.gain.value = volume * 0.5       // headroom: the layers add up
-    master.connect(ctx.destination)
+    // The layers add up, so the master used to sit at half the chosen volume and the music was faint even at
+    // the top. A limiter after it catches the peaks, which lets the level be much higher without clipping.
+    limited = typeof ctx.createDynamicsCompressor === 'function'
+    master.gain.value = volume * headroom()
+    if (limited) {
+      const lim = ctx.createDynamicsCompressor()
+      lim.threshold.value = -9; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.003; lim.release.value = 0.15
+      master.connect(lim); lim.connect(ctx.destination)
+    } else master.connect(ctx.destination)
     return ctx
   }
   const wake = () => {
@@ -185,7 +194,7 @@ export function createAmbient({ ctxFactory, setIntervalFn = setInterval, clearIn
       volume = clamp01(vol)
       if (!ensure()) return false
       bindUnlock(); wake()
-      master.gain.setTargetAtTime(volume * 0.5, ctx.currentTime, 0.1)
+      master.gain.setTargetAtTime(volume * headroom(), ctx.currentTime, 0.1)
       if (current && current.kind === kind && !current.dying) return true
       if (current) fadeOut(current, 1)
       const gain = ctx.createGain()
@@ -206,7 +215,7 @@ export function createAmbient({ ctxFactory, setIntervalFn = setInterval, clearIn
     },
     setVolume(vol) {
       volume = clamp01(vol)
-      if (ctx && master) master.gain.setTargetAtTime(volume * 0.5, ctx.currentTime, 0.1)
+      if (ctx && master) master.gain.setTargetAtTime(volume * headroom(), ctx.currentTime, 0.1)
     },
     kind: () => (current && !current.dying ? current.kind : null),
   }

@@ -95,10 +95,11 @@ describe('the workout summary', () => {
     install(5); open()
     const foot = host.querySelector('.fin-foot')
     expect(foot).toBeTruthy()
-    expect(foot.textContent).toBe('Done')
+    expect(foot.lastElementChild.textContent).toBe('Done')
+    expect([...foot.querySelectorAll('.fin-sbtn')].map(b => b.textContent)).toEqual(['Share', 'Save as photo'])   // share first, then leave
     const body = host.querySelector('.fin-body')
     expect(body.compareDocumentPosition(foot) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    act(() => foot.querySelector('button').click())
+    act(() => foot.lastElementChild.click())
     expect(useUI.getState().sheets.length).toBe(0)
   })
 
@@ -107,6 +108,29 @@ describe('the workout summary', () => {
     install(5); open()
     expect(text()).toContain('Latihan selesai!')
     expect(btn('Tampilkan semua (5)')).toBeTruthy()
-    expect(host.querySelector('.fin-foot').textContent).toBe('Selesai')
+    expect(host.querySelector('.fin-foot').lastElementChild.textContent).toBe('Selesai')
+    expect([...host.querySelectorAll('.fin-sbtn')].map(b => b.textContent)).toEqual(['Bagikan', 'Simpan sebagai foto'])
+  })
+})
+
+describe('the finish screen shares and saves', () => {
+  it('has Share and Save as photo before Done', () => {
+    install(2); open()
+    const foot = host.querySelector('.fin-foot')
+    expect([...foot.querySelectorAll('.fin-sbtn')].map(b => b.textContent)).toEqual(['Share', 'Save as photo'])
+  })
+  it('Share opens the share sheet: the system share, WhatsApp, Instagram, TikTok and Save as photo', () => {
+    install(2); open()
+    const before = useUI.getState().sheets.length
+    act(() => host.querySelector('.fin-sbtn').click())
+    const sheets = useUI.getState().sheets
+    expect(sheets.length).toBe(before + 1)
+    const h = document.createElement('div'); document.body.appendChild(h)
+    const root = createRoot(h); mounted.push(root)
+    act(() => root.render(sheets.at(-1).render(() => {})))
+    expect(h.querySelector('h3').textContent).toBe('Share workout')
+    const label = b => [...b.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('')
+    expect([...h.querySelectorAll('.share-app')].map(label)).toEqual(['WhatsApp', 'Instagram', 'TikTok', 'Save as photo'])
+    expect(h.textContent).toContain('Instagram and TikTok open once the image is saved')
   })
 })
