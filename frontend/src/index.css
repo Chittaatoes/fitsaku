@@ -2477,3 +2477,43 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
    A row that is off screen is not laid out or painted until it nears the viewport (the browser skips its
    work), with a remembered height so the scrollbar does not jump. Library only: the rest are short lists. */
 .lib-item{content-visibility:auto;contain-intrinsic-size:auto 68px}
+
+/* --- popups: iOS-style frosted glass ---
+   Dialogs (delete, discard, confirm) and bottom sheets are translucent panels over a blurred, dimmed page, the
+   way iOS draws alerts and action sheets. A browser without backdrop-filter gets the solid panel it always had. */
+.mback{background:rgba(0,0,0,.34);-webkit-backdrop-filter:blur(8px) saturate(120%);backdrop-filter:blur(8px) saturate(120%)}
+:root[data-theme="light"] .mback{background:rgba(0,0,0,.22)}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .center{
+    background:color-mix(in srgb,var(--bg-el) 68%,transparent);
+    -webkit-backdrop-filter:blur(34px) saturate(190%);backdrop-filter:blur(34px) saturate(190%);
+    box-shadow:0 0 0 .5px rgba(255,255,255,.14),0 24px 64px -16px rgba(0,0,0,.55);
+  }
+  :root[data-theme="light"] .center{background:rgba(255,255,255,.72);box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 24px 64px -18px rgba(0,0,0,.3)}
+  .sheet{
+    background:color-mix(in srgb,var(--bg-el) 78%,transparent);
+    -webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+    box-shadow:0 -1px 0 rgba(255,255,255,.08),0 -20px 50px -20px rgba(0,0,0,.5);
+  }
+  :root[data-theme="light"] .sheet{background:rgba(250,249,247,.8);box-shadow:0 -1px 0 rgba(0,0,0,.06),0 -20px 50px -22px rgba(0,0,0,.25)}
+}
+.center{border-radius:20px;width:min(82vw,290px)}
+.center:has(.ios-alert){padding:0;overflow:hidden;width:min(80vw,280px)}
+.ios-alert{display:flex;flex-direction:column;text-align:center}
+.ios-alert-body{padding:20px 18px 18px}
+.ios-alert-body h3{font-size:17px;font-weight:600;letter-spacing:-.012em;line-height:1.25;margin:0 0 6px}
+.ios-alert-msg{font-size:13px;line-height:1.38;color:var(--label-2);letter-spacing:-.005em;overflow-wrap:anywhere}
+.ios-alert-acts{display:flex;border-top:.5px solid var(--sep)}
+.ios-alert-acts.stacked{flex-direction:column}
+.ios-btn{
+  flex:1;min-height:46px;padding:0 12px;background:transparent;color:var(--acc);
+  font-size:17px;letter-spacing:-.02em;line-height:1.2;overflow-wrap:anywhere;
+  transition:background var(--fast);
+}
+.ios-alert-acts:not(.stacked) .ios-btn+.ios-btn{border-inline-start:.5px solid var(--sep)}
+.ios-alert-acts.stacked .ios-btn+.ios-btn{border-top:.5px solid var(--sep)}
+.ios-btn.is-main{font-weight:600}
+.ios-btn.is-danger{color:var(--red);font-weight:600}
+.ios-btn.is-cancel{color:var(--label);font-weight:400}
+.ios-btn:active{background:color-mix(in srgb,var(--label) 10%,transparent)}
+.ios-btn:focus-visible{outline:2px solid var(--acc);outline-offset:-2px}

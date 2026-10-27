@@ -77,13 +77,20 @@ const toast = m => ui().toast(m)
 const snd = () => S().sound
 
 /* ============================ custom confirm dialog ============================ */
+// An iOS-style alert: a frosted-glass panel, the words centred, and the answers as full-width buttons
+// separated by hairlines (index.css .ios-alert). Short labels sit side by side, Cancel then the action;
+// long ones stack, the action first. The destructive action is red, a plain one takes the accent and is bold.
 function ConfirmDialog({ title, message, confirmText, cancelText, danger, onConfirm, onCancel, close }) {
-  return <div style={{ textAlign: 'center', padding: '4px 0' }}>
-    {title && <h3 style={{ marginBottom: 8 }}>{title}</h3>}
-    <div className="muted" style={{ marginBottom: 18, lineHeight: 1.5 }}>{message}</div>
-    <button className={'btn ' + (danger ? 'danger' : 'primary')} onClick={() => { close(); onConfirm && onConfirm() }}>{confirmText || t('Confirm')}</button>
-    <div style={{ height: 8 }} />
-    <Button variant="ghost" className="dim" onClick={() => { close(); onCancel && onCancel() }}>{cancelText || t('Cancel')}</Button>
+  const yes = confirmText || t('Confirm'), no = cancelText || t('Cancel')
+  const stacked = Math.max([...yes].length, [...no].length) > 11
+  const confirm = <button key="y" type="button" className={'ios-btn ' + (danger ? 'is-danger' : 'is-main')} onClick={() => { close(); onConfirm && onConfirm() }}>{yes}</button>
+  const cancel = <button key="n" type="button" className="ios-btn is-cancel" onClick={() => { close(); onCancel && onCancel() }}>{no}</button>
+  return <div className="ios-alert" role="alertdialog" aria-modal="true" aria-label={title || undefined}>
+    <div className="ios-alert-body">
+      {title && <h3>{title}</h3>}
+      {message && <div className="ios-alert-msg">{message}</div>}
+    </div>
+    <div className={'ios-alert-acts' + (stacked ? ' stacked' : '')}>{stacked ? [confirm, cancel] : [cancel, confirm]}</div>
   </div>
 }
 // "1 workouts and 1 weigh-ins" read wrong: a count of one takes the singular, per noun. Four
