@@ -2485,11 +2485,11 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 :root[data-theme="light"] .mback{background:rgba(0,0,0,.22)}
 @supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .center{
-    background:color-mix(in srgb,var(--bg-el) 68%,transparent);
+    background:color-mix(in srgb,var(--bg-el) 48%,transparent);
     -webkit-backdrop-filter:blur(34px) saturate(190%);backdrop-filter:blur(34px) saturate(190%);
     box-shadow:0 0 0 .5px rgba(255,255,255,.14),0 24px 64px -16px rgba(0,0,0,.55);
   }
-  :root[data-theme="light"] .center{background:rgba(255,255,255,.72);box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 24px 64px -18px rgba(0,0,0,.3)}
+  :root[data-theme="light"] .center{background:rgba(255,255,255,.52);box-shadow:0 0 0 .5px rgba(0,0,0,.08),0 24px 64px -18px rgba(0,0,0,.3)}
   .sheet{
     background:color-mix(in srgb,var(--bg-el) 78%,transparent);
     -webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
