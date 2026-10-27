@@ -1371,6 +1371,7 @@ function AccentSwatches({ S, update }) {
 
 function EquipmentCard({ S, update }) {
   const profiles = S.equipProfiles || []
+  const activeProfile = profiles.find(p => p.id === S.activeEquipId)
   const remove = p => confirmSheet({
     title: t('Delete profile?'), message: t('"{0}" and its equipment list will be removed.', p.name),
     confirmText: t('Delete'), danger: true,
