@@ -16,6 +16,7 @@ Dashboard wording changes: trust the dashboards over this file for button names,
 | `DATABASE_URL` | PostgreSQL connection, Supabase **Session pooler** string. Must **not** contain `sslmode`/`ssl*` parameters (refused) | Render | **Secret** | optional (files if unset) | required |
 | `DATABASE_SSL_CA` | Supabase CA certificate, PEM text (several certificates allowed). **Required**: the server certificate chain and host name are always verified | Render | public certificate | - | **required** |
 | `DATABASE_SSL_CA_FILE` | path to the same PEM, alternative to `DATABASE_SSL_CA` | Render | - | - | optional |
+| `REQUIRE_DATABASE` | `1` = refuse to start without `DATABASE_URL` (no silent fall-back to files). On Render (`RENDER=true`) this is the default unless `ALLOW_FILE_STORAGE=1` | Render | public | unset | `1` (in `render.yaml`) |
 | `DATABASE_TLS` | unset or `verify-full`. `insecure-local` skips TLS **only** for a loopback host outside production (refused when `NODE_ENV=production` or on Render) | local only | public | local tests | **never set** |
 | `DATABASE_POOL_MAX` | pool size (default 5) | Render | public | - | optional |
 | `SESSION_SECRET` | signs session cookies; keep stable. Else generated once into the database | Render | **Secret** | - | set (Blueprint generates) |
@@ -72,6 +73,7 @@ Rollback: the source is untouched; truncate `app_documents, user_state, audit_ev
 1. New > Blueprint from the repo (`render.yaml`) or a Web Service with root `api`, build `npm ci --omit=dev --omit=optional`, start `node server.js`, health check `/api/health`.
 2. Enter `DATABASE_URL`, `DATABASE_SSL_CA`, `RP_ID`, `ORIGIN`, and `BOOTSTRAP_SECRET` (step 4). Keep `INVITE_ONLY=1`, `MEDIA_UPLOADS=0`. Leave `PUBLIC_SIGNUP` unset.
 3. Do **not** use a temporary RP_ID: a passkey is bound to it forever. Do the bootstrap on the final domain (steps 5, 7, 8 first).
+4. With `DATABASE_URL` the API never creates or writes `DATA_DIR` (`/data`), so no disk or `DATA_DIR` setting is needed on Render. Without `DATABASE_URL` it stops with `FATAL: DATABASE_URL is not set, but this deployment requires PostgreSQL`.
 4. If start-up fails (bad certificate, missing CA, unreachable database) the deploy fails with `FATAL: database start-up failed: <variable name>`; no secret is printed.
 5. Health: `GET /api/health` (503 if the database instance conflict was detected), `GET /api/health/ready` (503 when PostgreSQL cannot be reached).
 

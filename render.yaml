@@ -13,6 +13,8 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "22"
+      - key: REQUIRE_DATABASE   # refuse to start on the (empty, unwritable) local disk if DATABASE_URL is missing
+        value: "1"
       - key: DATABASE_URL       # Supabase "Session pooler" connection string
         sync: false
       - key: DATABASE_SSL_CA    # Supabase CA certificate (PEM). Required: the database certificate is always verified

@@ -99,7 +99,6 @@ const MAX_BODY = 5 * 1024 * 1024;
 // Secure cookies require HTTPS; over plain http://localhost the flag would drop the cookie
 const SECURE = /^https:/i.test(ORIGIN) ? ' Secure;' : '';
 
-fs.mkdirSync(DATA, { recursive: true });
 /* ---------- storage backend ----------
  * DATABASE_URL set: durable data lives in PostgreSQL (api/pg-store.js, migrations/). Unset: the
  * JSON files under DATA_DIR, exactly as before. The two never mix: with a database the local
@@ -108,6 +107,16 @@ fs.mkdirSync(DATA, { recursive: true });
 // platform shows), rather than serving from nothing or falling back to an unverified connection.
 // The message names the variable at fault, never a value.
 let PG = null;
+// A deployment that is meant to run on PostgreSQL must not fall back to the filesystem because a
+// variable is missing: on Render that disk is empty after every deploy and the instance would come
+// up looking healthy with no accounts. REQUIRE_DATABASE=1 asks for that explicitly (render.yaml);
+// Render itself (RENDER=true) is treated the same unless ALLOW_FILE_STORAGE=1 says it is on purpose.
+// A local or self-hosted run sets neither and keeps using DATA_DIR.
+const yes = v => /^(1|true|yes|on)$/i.test(v || '');
+if (!process.env.DATABASE_URL && (yes(process.env.REQUIRE_DATABASE) || (process.env.RENDER && !yes(process.env.ALLOW_FILE_STORAGE)))) {
+  console.error('FATAL: DATABASE_URL is not set, but this deployment requires PostgreSQL (REQUIRE_DATABASE=1, or running on Render without ALLOW_FILE_STORAGE=1). Set DATABASE_URL (and DATABASE_SSL_CA), or unset REQUIRE_DATABASE for local file storage.');
+  process.exit(1);
+}
 if (process.env.DATABASE_URL) {
   try { PG = await openPgStore({ pool: await poolFromEnv(), onFatal: () => setTimeout(() => process.exit(1), 500).unref(),
     // Swap the contents in place: every closure holds this very object.
@@ -115,6 +124,10 @@ if (process.env.DATABASE_URL) {
   catch (e) { console.error('FATAL: database start-up failed:', String(e.message).replace(/postgres(ql)?:\/\/\S+/g, 'postgres://<redacted>')); process.exit(1); }
 }
 rt.pg = PG;
+// The data directory belongs to the filesystem-backed mode only. With a database nothing durable
+// is written there (and on Render /data is not creatable by the service user), so it is neither
+// created nor touched at start-up.
+if (!PG) fs.mkdirSync(DATA, { recursive: true });
 /* The secrets are locked down file by file rather than by sealing the whole directory.
  *
  * A blanket `chmod 0700` on DATA looks stronger and is worse: ./data is a host bind mount and
@@ -127,7 +140,7 @@ rt.pg = PG;
  * reason to refuse to boot. The privilege drop in adapters/spawn.js is the control that does
  * fail closed. */
 const lock = f => { try { fs.chmodSync(path.join(DATA, f), 0o600); } catch { /* not present yet, or host says no */ } };
-['secret', 'db.json', 'coach.json'].forEach(lock);
+if (!PG) ['secret', 'db.json', 'coach.json'].forEach(lock);
 
 /* ---------- secret + db ---------- */
 const secretFile = path.join(DATA, 'secret');
@@ -3154,7 +3167,7 @@ if (PG) {
 // inherited access list is all the protection the session secret, db.json and the Coach and
 // Spotify credentials have. Said once, in the background, when a broad group can use the folder.
 // Nothing is changed for the owner (win-acl.js).
-if (process.platform === 'win32') {
+if (process.platform === 'win32' && !PG) {
   import('./win-acl.js').then(({ broadAccess }) => broadAccess(DATA)).then(broad => {
     if (broad.length) console.warn(`warning: ${DATA} can be used by other Windows accounts (Users / Authenticated Users / Everyone), and file modes are not enforced on Windows. The session secret, database and credentials are stored there. To restrict it to you: icacls "${DATA}" /inheritance:r /grant:r "%USERNAME%:(OI)(CI)F" "SYSTEM:(OI)(CI)F"`);
   }).catch(() => { /* PowerShell unavailable: nothing to say */ });
