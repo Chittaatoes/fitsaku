@@ -173,6 +173,7 @@ export function installEdgeSwipeBack(win = window, opts = {}) {
     if (!target) return
     // Claimed: nothing under the edge (a set row, a card) starts its own swipe from this touch.
     e.stopPropagation()
+    hold()
     // The page underneath starts mounting now, hidden, so it is there by the time the finger has
     // moved far enough to show it. Not with reduced motion: nothing slides, nothing to show.
     const path = reducedMotion(win) ? null : (target.getAttribute('data-back') || null)
@@ -213,12 +214,17 @@ export function installEdgeSwipeBack(win = window, opts = {}) {
   // scroll, and a scroll that starts in the slop cancels the pointer. Only touches that began in
   // the back edge of a page with a back button are held like this.
   const onTouchMove = e => { if (g && e.cancelable) e.preventDefault() }
+  // The listener has to be non-passive to be able to stop a scroll, and a non-passive touchmove on the
+  // document makes the browser wait for script on EVERY touch move of EVERY page, which is what makes
+  // scrolling stutter. So it is only added once a touch has actually been claimed (iOS and the phone
+  // app, where this gesture is on), and never on a browser where the swipe is off.
+  let holding = false
+  function hold() { if (!holding) { doc.addEventListener('touchmove', onTouchMove, { passive: false }); holding = true } }
 
   win.addEventListener('pointerdown', onDown, true)
   win.addEventListener('pointermove', onMove, true)
   win.addEventListener('pointerup', onUp, true)
   win.addEventListener('pointercancel', onUp, true)
-  doc.addEventListener('touchmove', onTouchMove, { passive: false })
   return () => {
     win.removeEventListener('pointerdown', onDown, true)
     win.removeEventListener('pointermove', onMove, true)

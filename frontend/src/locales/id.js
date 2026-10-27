@@ -2639,4 +2639,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Browser ini tidak mendukung passkey. Masuklah dengan nomor telepon dan PIN.",
   "Use your phone number and your 4-digit PIN.": "Gunakan nomor telepon dan PIN 4 digitmu.",
   "Wrong phone number or PIN.": "Nomor telepon atau PIN salah.",
+  // --- HD sharpening ---
+  "HD sharpening": "Penajaman HD",
+  "Makes the exercise pictures and animations crisper and clearer.": "Membuat gambar dan animasi latihan lebih tajam dan jelas.",
 }

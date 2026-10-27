@@ -275,7 +275,7 @@ describe('the pages', () => {
     mount('workout')
     expect([...host.querySelectorAll('.sect-t')].map(e => e.textContent)).toEqual(['Rest', 'Logging', 'Before and during'])
     expect(titles()).toEqual(['Rest timer', 'Rest between warm-ups', 'Rest-pause rest', 'Effort per set', 'Shown under each exercise', 'Layout',
-      'Collapse completed exercises', 'Skip completed exercises', 'Weigh in before workouts', 'Keep screen awake', 'Exercise animations', 'Fine-tuning'])
+      'Collapse completed exercises', 'Skip completed exercises', 'Weigh in before workouts', 'Keep screen awake', 'Exercise animations', 'HD sharpening', 'Fine-tuning'])
     // QA 10-05: the "screen stays on" line is the awake row's own subtitle, not a section footer
     // that read as if it explained the animations above it.
     expect(rowTitled('Keep screen awake').querySelector('.lrow-s').textContent).toMatch(/^The screen stays on/)
@@ -446,5 +446,28 @@ describe('translations', () => {
   })
   it('the root groups only name real pages', () => {
     for (const g of ROOT_GROUPS) for (const id of g) expect(PAGES[id], id).toBeTruthy()
+  })
+})
+
+describe('the Equipment page in Home Workout mode', () => {
+  // The state the first-run question leaves behind: Home Workout, the equipment filter on, a Home profile.
+  // The page used to read a variable that only exists on the Settings root and fell to "Something went wrong".
+  it('draws with the filter on and an active profile, without the hint', () => {
+    mocks.S = { ...mocks.S, workoutMode: 'home', equipFilterOn: true }
+    expect(() => mount('equipment')).not.toThrow()
+    expect(titles()).toEqual(expect.arrayContaining(['Plates', 'Workout style', 'Filter by equipment', 'Active profile', 'Home']))
+    expect(host.textContent).not.toContain('Add your equipment in a profile')
+  })
+  it('draws with the filter on and no profile behind it, and says what to do', () => {
+    mocks.S = { ...mocks.S, workoutMode: 'home', equipFilterOn: true, equipProfiles: [], activeEquipId: null }
+    expect(() => mount('equipment')).not.toThrow()
+    expect(host.textContent).toContain('Add your equipment in a profile to match exercises to it.')
+  })
+  it('draws in Gym mode and with nothing chosen', () => {
+    for (const patch of [{ workoutMode: 'gym', equipFilterOn: false }, {}]) {
+      mocks.S = { ...mocks.S, ...patch }
+      expect(() => mount('equipment')).not.toThrow()
+      expect(rowTitled('Workout style')).toBeTruthy()
+    }
   })
 })

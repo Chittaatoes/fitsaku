@@ -2619,4 +2619,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Ez a böngésző nem támogatja a hozzáférési kulcsokat. Jelentkezz be inkább telefonszámmal és PIN-kóddal.",
   "Use your phone number and your 4-digit PIN.": "Használd a telefonszámodat és a 4 számjegyű PIN-kódodat.",
   "Wrong phone number or PIN.": "Hibás telefonszám vagy PIN.",
+  // --- HD sharpening ---
+  "HD sharpening": "HD élesítés",
+  "Makes the exercise pictures and animations crisper and clearer.": "Élesebbé és világosabbá teszi a gyakorlatok képeit és animációit.",
 }

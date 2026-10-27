@@ -2616,4 +2616,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Bu tarayıcı geçiş anahtarlarını desteklemiyor. Bunun yerine telefon numaranız ve PIN ile giriş yapın.",
   "Use your phone number and your 4-digit PIN.": "Telefon numaranızı ve 4 haneli PIN’inizi kullanın.",
   "Wrong phone number or PIN.": "Telefon numarası veya PIN yanlış.",
+  // --- HD sharpening ---
+  "HD sharpening": "HD keskinleştirme",
+  "Makes the exercise pictures and animations crisper and clearer.": "Egzersiz görsellerini ve animasyonlarını daha net ve berrak yapar.",
 }

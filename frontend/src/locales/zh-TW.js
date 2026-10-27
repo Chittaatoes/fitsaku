@@ -2609,4 +2609,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "此瀏覽器不支援密碼金鑰。請改用電話號碼和 PIN 登入。",
   "Use your phone number and your 4-digit PIN.": "請使用您的電話號碼和 4 位數 PIN。",
   "Wrong phone number or PIN.": "電話號碼或 PIN 錯誤。",
+  // --- HD sharpening ---
+  "HD sharpening": "HD 銳化",
+  "Makes the exercise pictures and animations crisper and clearer.": "讓動作圖片與動畫更清晰銳利。",
 }

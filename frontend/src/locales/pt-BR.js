@@ -1713,6 +1713,9 @@ export const PT_BR_OVERRIDES = {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Este navegador não oferece suporte a passkeys. Entre com seu número de celular e PIN.",
   "Use your phone number and your 4-digit PIN.": "Use seu número de celular e seu PIN de 4 dígitos.",
   "Wrong phone number or PIN.": "Número de celular ou PIN incorreto.",
+  // --- HD sharpening ---
+  "HD sharpening": "Nitidez HD",
+  "Makes the exercise pictures and animations crisper and clearer.": "Deixa as imagens e animações dos exercícios mais nítidas e claras.",
 }
 
 export default { ...pt, ...PT_BR_OVERRIDES }

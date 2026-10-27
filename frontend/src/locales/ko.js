@@ -2616,4 +2616,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "이 브라우저는 패스키를 지원하지 않습니다. 대신 전화번호와 PIN으로 로그인하세요.",
   "Use your phone number and your 4-digit PIN.": "전화번호와 4자리 PIN을 사용하세요.",
   "Wrong phone number or PIN.": "전화번호 또는 PIN이 올바르지 않습니다.",
+  // --- HD sharpening ---
+  "HD sharpening": "HD 선명화",
+  "Makes the exercise pictures and animations crisper and clearer.": "운동 이미지와 애니메이션을 더 또렷하고 선명하게 만듭니다.",
 }

@@ -1,4 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { lazyView, prefetchViews } from './lib/lazy-view.js'
 import { hideBoot } from './lib/boot.js'
 import { HashRouter, Routes, Route, Navigate, useNavigate, useLocation, useNavigationType } from 'react-router-dom'
 import { useStore } from './store/useStore.js'
@@ -42,28 +43,32 @@ import WorkoutOnboarding from './views/WorkoutOnboarding.jsx'
 import { needsWorkoutOnboarding } from './lib/workout-prefs.js'
 import PermissionSteps from './views/PermissionSteps.jsx'
 import Home from './views/Home.jsx'
-import CheckIn from './views/CheckIn.jsx'
-import Plan from './views/Plan.jsx'
 import Train from './views/Train.jsx'
-import Progress from './views/Progress.jsx'
-import RoutineEdit from './views/RoutineEdit.jsx'
 import Workout from './views/Workout.jsx'
-import Stats from './views/Stats.jsx'
-import History from './views/History.jsx'
-import Library from './views/Library.jsx'
-import Profile from './views/Profile.jsx'
-import Muscles from './views/Muscles.jsx'
-import StructuralBalance from './views/StructuralBalance.jsx'
-import ProgressPhotos from './views/ProgressPhotos.jsx'
-import { SettingsRoute } from './views/Settings.jsx'
-import SpotifyCallback from './views/SpotifyCallback.jsx'
 import AmbientController from './components/AmbientController.jsx'
-import CreateWorkout from './views/CreateWorkout.jsx'
-import Admin from './views/Admin.jsx'
-import CoachChat from './views/CoachChat.jsx'
-import Measurements from './views/Measurements.jsx'
-import CoachIntake from './views/CoachIntake.jsx'
-import CoachSetup from './views/CoachSetup.jsx'
+import MediaFilters from './components/MediaFilters.jsx'
+
+// Screens other than the four tabs' first pages load as their own chunks and are fetched in the background once idle
+// (lib/lazy-view.js), so the first download is small and a tab switch is still instant.
+const CheckIn = lazyView(() => import('./views/CheckIn.jsx'))
+const Plan = lazyView(() => import('./views/Plan.jsx'))
+const Progress = lazyView(() => import('./views/Progress.jsx'))
+const RoutineEdit = lazyView(() => import('./views/RoutineEdit.jsx'))
+const Stats = lazyView(() => import('./views/Stats.jsx'))
+const History = lazyView(() => import('./views/History.jsx'))
+const Library = lazyView(() => import('./views/Library.jsx'))
+const Profile = lazyView(() => import('./views/Profile.jsx'))
+const Muscles = lazyView(() => import('./views/Muscles.jsx'))
+const StructuralBalance = lazyView(() => import('./views/StructuralBalance.jsx'))
+const ProgressPhotos = lazyView(() => import('./views/ProgressPhotos.jsx'))
+const SpotifyCallback = lazyView(() => import('./views/SpotifyCallback.jsx'))
+const CreateWorkout = lazyView(() => import('./views/CreateWorkout.jsx'))
+const Admin = lazyView(() => import('./views/Admin.jsx'))
+const CoachChat = lazyView(() => import('./views/CoachChat.jsx'))
+const Measurements = lazyView(() => import('./views/Measurements.jsx'))
+const CoachIntake = lazyView(() => import('./views/CoachIntake.jsx'))
+const CoachSetup = lazyView(() => import('./views/CoachSetup.jsx'))
+const SettingsRoute = lazyView(() => import('./views/Settings.jsx'), m => ({ default: m.SettingsRoute }))
 
 // last known scrollY per route, so back-navigation can put the page where it was
 const scrollPositions = new Map()
@@ -252,7 +257,7 @@ function Shell() {
   )
 
   const view = l => (!authed ? <Login /> : needsMobileOnboarding ? <MobileOnboarding /> : permSteps ? <PermissionSteps /> : needsWorkoutOnb ? <WorkoutOnboarding /> : (
-    <Routes location={l}>
+    <Suspense fallback={null}><Routes location={l}>
       <Route path="/home" element={<Home />} />
       {/* Gym check-in — switched off in Settings, the route falls through to the
           catch-all redirect below. */}
@@ -283,7 +288,7 @@ function Shell() {
       <Route path="/coach/setup" element={<CoachSetup />} />
       <Route path="/admin" element={user?.admin ? <Admin /> : <Navigate to="/home" replace />} />
       <Route path="*" element={<Navigate to="/home" replace />} />
-    </Routes>
+    </Routes></Suspense>
   ))
   const showPreview = !!preview && preview !== loc.pathname && authed && !needsMobileOnboarding && !permSteps && !needsWorkoutOnb
 
@@ -294,6 +299,7 @@ function Shell() {
           is under way the page it goes back to sits underneath (Page `under`), and as the swipe
           lands it simply stays: same key, same parent, so React keeps it instead of mounting
           the route again. */}
+      <MediaFilters />
       <div id="app">
         <Page key={loc.pathname} loc={loc} render={view} />
         {showPreview && <Page key={preview} loc={previewLoc(preview)} render={view} under scrollY={scrollPositions.get(preview) || 0} />}
@@ -342,6 +348,10 @@ function Page({ loc, render, under = false, scrollY = 0 }) {
 export default function App() {
   const boot = useStore(s => s.boot)
   useEffect(() => { boot() }, [boot])
+  // "HD sharpening" of the exercise pictures: on unless the person turned it off (index.css [data-media-hd]).
+  const mediaHd = useStore(s => s.S.mediaHd !== false)
+  useEffect(() => { document.documentElement.dataset.mediaHd = mediaHd ? '1' : '0' }, [mediaHd])
+  useEffect(() => prefetchViews(), [])
   // Android system back — sheet, then page, then press-again-to-exit (see lib/back.js)
   useEffect(() => {
     let stop = null, gone = false

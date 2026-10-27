@@ -59,7 +59,7 @@ export default function Library() {
     : []
   const row = e => {
     const best = bestWeightFor(S, e.id)
-    return <div key={e.id} className="item" {...tappable(() => exerciseDetailSheet(e))}>
+    return <div key={e.id} className="item lib-item" {...tappable(() => exerciseDetailSheet(e))}>
       <Thumb ex={e} />
       <div className="grow"><div className={`tt ${exerciseNameClass(e)}`}>{isFav(S, e.id) && <Icon name="starFill" className="fav-star" />}{exerciseNameFor(e)}</div><div className="ss capitalize">{t(MUSCLE_NAME[e.tg] || e.tg || e.bp)} · {t(e.eq)}</div></div>
       {best > 0 && <span className="tag acc">{fmtNum(best)}</span>}

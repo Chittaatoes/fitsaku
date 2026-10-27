@@ -2671,4 +2671,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "هذا المتصفح لا يدعم مفاتيح المرور. سجّل الدخول برقم هاتفك ورمز PIN بدلًا من ذلك.",
   "Use your phone number and your 4-digit PIN.": "استخدم رقم هاتفك ورمز PIN من 4 أرقام.",
   "Wrong phone number or PIN.": "رقم الهاتف أو رمز PIN غير صحيح.",
+  // --- HD sharpening ---
+  "HD sharpening": "تحسين الوضوح HD",
+  "Makes the exercise pictures and animations crisper and clearer.": "يجعل صور التمارين ورسومها المتحركة أكثر حدة ووضوحًا.",
 }

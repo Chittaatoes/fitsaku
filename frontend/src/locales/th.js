@@ -2627,4 +2627,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "เบราว์เซอร์นี้ไม่รองรับพาสคีย์ ให้เข้าสู่ระบบด้วยหมายเลขโทรศัพท์และ PIN แทน",
   "Use your phone number and your 4-digit PIN.": "ใช้หมายเลขโทรศัพท์และ PIN 4 หลักของคุณ",
   "Wrong phone number or PIN.": "หมายเลขโทรศัพท์หรือ PIN ไม่ถูกต้อง",
+  // --- HD sharpening ---
+  "HD sharpening": "เพิ่มความคมชัด HD",
+  "Makes the exercise pictures and animations crisper and clearer.": "ทำให้รูปภาพและแอนิเมชันท่าออกกำลังกายคมชัดและชัดเจนขึ้น",
 }

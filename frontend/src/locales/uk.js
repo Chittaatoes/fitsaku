@@ -2613,4 +2613,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Цей браузер не підтримує ключі доступу. Увійдіть за номером телефону та PIN-кодом.",
   "Use your phone number and your 4-digit PIN.": "Використовуйте номер телефону та 4-значний PIN-код.",
   "Wrong phone number or PIN.": "Неправильний номер телефону або PIN-код.",
+  // --- HD sharpening ---
+  "HD sharpening": "HD-різкість",
+  "Makes the exercise pictures and animations crisper and clearer.": "Робить зображення й анімації вправ чіткішими та яснішими.",
 }

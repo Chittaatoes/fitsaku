@@ -2620,4 +2620,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "Этот браузер не поддерживает ключи доступа. Войдите по номеру телефона и PIN-коду.",
   "Use your phone number and your 4-digit PIN.": "Используйте номер телефона и 4-значный PIN-код.",
   "Wrong phone number or PIN.": "Неверный номер телефона или PIN-код.",
+  // --- HD sharpening ---
+  "HD sharpening": "HD-резкость",
+  "Makes the exercise pictures and animations crisper and clearer.": "Делает изображения и анимации упражнений чётче и яснее.",
 }

@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore.js'
-import { t, LANGS, baseLang, setLang } from '../lib/i18n.js'
-import { ACCENTS } from '../lib/format.js'
+import { t, LANGS } from '../lib/i18n.js'
+import { effectiveLang } from '../lib/default-lang.js'
+import { goalSheet } from '../sheets.jsx'
+import { ACCENTS, ACCENT_NAMES } from '../lib/format.js'
 import Icon from '../components/Icon.jsx'
 import { Section, Row, SelectRow, Switch, Button } from '../components/ui.jsx'
 import SpotifyCard from '../components/SpotifyCard.jsx'
@@ -12,11 +14,11 @@ export default function Profile() {
   const S = useStore(s => s.S)
   const user = useStore(s => s.user)
   const isGuest = useStore(s => s.isGuest())
+  const config = useStore(s => s.config)
   const { update } = useStore()
 
-  const handleLanguageChange = (lang) => {
-    setLang(lang)
-  }
+  // Saved on the profile like the Settings page does it (App then applies it everywhere), never just set on screen.
+  const handleLanguageChange = lang => update(s => { s.lang = lang; s.langAuto = false })
 
   const handleThemeChange = (theme) => {
     update(s => { s.theme = theme })
@@ -67,7 +69,7 @@ export default function Profile() {
       <Section title={t('Preferences')}>
         <SelectRow
           title={t('Language')}
-          value={S.lang || 'en'}
+          value={effectiveLang(S, config)}
           options={Object.entries(LANGS).map(([code, name]) => ({ value: code, label: name }))}
           onChange={handleLanguageChange}
         />
@@ -84,7 +86,7 @@ export default function Profile() {
         <SelectRow
           title={t('Accent Color')}
           value={S.accent || 'lime'}
-          options={Object.entries(ACCENTS).map(([key, color]) => ({ value: key, label: key.charAt(0).toUpperCase() + key.slice(1) }))}
+          options={Object.entries(ACCENTS).map(([key, color]) => ({ value: key, label: t(ACCENT_NAMES[key] || key) }))}
           onChange={handleAccentChange}
         />
       </Section>
@@ -94,7 +96,7 @@ export default function Profile() {
         <Row title={t('Equipment')} onClick={() => nav('/settings/equipment')}>
           <Icon name="settings" className="chev" />
         </Row>
-        <Row title={t('Goals')} onClick={() => nav('/settings/goals')}>
+        <Row title={t('Goals')} onClick={() => goalSheet()}>
           <Icon name="settings" className="chev" />
         </Row>
         <Row title={t('Units')} onClick={() => nav('/settings/units')}>
@@ -112,10 +114,10 @@ export default function Profile() {
 
       {/* Data & Backup */}
       <Section title={t('Data & Backup')}>
-        <Row title={t('Backups')} onClick={() => nav('/settings/data-backup')}>
+        <Row title={t('Backups')} onClick={() => nav('/settings/data')}>
           <Icon name="settings" className="chev" />
         </Row>
-        <Row title={t('Import / Export')} onClick={() => nav('/settings/import-export')}>
+        <Row title={t('Import / Export')} onClick={() => nav('/settings/data', { state: { find: 'Import backup' } })}>
           <Icon name="settings" className="chev" />
         </Row>
       </Section>
@@ -123,7 +125,7 @@ export default function Profile() {
       {/* Account & Security */}
       {!isGuest && (
         <Section title={t('Account')}>
-          <Row title={t('Passkeys')} onClick={() => nav('/settings/passkeys')}>
+          <Row title={t('Passkeys')} onClick={() => nav('/settings/account', { state: { find: 'Passkeys' } })}>
             <Icon name="settings" className="chev" />
           </Row>
           <Row title={t('Sign Out')} onClick={() => nav('/settings/account')}>
@@ -137,7 +139,7 @@ export default function Profile() {
         <Row title={t('About')} onClick={() => nav('/settings/about')}>
           <Icon name="chevronRight" className="chev" />
         </Row>
-        <Row title={t('Help')} onClick={() => nav('/settings/help')}>
+        <Row title={t('Help')} onClick={() => nav('/settings/about')}>
           <Icon name="chevronRight" className="chev" />
         </Row>
       </Section>

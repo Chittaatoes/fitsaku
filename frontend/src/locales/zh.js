@@ -2616,4 +2616,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "此浏览器不支持通行密钥。请改用手机号和 PIN 登录。",
   "Use your phone number and your 4-digit PIN.": "请使用你的手机号和 4 位数字 PIN。",
   "Wrong phone number or PIN.": "手机号或 PIN 错误。",
+  // --- HD sharpening ---
+  "HD sharpening": "HD 锐化",
+  "Makes the exercise pictures and animations crisper and clearer.": "让动作图片和动画更清晰锐利。",
 }

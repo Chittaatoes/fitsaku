@@ -23,7 +23,9 @@ let host, root, originalS, scrolls
 const pages = () => [...document.querySelectorAll('#app > .page')]
 const under = () => document.querySelector('#app > .page.under')
 const send = detail => act(() => { window.dispatchEvent(new CustomEvent(BACK_PREVIEW_EVENT, { detail })) })
-const go = async hash => { await act(async () => { window.location.hash = hash; window.dispatchEvent(new HashChangeEvent('hashchange')); window.dispatchEvent(new PopStateEvent('popstate')) }) }
+// Screens load as their own chunks (lib/lazy-view.js): let the one being shown arrive before looking at it.
+const settle = () => act(async () => { await new Promise(r => setTimeout(r, 60)) })
+const go = async hash => { await act(async () => { window.location.hash = hash; window.dispatchEvent(new HashChangeEvent('hashchange')); window.dispatchEvent(new PopStateEvent('popstate')) }); await settle() }
 const scrolledTo = async y => {
   Object.defineProperty(window, 'scrollY', { configurable: true, value: y })
   await act(async () => { window.dispatchEvent(new Event('scroll')) })
@@ -38,6 +40,7 @@ beforeEach(async () => {
   scrolls = []
   window.scrollTo = vi.fn((x, y) => { scrolls.push([x, y]); Object.defineProperty(window, 'scrollY', { configurable: true, value: y }) })
   await act(async () => { root.render(<App />) })
+  await settle()
 })
 afterEach(() => {
   act(() => root.unmount())

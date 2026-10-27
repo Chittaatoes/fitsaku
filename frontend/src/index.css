@@ -2464,3 +2464,16 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 .home-last .lbl2{font-size:11px;font-weight:500;letter-spacing:.03em;text-transform:uppercase;color:var(--label-3)}
 .home-last .ttl{font-size:17px;font-weight:600;letter-spacing:-.012em;margin:2px 0}
 .home-h{font-size:13px;font-weight:600;color:var(--label-2);margin:0 2px 8px;text-transform:uppercase;letter-spacing:.05em}
+
+/* --- exercise pictures: "HD sharpening" (Settings), see components/MediaFilters.jsx ---
+   The stills and clips are 180 px and are shown at up to 320 px: smooth upscaling blurs them. Edges are restored
+   on the big still (SVG kernel), and a touch of contrast and colour clarifies still and clip. Only the large
+   media view: list thumbnails are untouched. */
+:root[data-media-hd="1"] .exmedia img{filter:url(#fs-sharpen) contrast(1.08) saturate(1.1);image-rendering:-webkit-optimize-contrast}
+:root[data-media-hd="1"] .exmedia video{filter:contrast(1.1) saturate(1.12) brightness(1.02)}
+@media (prefers-reduced-data:reduce){:root[data-media-hd="1"] .exmedia img,:root[data-media-hd="1"] .exmedia video{filter:none}}
+
+/* --- scrolling: long exercise lists ---
+   A row that is off screen is not laid out or painted until it nears the viewport (the browser skips its
+   work), with a remembered height so the scrollbar does not jump. Library only: the rest are short lists. */
+.lib-item{content-visibility:auto;contain-intrinsic-size:auto 68px}

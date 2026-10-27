@@ -564,6 +564,13 @@ export default function Settings({ page = null, find = null, via = null, entryKe
             value={S.gifSize === 'mini' || S.gifSize === 'off' ? S.gifSize : 'full'}
             onChange={v => update(s => { s.gifSize = v })} />
         </Row>
+        {/* The built-in pictures are 180 px shown larger; this sharpens and enriches them (components/MediaFilters.jsx,
+            index.css [data-media-hd]). On unless turned off; a switch because a very old phone may prefer the plain look. */}
+        <Row icon="sparkles" iconTint="var(--teal)" title={t('HD sharpening')}
+          subtitle={t('Makes the exercise pictures and animations crisper and clearer.')}>
+          <Switch aria-label={t('HD sharpening')} checked={S.mediaHd !== false}
+            onChange={v => update(s => { s.mediaHd = v })} />
+        </Row>
         {/* Store apps: how sharp the animations are, from packs this device downloads. Per device,
             never synced: the profile is not touched (components/Animations.jsx). */}
         <AnimationQualityRow />

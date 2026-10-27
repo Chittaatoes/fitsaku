@@ -2616,4 +2616,7 @@ export default {
   "This browser doesn't support passkeys. Sign in with your phone number and PIN instead.": "यह ब्राउज़र पासकी को सपोर्ट नहीं करता। इसके बजाय अपने फ़ोन नंबर और PIN से साइन इन करें।",
   "Use your phone number and your 4-digit PIN.": "अपना फ़ोन नंबर और 4 अंकों का PIN इस्तेमाल करें।",
   "Wrong phone number or PIN.": "फ़ोन नंबर या PIN ग़लत है।",
+  // --- HD sharpening ---
+  "HD sharpening": "HD शार्पनिंग",
+  "Makes the exercise pictures and animations crisper and clearer.": "व्यायाम की तस्वीरों और एनिमेशन को ज़्यादा साफ़ और तीखा बनाता है।",
 }
