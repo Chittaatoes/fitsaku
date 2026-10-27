@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, cpSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -36,6 +36,21 @@ const catalogueMedia = {
       res.setHeader('Content-Type', ext === '.mp4' ? 'video/mp4' : 'image/webp')
       res.end(readFileSync(file))
     })
+  }
+}
+
+// Personal-use build (see MEDIA_PERSONAL_USE.md): VITE_BUNDLE_MEDIA=1 copies the 180 px stills and clips from
+// catalogue/media into dist/exercise-media, unmodified and with their licence notice, so a static host
+// (Vercel) can serve them from the same origin. Off by default: an ordinary build ships none.
+const bundleMedia = {
+  name: 'fitsaku-bundle-media',
+  apply: 'build',
+  closeBundle() {
+    if (process.env.VITE_BUNDLE_MEDIA !== '1' || process.env.VITE_BUILTIN_MEDIA === '0') return
+    const src = resolve(fileURLToPath(new URL('.', import.meta.url)), '../catalogue/media')
+    const out = resolve(fileURLToPath(new URL('.', import.meta.url)), 'dist/exercise-media')
+    if (!existsSync(join(src, 'still'))) { console.warn('VITE_BUNDLE_MEDIA=1 but catalogue/media/still is missing: no exercise media bundled'); return }
+    for (const d of ['still', 'clip', 'NOTICE.md']) if (existsSync(join(src, d))) cpSync(join(src, d), join(out, d), { recursive: true })
   }
 }
 
@@ -106,7 +121,7 @@ const appVersion = process.env.APP_BUILD ? `${pkgVersion}+${process.env.APP_BUIL
 
 export default defineConfig({
   define: { __APP_VERSION__: JSON.stringify(appVersion) },
-  plugins: [react(), umami, flavor, swStamp, catalogueMedia],
+  plugins: [react(), umami, flavor, swStamp, catalogueMedia, bundleMedia],
   base: './',
   server: {
     // The Coach's core (payload, validator, prompts, HTTP adapters) lives in ../api/coach/core

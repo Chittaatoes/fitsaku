@@ -65,9 +65,12 @@ export function ignoreRules(root = ROOT) {
   try {
     g('init', '-q');
     fs.copyFileSync(path.join(root, '.gitignore'), path.join(tmp, '.gitignore'));
+    // With MEDIA_PERSONAL_USE.md the owner keeps the media in the repository on purpose; without it they stay out.
+    const personal = fs.existsSync(path.join(root, 'MEDIA_PERSONAL_USE.md'));
+    const media = ['catalogue/media/still/0001.webp', 'catalogue/media/clip/0001.mp4'];
     const mustIgnore = ['.env', '.env.production', 'data/db.json', 'data/state-abc.json', 'frontend/dist/index.html', 'node_modules/x/index.js',
-      'catalogue/media/still/0001.webp', 'catalogue/media/clip/0001.mp4', 'server.pem', 'db.key', 'ca.crt', 'backup.dump', 'coach-auth/x.json', 'uploads/u/a.png', 'frontend/build_output.txt', 'debug.log'];
-    const mustKeep = ['LICENSE', 'NOTICE.md', 'catalogue/media/NOTICE.md', '.env.example', 'README.md', 'api/migrations/001_init.sql', 'api/server.js', 'frontend/src/App.jsx', 'docs/DEPLOYMENT.md', 'render.yaml', 'frontend/vercel.json'];
+      ...(personal ? [] : media), 'server.pem', 'db.key', 'ca.crt', 'backup.dump', 'coach-auth/x.json', 'uploads/u/a.png', 'frontend/build_output.txt', 'debug.log'];
+    const mustKeep = ['LICENSE', 'NOTICE.md', 'catalogue/media/NOTICE.md', '.env.example', 'README.md', 'api/migrations/001_init.sql', 'api/server.js', 'frontend/src/App.jsx', 'docs/DEPLOYMENT.md', 'render.yaml', 'frontend/vercel.json', ...(personal ? [...media, 'MEDIA_PERSONAL_USE.md'] : [])];
     const ignored = p => { try { g('check-ignore', '-q', '--no-index', p); return true; } catch { return false; } };
     for (const p of mustIgnore) if (!ignored(p)) problems.push(`not ignored but should be: ${p}`);
     for (const p of mustKeep) if (ignored(p)) problems.push(`ignored but must be kept: ${p}`);

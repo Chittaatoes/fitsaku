@@ -6,7 +6,7 @@
   "outputDirectory": "dist",
   "build": {
     "env": {
-      "VITE_BUILTIN_MEDIA": "0"
+      "VITE_BUNDLE_MEDIA": "1"
     }
   },
   "rewrites": [

@@ -31,10 +31,10 @@ frontend/bundle-size.json
 # Local planning notes
 docs/superpowers/plans/
 
-# Third-party exercise media (Gym visual) is licensed to the openGym app only: a FitSaku repository
-# must not redistribute it. The licence notice (catalogue/media/NOTICE.md) is kept.
-catalogue/media/still/
-catalogue/media/clip/
+# Third-party exercise media (Gym visual, catalogue/media/still and /clip) is licensed to the openGym app and
+# may be kept by a NON-COMMERCIAL fork, unmodified, with its notice (NOTICE.md). It is tracked here only because
+# MEDIA_PERSONAL_USE.md records that this deployment is personal and non-commercial. Without that file, ignore
+# them again:   catalogue/media/still/   catalogue/media/clip/
 
 # Never commit credentials, dumps or user data
 .env.*

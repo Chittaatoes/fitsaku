@@ -169,10 +169,10 @@ is not the official openGym project. Where this file says "openGym" it names the
 - **Source for network users (AGPL section 13):** a FitSaku service must offer its users the
   corresponding source of the version running. The app links it from Settings (the address is the
   `VITE_SOURCE_URL` build variable of the deployment; set it to the fork's repository).
-- **Exercise media:** the stills and animations above are licensed to the openGym application only,
-  and a commercial fork or any other use needs its own licence from gymvisual.com. The FitSaku
-  public build therefore ships **without** them (`VITE_BUILTIN_MEDIA=0`, neutral tiles instead).
-  Do not publish a FitSaku image or site that contains `catalogue/media` until that licence is obtained.
+- **Exercise media:** the stills and animations above are Gym visual's, licensed to openGym; a non-commercial fork may keep the
+  unmodified 180 px media with their notice, and anything else needs a licence from gymvisual.com. This FitSaku deployment keeps them for
+  **personal, non-commercial** use only, as recorded in `MEDIA_PERSONAL_USE.md`; that file is the owner's statement, not a licence from Gym visual.
+  If the use becomes commercial, or the media is wanted for anything else, remove it (see that file) or obtain a licence first.
 - **Not covered by the media licence and unchanged:** the MuscleMap geometry (MIT) and the ExerciseDB
   text (MIT) above, which stay with their notices.
 - **FitSaku additions:** the FitSaku application icon (`frontend/public/icon-*.png`) is original artwork

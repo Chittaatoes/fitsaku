@@ -107,12 +107,15 @@ Passkeys only work on the host that equals the API's `RP_ID`/`ORIGIN`, so test t
 ### 9 to 10. End-to-end and isolation
 Register, sign out and in, wrong credentials, two accounts that cannot see each other, sync from two devices (409 then merge), restart Render and confirm history, Coach (if enabled) including rejecting a proposal.
 
-### 11. Restricted media: explicit
-The exercise stills and clips (Gym visual) are licensed to the **openGym app only**; FitSaku has **no permission**. They are excluded from every public artifact:
-`frontend/vercel.json` and `web/Dockerfile` build with `VITE_BUILTIN_MEDIA=0`; `web/Dockerfile` does not even build the media stage unless `--build-arg INCLUDE_EXERCISE_MEDIA=1`;
-`.dockerignore` keeps `catalogue/media/still` and `/clip` out of build contexts; `.gitignore` keeps them out of a repository; the Vite dev server refuses to serve them when `VITE_BUILTIN_MEDIA=0`; the API image and `render.yaml` never touch them.
-Check, repeatedly: `cd frontend && npm run build && npm run audit:public` (or `node scripts/audit-public-artifacts.mjs --dir <folder> [--docker-image <name>]`): it **fails** if any restricted path, video file or byte-identical copy is present.
-A neutral placeholder is shown instead; the catalogue, search, filters, logging and progression are unchanged. Do not enable the media until you hold a licence from gymvisual.com.
+### 11. Exercise media: personal-use mode (owner's decision)
+The exercise stills and clips (Gym visual) are licensed to the openGym project; `NOTICE.md` lets a **non-commercial** fork keep them **unmodified, with the notice**.
+This deployment keeps them because the owner states it is personal and non-commercial (`MEDIA_PERSONAL_USE.md`, which records the conditions and the risk, including that opening sign-up to anyone weakens the "personal" claim).
+- `frontend/vercel.json` builds with `VITE_BUNDLE_MEDIA=1`: `vite build` copies `catalogue/media/still`, `clip` and `NOTICE.md` into `dist/exercise-media/` (about 240 MB, 13,000 files). The files must be in the repository (`.gitignore` no longer excludes them).
+- Settings > About shows Gym visual's attribution while the media is on.
+- **Vercel limits are unverified:** a 240 MB static output may exceed what your plan accepts. If a deploy fails for size, set `VITE_BUNDLE_MEDIA=0` (placeholders return) or ship only `still/` (48 MB).
+- `scripts/audit-public-artifacts.mjs` allows the media only inside `exercise-media/still|clip` and only while `MEDIA_PERSONAL_USE.md` exists; the Docker `web` image still defaults to **no** media (`INCLUDE_EXERCISE_MEDIA=0`).
+- To go back to excluding it: delete `MEDIA_PERSONAL_USE.md`, set `VITE_BUNDLE_MEDIA` to `0` (or `VITE_BUILTIN_MEDIA=0`) in `vercel.json`, and re-add `catalogue/media/still/` and `clip/` to `.gitignore`. The audit then enforces it again.
+If the use ever becomes commercial or the site is offered as a service, remove the media or obtain a licence from gymvisual.com first.
 
 ### 12. Open registration
 Only after: owner verified (step 4), restricted media absent (step 11), TLS validated (step 1), staging tests passed, backups understood. Then `PUBLIC_SIGNUP=1` and **remove** `INVITE_ONLY`. It has no effect while no administrator exists. Revert to close it.

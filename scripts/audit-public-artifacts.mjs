@@ -23,6 +23,9 @@ const NUMERIC_MEDIA = /(^|[\\/])(still|clip)[\\/]\d{3,6}\.(webp|mp4|png|jpg|gif)
 const MEDIA_DIR = /(^|[\\/])exercise-media[\\/]/i;
 const VIDEO_EXT = /\.(mp4|webm|gif)$/i;
 
+/** Personal-use mode: MEDIA_PERSONAL_USE.md exists, so the owner has recorded a non-commercial use that the media notice allows. */
+export const personalMedia = (root = ROOT) => fs.existsSync(path.join(root, 'MEDIA_PERSONAL_USE.md'));
+
 const sha = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 function* walk(dir) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -42,12 +45,14 @@ export function restrictedHashes(root = ROOT) {
 }
 
 /** Problems found in one built folder. */
-export function auditDir(dir, hashes = restrictedHashes()) {
+export function auditDir(dir, hashes = restrictedHashes(), { allowMedia = false } = {}) {
   const problems = [];
   if (!fs.existsSync(dir)) return [`${dir}: does not exist`];
   for (const f of walk(dir)) {
     const rel = path.relative(dir, f);
     if (/(^|[\\/])NOTICE\.md$/i.test(rel)) continue;                  // the licence notice is meant to travel
+    // Personal-use mode: the media is allowed in exactly one place, exercise-media/still|clip, unmodified.
+    if (allowMedia && /^exercise-media[\\/](still|clip)[\\/]\d{3,6}\.(webp|mp4)$/i.test(rel)) continue;
     if (MEDIA_DIR.test(rel) || NUMERIC_MEDIA.test(rel)) problems.push(`${rel}: exercise media path`);
     else if (VIDEO_EXT.test(rel)) problems.push(`${rel}: video/animation file in a public artifact`);
     else if (hashes.size && /\.(webp|png|jpg|jpeg)$/i.test(rel) && fs.statSync(f).size > 1024 && hashes.has(sha(f))) problems.push(`${rel}: identical to a restricted exercise image`);
@@ -61,13 +66,21 @@ export function auditInputs(root = ROOT) {
   const read = f => { try { return fs.readFileSync(path.join(root, f), 'utf8'); } catch { return null; } };
   const need = (file, test, msg) => { const t = read(file); if (t == null) problems.push(`${file}: missing`); else if (!test(t)) problems.push(`${file}: ${msg}`); };
 
+  const personal = personalMedia(root);
+  if (personal) {
+    need('catalogue/media/NOTICE.md', t => /Gym visual/i.test(t), 'the licence notice must be present to travel with the media');
+    need('frontend/vercel.json', t => JSON.parse(t).build?.env?.VITE_BUNDLE_MEDIA === '1' && JSON.parse(t).build?.env?.VITE_BUILTIN_MEDIA !== '0', 'personal-use mode: build.env.VITE_BUNDLE_MEDIA must be "1" and VITE_BUILTIN_MEDIA not "0"');
+    need('frontend/vite.config.js', t => /VITE_BUNDLE_MEDIA/.test(t) && /exercise-media/.test(t), 'the build must bundle the media (VITE_BUNDLE_MEDIA)');
+  }
   need('web/Dockerfile', t => /ARG INCLUDE_EXERCISE_MEDIA=0/.test(t), 'INCLUDE_EXERCISE_MEDIA must default to 0');
   // Every COPY of the media directory must sit in the optional stage `media-1`, which is not built unless asked for.
   need('web/Dockerfile', t => t.split(/^FROM /m).every(stage => !/^\s*COPY\s+catalogue\/media\/?\s/m.test(stage) || /^scratch AS media-1/.test(stage)), 'copies catalogue/media outside the optional media-1 stage');
   need('web/Dockerfile', t => /ARG VITE_BUILTIN_MEDIA=0/.test(t) && /VITE_BUILTIN_MEDIA="?\$\{?VITE_BUILTIN_MEDIA/.test(t), 'the frontend build must default to VITE_BUILTIN_MEDIA=0');
   need('.dockerignore', t => /catalogue\/media\/still/.test(t) && /catalogue\/media\/clip/.test(t), 'must exclude catalogue/media/still and /clip from build contexts');
-  need('.gitignore', t => /catalogue\/media\/still/.test(t) && /catalogue\/media\/clip/.test(t), 'must keep the restricted media out of a public repository');
-  need('frontend/vercel.json', t => JSON.parse(t).build?.env?.VITE_BUILTIN_MEDIA === '0', 'build.env.VITE_BUILTIN_MEDIA must be "0"');
+  if (!personal) {
+    need('.gitignore', t => /^catalogue\/media\/still\//m.test(t) && /^catalogue\/media\/clip\//m.test(t), 'must keep the restricted media out of a public repository');
+    need('frontend/vercel.json', t => JSON.parse(t).build?.env?.VITE_BUILTIN_MEDIA === '0', 'build.env.VITE_BUILTIN_MEDIA must be "0"');
+  }
   need('frontend/vite.config.js', t => /VITE_BUILTIN_MEDIA/.test(t) && /configureServer/.test(t) && /apply: 'serve'/.test(t), 'the dev media middleware must be dev-only and honour VITE_BUILTIN_MEDIA=0');
   need('render.yaml', t => !/catalogue\/media|exercise-media/.test(t) && /rootDir: api/.test(t), 'the API service must be built from api/ only');
   need('api/Dockerfile', t => !/catalogue\/media/.test(t), 'the API image must not copy media');
@@ -90,7 +103,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   const run = (label, problems) => { report.push({ label, problems }); };
   run('deployment inputs', auditInputs());
   const targets = dirs.length ? dirs : (fs.existsSync(path.join(ROOT, 'frontend', 'dist')) ? [path.join(ROOT, 'frontend', 'dist')] : []);
-  for (const d of targets) run('folder ' + d, auditDir(d));
+  for (const d of targets) run('folder ' + d + (personalMedia() ? ' (personal-use mode)' : ''), auditDir(d, restrictedHashes(), { allowMedia: personalMedia() }));
   for (const i of images) run('image ' + i, auditImage(i));
   let bad = 0;
   for (const r of report) { console.log((r.problems.length ? 'FAIL ' : 'ok   ') + r.label); r.problems.slice(0, 20).forEach(p => console.log('       ' + p)); bad += r.problems.length; }
