@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { createMusic, TRACKS, RESTART_AFTER_S } from './music.js'
 
 // An audio element stand-in: events by name, a play() that can be refused, a clock.
-function fakeAudio({ refuse = false, fail = false } = {}) {
+function fakeAudio({ refuse = false, fail = false, readOnlyVolume = false } = {}) {
   const l = {}
   const a = {
     preload: '', src: '', currentTime: 0, paused: true,
@@ -17,15 +17,30 @@ function fakeAudio({ refuse = false, fail = false } = {}) {
     pause: vi.fn(() => { a.paused = true; if (l.pause) l.pause() }),
     refuse, fail,
   }
+  // iOS: the volume property can be read and written to, and it stays 1.
+  if (readOnlyVolume) Object.defineProperty(a, 'volume', { get: () => 1, set: () => {} })
+  else a.volume = 1
   return a
+}
+
+// A Web Audio stand-in: a gain the music is routed through, a context that starts suspended.
+function fakeCtx() {
+  const gain = { gain: { value: 1, setTargetAtTime: vi.fn((v) => { gain.gain.value = v }) }, connect: vi.fn() }
+  const ctx = {
+    currentTime: 0, state: 'suspended', destination: {},
+    createMediaElementSource: vi.fn(() => ({ connect: vi.fn() })), createGain: vi.fn(() => gain),
+    resume: vi.fn(async () => { ctx.state = 'running' }),
+  }
+  return { ctx, gain }
 }
 const rig = opts => {
   const audio = fakeAudio(opts)
   const changes = []
   const h = {}
   const doc = { h, addEventListener: (t, f) => { h[t] = f }, removeEventListener: t => { delete h[t] } }
-  const m = createMusic({ audioFactory: () => audio, base: 'https://gym.test/', onPlayingChange: p => changes.push(p), doc })
-  return { m, audio, changes, doc }
+  const web = fakeCtx()
+  const m = createMusic({ audioFactory: () => audio, base: 'https://gym.test/', onPlayingChange: p => changes.push(p), doc, ctxFactory: () => web.ctx })
+  return { m, audio, changes, doc, web }
 }
 const file = a => a.src.split('/').pop()
 
@@ -135,5 +150,61 @@ describe('the workout music', () => {
     expect(file(audio)).toBe('music1.mp3')
     await m.start()
     expect(file(audio)).toBe('music1.mp3')
+  })
+})
+
+describe('the volume of the music', () => {
+  it('sets the audio element volume where the browser lets it, and does not touch Web Audio', async () => {
+    const { m, audio, web } = rig()
+    await m.start()
+    m.setVolume(0.3)
+    expect(audio.volume).toBeCloseTo(0.3)
+    m.setVolume(0.9)
+    expect(audio.volume).toBeCloseTo(0.9)
+    expect(web.ctx.createMediaElementSource).not.toHaveBeenCalled()
+  })
+
+  it('a volume chosen before the first song is the one it starts at', async () => {
+    const { m, audio } = rig()
+    m.setVolume(0.4)
+    await m.start()
+    expect(audio.volume).toBeCloseTo(0.4)
+  })
+
+  it('is clamped to 0–1', async () => {
+    const { m, audio } = rig()
+    await m.start()
+    m.setVolume(7); expect(audio.volume).toBe(1)
+    m.setVolume(-2); expect(audio.volume).toBe(0)
+    m.setVolume(NaN); expect(audio.volume).toBe(1)
+  })
+
+  it('where the element volume cannot be set (the iPhone) the music goes through a gain, and the volume is the gain', async () => {
+    const { m, audio, web } = rig({ readOnlyVolume: true })
+    m.setVolume(0.25)
+    await m.start()
+    expect(web.ctx.createMediaElementSource).toHaveBeenCalledWith(audio)
+    expect(web.ctx.createGain).toHaveBeenCalledTimes(1)
+    expect(web.ctx.resume).toHaveBeenCalled()                     // started suspended: the touch that starts the song wakes it
+    expect(web.gain.gain.setTargetAtTime).toHaveBeenLastCalledWith(0.25, expect.any(Number), expect.any(Number))
+    m.setVolume(0.8)
+    expect(web.gain.gain.setTargetAtTime).toHaveBeenLastCalledWith(0.8, expect.any(Number), expect.any(Number))
+    expect(m.volume).toBe(0.8)
+  })
+
+  it('a device with no Web Audio and a read-only volume plays at full volume rather than not at all', async () => {
+    const audio = fakeAudio({ readOnlyVolume: true })
+    const m = createMusic({ audioFactory: () => audio, base: 'https://gym.test/', doc: null, ctxFactory: () => null })
+    await m.start()
+    m.setVolume(0.2)
+    expect(m.state.playing).toBe(true)
+  })
+
+  it('the volume survives the end of a session and the next one starts at it', async () => {
+    const { m, audio } = rig()
+    m.setVolume(0.35)
+    await m.start(); m.stop()
+    await m.start()
+    expect(audio.volume).toBeCloseTo(0.35)
   })
 })

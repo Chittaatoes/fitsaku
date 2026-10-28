@@ -62,6 +62,8 @@ describe('the workout music card', () => {
     expect(set).not.toBeNull()
     expect(set.textContent).toContain('Workout sound')
     expect(set.textContent).toContain('Rest only')
+    expect(set.textContent).not.toContain('Workout + rest')           // the training beat is gone
+    expect(set.querySelector('input[type=range]')).not.toBeNull()     // the volume: the music's
     expect(set.textContent).toContain('Play music in a workout')
     act(() => btn('Workout sound settings').click())
     expect(host.querySelector('.mp-set')).toBeNull()
@@ -69,9 +71,9 @@ describe('the workout music card', () => {
 
   it('the options change the workout sound setting, and the switch the music auto-play', () => {
     act(() => btn('Workout sound settings').click())
-    const chip = [...host.querySelectorAll('.amb-opts .chip')].find(c => c.textContent === 'Rest only')
+    const chip = [...host.querySelectorAll('.amb-opts .chip')].find(c => c.textContent === 'Off')
     act(() => chip.click())
-    expect(useStore.getState().S.ambient).toBe('rest')
+    expect(useStore.getState().S.ambient).toBe('off')
     const sw = host.querySelector('button[role="switch"][aria-label="Play music in a workout"]')
     expect(sw.getAttribute('aria-checked')).toBe('true')               // on unless turned off
     act(() => sw.click())

@@ -256,8 +256,8 @@ export const DEF = {
   xpAwarded: {},
   // The workout's own music (lib/music.js): played from the start of a workout unless this is false.
   musicAuto: true,
-  // The built-in workout sound (lib/ambient.js): 'off' | 'rest' | 'all', and its volume 0–1.
-  ambient: 'all', ambientVol: 0.5,
+  // The built-in rest sound (lib/ambient.js): 'off' | 'rest', and the volume 0–1 of it and of the workout's music (lib/music.js).
+  ambient: 'rest', ambientVol: 0.8,
   // Weekly quests: [{ id, title, target, progress, completed, completedAt }]
   // Generated from user's training schedule; tracks progress toward weekly goals.
   quests: [],

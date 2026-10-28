@@ -1,17 +1,24 @@
 import { useStore } from '../store/useStore.js'
-import { t } from '../lib/i18n.js'
+import { t, getLang, useLang } from '../lib/i18n.js'
 import { ambientSettingOf, ambientVolumeOf } from '../lib/ambient-plan.js'
 
 // Functions, so each word is a literal t() call the string checks can see.
 const OPTIONS = [
   ['off', () => t('Off')],
   ['rest', () => t('Rest only')],
-  ['all', () => t('Workout + rest')],
 ]
 
-/* The built-in workout sound's settings: off, only while resting, or a beat while training and calm
-   while resting, and how loud. Used in Profile and in the workout's music panel. */
+const NOTE = {
+  en: 'A calm sound while you rest. The volume sets the workout music and this sound.',
+  id: 'Suara tenang saat istirahat. Volume mengatur musik latihan dan suara ini.',
+  'pt-BR': 'Um som calmo durante o descanso. O volume ajusta a música do treino e este som.',
+}
+const note = () => { const l = getLang(); return NOTE[l] || NOTE[String(l).split('-')[0]] || NOTE.en }
+
+/* The workout sound's settings: the calm sound while resting (on or off), and the volume, which is the loudness of the
+   workout's own music (lib/music.js) as well as of that sound. Used in Profile and in the workout's music card. */
 export default function AmbientControls({ compact = false }) {
+  useLang()
   const S = useStore(s => s.S)
   const update = useStore(s => s.update)
   const setting = ambientSettingOf(S)
@@ -22,12 +29,12 @@ export default function AmbientControls({ compact = false }) {
       {OPTIONS.map(([key, label]) => <button key={key} type="button" role="radio" aria-checked={setting === key}
         className={'chip' + (setting === key ? ' on' : '')} onClick={() => update(s => { s.ambient = key })}>{label()}</button>)}
     </div>
-    {setting !== 'off' && <label className="amb-vol">
+    <label className="amb-vol">
       <span className="small muted">{t('Volume')}</span>
       <input type="range" min="0" max="100" step="5" value={Math.round(vol * 100)} aria-label={t('Volume')}
         onChange={e => update(s => { s.ambientVol = Number(e.target.value) / 100 })} />
-    </label>}
-    {!compact && <p className="small muted amb-note">{t('A built-in beat while you train and a calm sound while you rest. It follows your Sound setting and stays quiet while the workout music plays.')}</p>}
-    {setting !== 'off' && !S.sound && <p className="small amb-warn">{t('Sound is off, so nothing plays. Turn it on in Settings.')}</p>}
+    </label>
+    {!compact && <p className="small muted amb-note">{note()}</p>}
+    {!S.sound && <p className="small amb-warn">{t('Sound is off, so nothing plays. Turn it on in Settings.')}</p>}
   </div>
 }

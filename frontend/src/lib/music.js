@@ -4,7 +4,11 @@
 //
 // Nothing here talks to a server or an account. A browser may refuse to start sound without a tap
 // (autoplay rules): then `blocked` is set and the music starts on the person's next touch anywhere, or on the play button.
-// Played songs set `useUI.extMusic`, which keeps the built-in generated workout sound quiet (components/AmbientController.jsx).
+//
+// The volume (setVolume, 0–1) is the one the person sets in the workout sound settings. Where the audio element's own `volume`
+// can be set it is used. On the iPhone it cannot (the property is read-only there), so the element is routed through
+// Web Audio and the volume is a gain: with that, like every other Web Audio sound of the app, the music follows the silent
+// switch unless "play sounds on silent" is on (lib/sound.js).
 
 export const TRACKS = [1, 2, 3, 4].map(n => ({ id: 'music' + n, n, src: 'music/music' + n + '.mp3' }))
 const COUNT = TRACKS.length
@@ -16,8 +20,18 @@ const srcOf = (i, base) => {
   try { return new URL(rel, base || (typeof document !== 'undefined' ? document.baseURI : 'http://localhost/')).href } catch { return rel }
 }
 
-export function createMusic({ audioFactory = () => new Audio(), base, onPlayingChange = () => {}, doc = typeof document !== 'undefined' ? document : null } = {}) {
+const clamp01 = v => (Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 1)
+const volumeWritable = a => {
+  try { const keep = a.volume; a.volume = 0.5; const ok = Math.abs(a.volume - 0.5) < 0.01; a.volume = keep; return ok } catch { return false }
+}
+
+export function createMusic({
+  audioFactory = () => new Audio(), base, onPlayingChange = () => {}, doc = typeof document !== 'undefined' ? document : null,
+  ctxFactory = () => { const C = typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext); return C ? new C() : null },
+} = {}) {
   let audio = null
+  let volume = 1
+  let actx = null, gain = null            // set only where the element's own volume cannot be
   let state = { index: 0, playing: false, blocked: false, error: false }
   const subs = new Set()
   const set = patch => {
@@ -42,10 +56,28 @@ export function createMusic({ audioFactory = () => new Audio(), base, onPlayingC
     doc.addEventListener('pointerup', go, true); doc.addEventListener('keydown', go, true)
   }
 
+  // The volume goes to the element, or to the gain it is routed through.
+  const applyVolume = () => {
+    if (gain && actx) { try { gain.gain.setTargetAtTime(volume, actx.currentTime, 0.04) } catch { gain.gain.value = volume } }
+    else if (audio) { try { audio.volume = volume } catch { /* a read-only volume: routed below */ } }
+  }
+  const route = a => {
+    if (volumeWritable(a)) return
+    try {
+      actx = ctxFactory()
+      if (!actx) return
+      const src = actx.createMediaElementSource(a)
+      gain = actx.createGain()
+      src.connect(gain); gain.connect(actx.destination)
+    } catch { actx = null; gain = null }
+  }
+
   const ensure = () => {
     if (audio) return audio
     audio = audioFactory()
     audio.preload = 'none'
+    route(audio)
+    applyVolume()
     audio.addEventListener('play', () => set({ playing: true, blocked: false, error: false }))
     audio.addEventListener('pause', () => set({ playing: false }))
     audio.addEventListener('ended', () => api.next())
@@ -84,6 +116,8 @@ export function createMusic({ audioFactory = () => new Audio(), base, onPlayingC
       const a = ensure()
       describe()
       try {
+        // A routed context starts suspended where the page has had no touch yet: the touch that gets the song going wakes it.
+        if (actx && actx.state === 'suspended' && typeof actx.resume === 'function') { try { await actx.resume() } catch { /* wakes on the next touch */ } }
         await a.play()
       } catch (e) {
         if (e && e.name === 'NotAllowedError') { set({ blocked: true, playing: false }); bindGesture() }
@@ -92,6 +126,9 @@ export function createMusic({ audioFactory = () => new Audio(), base, onPlayingC
       }
     },
     pause() { if (audio) audio.pause(); set({ blocked: false }) },
+    /** The loudness of the music, 0–1: what the volume slider in the workout sound settings says. */
+    setVolume(v) { volume = clamp01(v); applyVolume() },
+    get volume() { return volume },
     toggle() { return state.playing ? api.pause() : api.play() },
     /** Next song, the first after the last. Plays it: pressing next is asking for music. */
     next() { load((state.index + 1) % COUNT); return api.play() },
@@ -117,6 +154,4 @@ export function createMusic({ audioFactory = () => new Audio(), base, onPlayingC
   return api
 }
 
-export const music = createMusic({
-  onPlayingChange: playing => { import('../store/useUI.js').then(({ useUI }) => useUI.setState({ extMusic: playing })).catch(() => {}) },
-})
+export const music = createMusic()

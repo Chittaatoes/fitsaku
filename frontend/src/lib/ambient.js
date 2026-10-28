@@ -1,14 +1,12 @@
-// Built-in workout sound: a gentle beat while you train and a slow, calm pad while you rest.
+// Built-in rest sound: a slow, calm pad while a rest counts down.
 //
 // Generated live with Web Audio (oscillators and filtered noise), so there is no audio file, no
 // licensing question and no download. It runs in a context of its own: lib/sound.js suspends its
 // context a second after its last beep (to give the phone's audio session back), which would cut
 // a continuous sound; the beeps and the chime keep working beside it.
 //
-// `kind` is 'workout' (128 bpm gym beat: a hard kick on every beat, claps on 2 and 4, rolling hats
-// with an open hat on the offbeat, a pumping sub on the offbeats and a power-chord stab; no melody,
-// and a clap roll into every fourth bar to lift it) or 'rest' (four slow chords that swell and fade,
-// with a faint bell now and then).
+// `kind` is 'rest' (four slow chords that swell and fade, with a faint bell now and then). There used to be a second
+// one, a training beat that ran under every set; the workout's own music (lib/music.js) took its place.
 // Playing a different kind crossfades; stopping fades out. The scheduler looks a short way ahead
 // of the audio clock and never queues a backlog: after a pause (a tab put to sleep) it resumes from
 // "now" instead of replaying what it missed.
@@ -21,15 +19,11 @@ const TICK_MS = 60
 const FADE_IN = 1.2
 const A = f => 440 * Math.pow(2, (f - 69) / 12)   // MIDI note → Hz
 
-// The training beat is drums, a pumping sub and a stab: no tune to follow. The sub's root moves every
-// two bars (A, A, F, G) so it drives without becoming a melody.
-const SUB_ROOTS = [33, 33, 29, 31]   // MIDI A1, A1, F1, G1
 const CHORDS = [[45, 52, 55, 59, 60], [41, 48, 52, 57], [48, 55, 59, 64], [43, 50, 52, 59]]   // Am9, Fmaj7, Cmaj7, G6
 const BELLS = [72, 76, 79, 81, 84]
-const BPM = 128
 const CHORD_SEC = 8
 
-export const KINDS = ['workout', 'rest']
+export const KINDS = ['rest']
 const clamp01 = v => (Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0)
 
 export function createAmbient({ ctxFactory, setIntervalFn = setInterval, clearIntervalFn = clearInterval, random = Math.random } = {}) {
@@ -107,32 +101,7 @@ export function createAmbient({ ctxFactory, setIntervalFn = setInterval, clearIn
     v.nodes.push(s)
   }
 
-  /* ---- the two kinds: each schedules whatever falls before `until` ---- */
-  // One sixteenth note of the training beat. 16 sixteenths = one bar of 4/4.
-  const playWorkoutStep = (v, step, t0) => {
-    const i = step % 16, bar = Math.floor(step / 16)
-    const beat = i % 4 === 0
-    if (beat) {                                                                                       // kick on every beat
-      note(v, 160, t0, 0.24, { peak: 0.9, attack: 0.002, glideTo: 42 })
-      burst(v, t0, 0.012, { peak: 0.12, hp: 3500 })                                                   // its click
-    }
-    if (i === 4 || i === 12) {                                                                        // clap on 2 and 4
-      burst(v, t0, 0.16, { peak: 0.26, bp: 1500 })
-      burst(v, t0 + 0.012, 0.1, { peak: 0.16, bp: 2400 })
-    }
-    if (i % 4 === 2) burst(v, t0, 0.11, { peak: 0.1, hp: 6500 })                                     // open hat on the offbeat
-    else if (!beat) burst(v, t0, 0.03, { peak: i % 2 ? 0.045 : 0.07, hp: 8500 })                      // closed hats between
-    if (i % 4 === 2) {                                                                                // the sub pumps on the offbeats
-      const root = SUB_ROOTS[Math.floor(bar / 2) % SUB_ROOTS.length]
-      note(v, A(root), t0, 0.2, { type: 'sawtooth', peak: 0.3, filter: 190, attack: 0.006 })
-    }
-    if (i === 0 || i === 10) {                                                                        // a power-chord stab, off the beat
-      const root = SUB_ROOTS[Math.floor(bar / 2) % SUB_ROOTS.length] + 12
-      note(v, A(root), t0, 0.17, { type: 'sawtooth', peak: 0.07, filter: 1400, attack: 0.004 })
-      note(v, A(root + 7), t0, 0.17, { type: 'sawtooth', peak: 0.06, filter: 1400, attack: 0.004 })
-    }
-    if (bar % 4 === 3 && i >= 12) burst(v, t0, 0.06, { peak: 0.1 + (i - 12) * 0.05, bp: 1900 })        // the roll into every fourth bar
-  }
+  /* ---- the kind: schedules whatever falls before `until` ---- */
   const playChord = (v, idx, t0) => {
     for (const m of CHORDS[idx % CHORDS.length]) {
       for (const detune of [-5, 5]) {
@@ -154,17 +123,11 @@ export function createAmbient({ ctxFactory, setIntervalFn = setInterval, clearIn
 
   const schedule = v => {
     const now = ctx.currentTime
-    if (v.kind === 'workout') {
-      const eighth = 60 / BPM / 4                            // one sixteenth
-      if (v.next < now) v.next = now + 0.05                  // after a stall, from now: no backlog
-      while (v.next < now + LOOKAHEAD) { playWorkoutStep(v, v.step++, v.next); v.next += eighth }
-    } else {
-      if (v.next < now) v.next = now + 0.05
-      while (v.next < now + LOOKAHEAD) {
-        if (v.step % 1 === 0 && v.chordAt <= v.next) { playChord(v, v.chordIdx++, v.next); v.chordAt = v.next + CHORD_SEC }
-        if (v.bellAt <= v.next) { note(v, A(BELLS[Math.floor(random() * BELLS.length)]), v.next, 3.2, { peak: 0.05, attack: 0.02 }); v.bellAt = v.next + 3 + random() * 4 }
-        v.next += 0.25; v.step++
-      }
+    if (v.next < now) v.next = now + 0.05
+    while (v.next < now + LOOKAHEAD) {
+      if (v.chordAt <= v.next) { playChord(v, v.chordIdx++, v.next); v.chordAt = v.next + CHORD_SEC }
+      if (v.bellAt <= v.next) { note(v, A(BELLS[Math.floor(random() * BELLS.length)]), v.next, 3.2, { peak: 0.05, attack: 0.02 }); v.bellAt = v.next + 3 + random() * 4 }
+      v.next += 0.25; v.step++
     }
     // forget nodes that have finished, so a long session does not hold on to thousands
     if (v.nodes.length > 80) v.nodes.splice(0, v.nodes.length - 40)
