@@ -15,7 +15,10 @@ export function measureGap(win = window) {
     const apple = /iPhone|iPad|iPod/.test(nav.userAgent || '') || (/Macintosh/.test(nav.userAgent || '') && (nav.maxTouchPoints || 0) > 1)
     const standalone = nav.standalone === true || !!win.matchMedia?.('(display-mode: standalone)').matches
     if (!apple || !standalone) return 0
-    const h = win.innerHeight, w = win.innerWidth
+    const w = win.innerWidth
+    // the shortest of the heights the browser reports: some iOS versions shorten only one of them
+    const hs = [win.innerHeight, win.visualViewport?.height, win.document?.documentElement?.clientHeight].filter(n => n > 0)
+    const h = Math.min(...hs)
     if (!(h > w)) return 0                                       // landscape: not measured
     const s = win.screen || {}
     const full = Math.max(s.height || 0, s.width || 0)

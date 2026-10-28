@@ -16,6 +16,10 @@ describe('the strip under a popup', () => {
 })
 
 describe('the popup layer', () => {
+  it('paints a solid fill under the sheet, so it reaches the bottom even when the gap cannot be measured', () => {
+    expect(css).toMatch(/0 120px 0 0 var\(--bg-el\)/)
+    expect(css).toMatch(/0 120px 0 0 var\(--bg\)/)
+  })
   it('extends below the layout viewport by the measured gap (--vgap), and the sheet pads for it', () => {
     expect(css).toMatch(/#modal-root\{position:fixed;inset:0;bottom:calc\(-1 \* var\(--vgap,0px\)\)/)
     expect(css).toMatch(/padding:8px 18px calc\(20px \+ var\(--sab\) \+ var\(--vgap,0px\)\)/)
