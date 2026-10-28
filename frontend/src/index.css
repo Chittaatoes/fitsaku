@@ -63,6 +63,9 @@
      --native-sab (MainActivity.java). The larger one wins, so a WebView that learns to report
      the bars does not count them twice. */
   --sab:max(env(safe-area-inset-bottom,0px),var(--native-sab,0px));
+  /* What the tab bar leaves of the bottom inset: it sits low, over the home-indicator zone like the App Store's, so
+     only the part of --sab past 27px counts toward its height. Roomy screens keep the whole inset (below). */
+  --sab-nav:max(0px,calc(var(--sab) - 27px));
   --sat:max(env(safe-area-inset-top,0px),var(--native-sat,0px));
   /* height of the connection indicator under the status bar, 0 while there is none — set by
      components/SyncBanner.jsx. Whatever starts at the top of the screen starts below it. */
@@ -165,7 +168,7 @@ button,.chip,.tile,.item,.wday,.cal-d,.swatch,.hm-c,.lrow,.seg button,.stp butto
 
 /* ---------------------------------------------------------------- layout -- */
 #app{
-  padding:calc(var(--sat) + var(--conn) + 8px) var(--pad) calc(88px + var(--sab));
+  padding:calc(var(--sat) + var(--conn) + 8px) var(--pad) calc(88px + var(--sab-nav));
   max-width:560px;margin:0 auto;
 }
 /* Android 15 with the keyboard up: room to scroll the last field on a page above the keys.
@@ -173,7 +176,7 @@ button,.chip,.tile,.item,.wday,.cal-d,.swatch,.hm-c,.lrow,.seg button,.stp butto
 :root[data-native-kb] #app,:root[data-native-kb] body.resting #app,:root[data-native-kb] body.no-tabbar.resting #app{padding-bottom:calc(88px + var(--native-kb))}
 /* Keep the last workout controls clear of the mobile overlays without adding a second
    screenful of blank scroll space. The stacked rest timer needs the larger reserve. */
-body.resting #app{padding-bottom:calc(166px + var(--sab))}
+body.resting #app{padding-bottom:calc(166px + var(--sab-nav))}
 /* The workout screen has no tab bar (App.jsx): only the docked rest bar, when it is there. */
 body.no-tabbar #app{padding-bottom:calc(24px + var(--sab))}
 body.no-tabbar.resting #app{padding-bottom:calc(96px + var(--sab))}
@@ -406,7 +409,7 @@ h4.sec{
    the screen is wide enough for every name. The names come from data-label (CSS content), so the
    buttons keep their text-free markup and aria-labels. */
 #tabbar{
-  position:fixed;left:50%;bottom:calc(14px + var(--sab));z-index:50;
+  position:fixed;left:50%;bottom:calc(14px + var(--sab-nav));z-index:50;
   transform:translateX(-50%);
   display:flex;justify-content:center;
   width:max-content;max-width:calc(100vw - 24px);
@@ -460,6 +463,7 @@ h4.sec{
 #tabbar .pill-dot{position:absolute;top:7px;right:9px;width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 2px var(--glass,transparent);pointer-events:none}
 /* roomy screens: every tab carries its name */
 @media (min-width:600px){
+  :root{--sab-nav:var(--sab)}
   #tabbar{bottom:calc(20px + var(--sab))}
   #tabbar.floating-pill .pill-nav{gap:4px;padding:7px}
   #tabbar .pill-btn{height:50px;padding:0 18px;font-size:14px}
@@ -1430,7 +1434,7 @@ body.chips-dragging *{cursor:inherit}
    no tab bar (body.no-tabbar, App.jsx), the bar is docked to the bottom edge; anywhere else it
    sits just above the tab bar. */
 #timer{
-  position:fixed;inset-inline-start:12px;inset-inline-end:12px;bottom:calc(88px + var(--sab));z-index:60;
+  position:fixed;inset-inline-start:12px;inset-inline-end:12px;bottom:calc(88px + var(--sab-nav));z-index:60;
   /* nearly opaque: the set rows underneath were reading through the old 82% and made the
      clock hard to pick out mid-set. The blur stays, so it still sits above the page. */
   background:color-mix(in srgb,var(--surface) 97%,transparent);
@@ -1741,7 +1745,7 @@ button.mchip{border:none;font:inherit;font-size:12px;cursor:pointer}
 /* --- toast --- */
 #toast{
   position:fixed;left:50%;transform:translateX(-50%) translateY(6px);
-  bottom:calc(96px + var(--sab));z-index:200;
+  bottom:calc(96px + var(--sab-nav));z-index:200;
   background:color-mix(in srgb,var(--surface-2) 88%,transparent);
   -webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);
   /* 22px, not a pill radius: one line (about 41px high) still reads as a pill, and a toast that
@@ -2498,9 +2502,9 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
   :root[data-theme="light"] .sheet{background:rgba(250,249,247,.8);box-shadow:0 -1px 0 rgba(0,0,0,.06),0 -20px 50px -22px rgba(0,0,0,.25)}
 }
 .center{border-radius:20px;width:min(82vw,290px)}
-/* In the iOS home-screen app the sheet stands on the screen's bottom edge, so its foot is the home-indicator inset
-   (--sab) and a short breath above it; the 20px every other platform keeps read as a gap there. */
-:root[data-ios-standalone] .sheet{padding-bottom:calc(10px + var(--sab));scroll-padding-bottom:calc(10px + var(--sab))}
+/* In the iOS home-screen app the sheet stands on the screen's bottom edge. Its last row ends just above the home
+   indicator (which sits in the lower ~13px of the inset) instead of a whole inset plus a margin above the edge. */
+:root[data-ios-standalone] .sheet{padding-bottom:max(12px,calc(var(--sab) - 10px));scroll-padding-bottom:max(12px,calc(var(--sab) - 10px))}
 .center:has(.ios-alert){padding:0;overflow:hidden;width:min(80vw,280px)}
 .ios-alert{display:flex;flex-direction:column;text-align:center}
 .ios-alert-body{padding:20px 18px 18px}

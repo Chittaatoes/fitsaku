@@ -28,6 +28,19 @@ describe('the popup layer', () => {
   })
   it('gives a sheet in the iOS home-screen app the home-indicator inset and a short breath, nothing more', () => {
     expect(css).toMatch(/padding:8px 18px calc\(20px \+ var\(--sab\)\);/)
-    expect(css).toMatch(/:root\[data-ios-standalone\] \.sheet\{padding-bottom:calc\(10px \+ var\(--sab\)\);scroll-padding-bottom:calc\(10px \+ var\(--sab\)\)\}/)
+    expect(css).toMatch(/:root\[data-ios-standalone\] \.sheet\{padding-bottom:max\(12px,calc\(var\(--sab\) - 10px\)\);scroll-padding-bottom:max\(12px,calc\(var\(--sab\) - 10px\)\)\}/)
+  })
+})
+
+describe('the tab bar sits low, like the App Store one', () => {
+  it('counts only the part of the bottom inset past 27px, and everything stacked above it follows', () => {
+    expect(css).toMatch(/--sab-nav:max\(0px,calc\(var\(--sab\) - 27px\)\)/)
+    expect(css).toMatch(/#tabbar\{\s*position:fixed;left:50%;bottom:calc\(14px \+ var\(--sab-nav\)\)/)
+    expect(css).toMatch(/#timer\{[^}]*bottom:calc\(88px \+ var\(--sab-nav\)\)/)
+    expect(css).toMatch(/#toast\{[^}]*bottom:calc\(96px \+ var\(--sab-nav\)\)/)
+    expect(css).toMatch(/calc\(88px \+ var\(--sab-nav\)\)/)
+  })
+  it('leaves roomy screens as they were', () => {
+    expect(css).toMatch(/@media \(min-width:600px\)\{\s*:root\{--sab-nav:var\(--sab\)\}\s*#tabbar\{bottom:calc\(20px \+ var\(--sab\)\)\}/)
   })
 })
