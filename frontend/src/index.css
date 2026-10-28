@@ -2581,3 +2581,15 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 .app-notice .an-btn:disabled{opacity:.6}
 .app-notice .an-x{padding:2px 8px;font-size:20px;line-height:1;color:var(--label-3)}
 :root[data-theme="light"] .app-notice{background:rgba(255,255,255,.8)}
+
+/* --- the guide to logging a set (components/WorkoutTips.jsx), a dialog in the middle of the screen --- */
+.wtip{display:flex;flex-direction:column;gap:14px;text-align:left}
+.wtip-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--acc-soft);color:var(--acc);align-self:center}
+.wtip h3{text-align:center;margin:0;font-size:18px}
+.wtip-steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.wtip-steps li{display:flex;align-items:center;gap:12px;font-size:14.5px;line-height:1.35;color:var(--label-2)}
+.wtip-vis{flex:none;width:64px;display:flex;align-items:center;justify-content:center;gap:5px}
+.wtip-chk,.wtip-stp,.wtip-next{display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+.wtip-chk{width:30px;height:30px;border-radius:50%;background:var(--acc);color:var(--on-acc)}
+.wtip-stp{width:26px;height:26px;border-radius:8px;background:var(--surface-2);color:var(--label)}
+.wtip-next{width:30px;height:30px;border-radius:10px;background:var(--acc-soft);color:var(--acc)}

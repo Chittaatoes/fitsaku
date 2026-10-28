@@ -33,6 +33,7 @@ import { afterScrollRestore, scrollRestorePending } from '../components/Modals.j
 import { effortColor } from '../lib/effort.js'
 import Elapsed from '../components/Elapsed.jsx'
 import Icon from '../components/Icon.jsx'
+import { WorkoutTipsOnce } from '../components/WorkoutTips.jsx'
 import { Button, Check, NumberField } from '../components/ui.jsx'
 import { defaultIncrement, weightIncrement, stepWeight } from '../lib/progression.js'
 import { progressionGuidance } from '../lib/progression-copy.js'
@@ -2196,5 +2197,5 @@ export function _resetHintQuiet() { lastTouchAt = 0 }
 
 export default function Workout() {
   const active = useStore(s => s.S.active)
-  return active ? <ActiveWorkout /> : <StartChooser />
+  return active ? <><ActiveWorkout /><WorkoutTipsOnce /></> : <StartChooser />
 }

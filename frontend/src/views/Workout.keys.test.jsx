@@ -45,6 +45,7 @@ const doneOf = idx => active().entries[idx].sets.map(s => s.done)
 beforeEach(() => {
   vi.useFakeTimers()
   localStorage.clear()
+  localStorage.setItem('fs_workout_tips_v1', '1')   // the first-workout guide would be a dialog on top of the keys under test
   useUI.setState({ sheets: [], toastMsg: '', timer: null, work: null })
   root = null
   container = null
