@@ -1,221 +1,821 @@
 {
-"0025": {
-  "name": "Bench press barbel",
-  "description": "Bench press datar yang klasik. Turunkan barbel ke dada lalu dorong ke atas untuk membentuk dada, bahu, dan trisep.",
-  "instructions": [
-    "Berbaringlah telentang di bangku dengan kaki menapak rata di lantai dan punggung menempel pada bangku.",
-    "Pegang barbel dengan genggaman dari atas, sedikit lebih lebar dari lebar bahu.",
-    "Angkat barbel dari penyangga dan tahan tepat di atas dada dengan lengan lurus sepenuhnya.",
-    "Turunkan barbel perlahan ke arah dada sambil menjaga siku tetap dekat dengan badan.",
-    "Berhenti sejenak saat barbel menyentuh dada.",
-    "Dorong barbel kembali ke posisi awal dengan meluruskan lengan.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0027": {
-  "name": "Barbell bent over row",
-  "description": "Dayung dengan pinggul menekuk, menarik barbel ke dada bagian bawah. Gerakan utama untuk punggung atas dan lat.",
-  "instructions": [
-    "Berdirilah dengan kaki selebar bahu dan lutut sedikit menekuk.",
-    "Condongkan badan ke depan dari pinggul sambil menjaga punggung tetap lurus dan dada terangkat.",
-    "Pegang barbel dengan genggaman dari atas, kedua tangan sedikit lebih lebar dari lebar bahu.",
-    "Tarik barbel ke arah dada bagian bawah dengan merapatkan tulang belikat dan mengencangkan otot punggung.",
-    "Berhenti sejenak di atas, lalu turunkan barbel perlahan ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0031": {
-  "name": "Barbell curl",
-  "description": "Curl barbel berdiri yang standar. Cara sederhana dan efektif untuk membentuk bisep.",
-  "instructions": [
-    "Berdirilah tegak dengan kaki selebar bahu dan pegang barbel dengan genggaman dari bawah, telapak tangan menghadap ke depan.",
-    "Jaga siku tetap dekat dengan badan, lalu hembuskan napas sambil mengangkat beban dan mengencangkan bisep.",
-    "Teruskan mengangkat barbel sampai bisep berkontraksi penuh dan barbel berada setinggi bahu.",
-    "Tahan posisi kontraksi sejenak sambil meremas bisep.",
-    "Tarik napas sambil perlahan menurunkan barbel ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0043": {
-  "name": "Squat penuh barbel",
-  "description": "Back squat dalam dengan barbel di punggung atas. Membentuk paha depan, bokong, dan kekuatan kaki secara keseluruhan.",
-  "instructions": [
-    "Berdirilah dengan kaki selebar bahu dan ujung kaki sedikit mengarah ke luar.",
-    "Letakkan barbel di punggung atas, bertumpu pada otot trapezius atau bahu belakang.",
-    "Kencangkan perut dan jaga dada tetap terangkat saat mulai menurunkan badan.",
-    "Tekuk lutut dan pinggul, dorong pinggul ke belakang dan ke bawah seolah-olah duduk di kursi.",
-    "Turunkan badan sampai paha sejajar dengan lantai atau sedikit lebih rendah.",
-    "Jaga lutut tetap searah dengan ujung kaki dan beban tubuh bertumpu pada tumit.",
-    "Dorong lewat tumit untuk berdiri kembali sambil meluruskan pinggul dan lutut.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0047": {
-  "name": "Incline bench press barbel",
-  "description": "Press barbel di bangku miring, menekankan dada bagian atas dan bahu depan.",
-  "instructions": [
-    "Atur bangku miring pada sudut 45 derajat.",
-    "Berbaringlah di bangku dengan kaki menapak rata di lantai.",
-    "Pegang barbel dengan genggaman dari atas, sedikit lebih lebar dari lebar bahu.",
-    "Angkat barbel dari penyangga dan turunkan perlahan ke arah dada, dengan siku membentuk sudut 45 derajat.",
-    "Berhenti sejenak di bawah, lalu dorong barbel kembali ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0085": {
-  "name": "Romanian deadlift barbel",
-  "description": "Tekuk pinggul dengan barbel dekat kaki hingga hamstring terasa teregang, lalu berdiri tegak. Melatih hamstring dan bokong.",
-  "instructions": [
-    "Berdirilah dengan kaki selebar bahu dan ujung kaki menghadap ke depan.",
-    "Pegang barbel dengan genggaman dari atas, kedua tangan sedikit lebih lebar dari lebar bahu.",
-    "Tekuk pinggul sambil menjaga punggung tetap lurus dan lutut sedikit menekuk.",
-    "Turunkan barbel ke arah lantai dengan tetap dekat dengan badan.",
-    "Rasakan regangan pada hamstring saat menurunkan barbel.",
-    "Setelah hamstring terasa teregang, dorong pinggul ke depan dan berdiri tegak.",
-    "Kencangkan bokong di puncak gerakan.",
-    "Turunkan barbel kembali ke posisi awal dan ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0241": {
-  "name": "Triceps pushdown kabel (V-bar)",
-  "description": "Triceps pushdown dengan V-bar pada katrol tinggi. Genggaman bersudut memungkinkan Anda menekan kuat dan meremas trisep.",
-  "instructions": [
-    "Pasang V-bar pada mesin kabel di posisi tertinggi.",
-    "Berdirilah menghadap mesin kabel dengan kaki selebar bahu.",
-    "Pegang V-bar dengan genggaman dari atas, telapak tangan menghadap ke bawah, kedua tangan selebar bahu.",
-    "Jaga siku tetap dekat dengan sisi badan dan lengan atas tidak bergerak selama latihan.",
-    "Kencangkan trisep dan hembuskan napas sambil mendorong V-bar ke bawah sampai lengan lurus sepenuhnya.",
-    "Berhenti sejenak di bawah sambil meremas trisep.",
-    "Tarik napas sambil perlahan mengembalikan V-bar ke posisi awal dengan terkendali.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0251": {
-  "name": "Chest dip",
-  "description": "Dip berat badan dengan badan condong ke depan pada palang paralel. Menargetkan dada bagian bawah, trisep, dan bahu.",
-  "instructions": [
-    "Posisikan diri di palang paralel dengan lengan lurus sepenuhnya dan badan tegak lurus.",
-    "Turunkan badan dengan menekuk siku sampai bahu berada di bawah siku.",
-    "Dorong badan kembali ke posisi awal dengan meluruskan lengan.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0313": {
-  "name": "Hammer curl dumbbell",
-  "description": "Hammer curl standar dengan telapak tangan menghadap ke dalam. Melatih brakialis, bisep, dan lengan bawah.",
-  "instructions": [
-    "Berdirilah tegak dengan dumbbell di kedua tangan, telapak tangan menghadap ke badan.",
-    "Jaga siku tetap dekat dengan badan dan putar telapak tangan sampai menghadap ke depan.",
-    "Ini adalah posisi awal Anda.",
-    "Sekarang, dengan lengan atas tidak bergerak, hembuskan napas dan angkat beban sambil mengencangkan bisep.",
-    "Teruskan mengangkat beban sampai bisep berkontraksi penuh dan dumbbell setinggi bahu.",
-    "Tahan posisi kontraksi sejenak sambil meremas bisep.",
-    "Kemudian tarik napas dan perlahan turunkan dumbbell ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang dianjurkan."
-  ]
-},
-"0334": {
-  "name": "Lateral raise dumbbell",
-  "description": "Lateral raise dumbbell berdiri yang standar. Mengangkat lengan ke samping membentuk bahu samping.",
-  "instructions": [
-    "Berdirilah dengan kaki selebar bahu dan pegang dumbbell di kedua tangan, telapak tangan menghadap badan.",
-    "Jaga punggung tetap lurus dan kencangkan perut.",
-    "Angkat lengan ke samping sampai sejajar dengan lantai, dengan siku tetap sedikit menekuk.",
-    "Berhenti sejenak di atas, lalu perlahan turunkan lengan ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0426": {
-  "name": "Overhead press dumbbell berdiri",
-  "description": "Sambil berdiri, Anda menekan dumbbell dari bahu ke atas kepala. Membentuk bahu, trisep, dan kestabilan badan.",
-  "instructions": [
-    "Berdirilah dengan kaki selebar bahu, pegang dumbbell di kedua tangan setinggi bahu dengan telapak tangan menghadap ke depan.",
-    "Dorong dumbbell ke atas sampai lengan lurus sepenuhnya di atas kepala.",
-    "Berhenti sejenak di atas, lalu perlahan turunkan dumbbell ke ketinggian bahu.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0585": {
-  "name": "Leg extension mesin",
-  "description": "Sambil duduk di mesin, Anda meluruskan kaki melawan bantalan. Latihan sederhana untuk membentuk paha depan.",
-  "instructions": [
-    "Sesuaikan tinggi dudukan dan sandaran mesin dengan tubuh Anda.",
-    "Duduklah di mesin dengan punggung bersandar dan kaki pada bantalan kaki.",
-    "Pegang pegangan atau sisi mesin agar stabil.",
-    "Luruskan kaki ke depan dengan meluruskan lutut sambil mengangkat beban.",
-    "Berhenti sejenak di atas, lalu perlahan turunkan beban ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0586": {
-  "name": "Lying leg curl mesin",
-  "description": "Berbaring telungkup di mesin, Anda menekuk tumit ke arah bokong. Mengisolasi hamstring.",
-  "instructions": [
-    "Sesuaikan mesin dengan tubuh Anda dan pilih beban yang diinginkan.",
-    "Berbaringlah telungkup di mesin dengan kaki lurus dan tumit menempel pada tuas berbantalan.",
-    "Pegang pegangan atau sisi mesin agar stabil.",
-    "Dengan tubuh bagian atas tidak bergerak, hembuskan napas dan tekuk kaki ke atas sejauh mungkin tanpa mengangkat pinggul dari bantalan.",
-    "Tahan posisi kontraksi sejenak sambil meremas hamstring.",
-    "Tarik napas dan perlahan turunkan tuas ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0605": {
-  "name": "Calf raise mesin berdiri",
-  "description": "Sambil berdiri dengan bantalan di bahu, Anda berjinjit lalu turun kembali. Mengisolasi betis.",
-  "instructions": [
-    "Sesuaikan mesin dengan tinggi badan Anda dan berdirilah dengan kaki selebar bahu.",
-    "Letakkan bahu di bawah bantalan dan pegang pegangan agar stabil.",
-    "Angkat tumit setinggi mungkin dengan meluruskan pergelangan kaki.",
-    "Berhenti sejenak di atas, lalu perlahan turunkan tumit ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0662": {
-  "name": "Push-up",
-  "description": "Push-up klasik dari posisi plank tinggi. Melatih dada, bahu, trisep, dan inti tubuh dalam satu gerakan.",
-  "instructions": [
-    "Mulailah dalam posisi plank tinggi dengan tangan sedikit lebih lebar dari lebar bahu dan kaki rapat.",
-    "Kencangkan perut dan turunkan badan ke arah lantai dengan menekuk siku, sambil menjaga badan tetap lurus.",
-    "Berhenti sejenak saat dada tepat di atas lantai, lalu dorong badan kembali ke posisi awal dengan meluruskan lengan.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"0739": {
-  "name": "Leg press sled 45°",
-  "description": "Pada sled 45 derajat, Anda mendorong pijakan menjauh dengan kaki. Melatih paha depan dan bokong.",
-  "instructions": [
-    "Sesuaikan dudukan dan pijakan kaki mesin sled ke posisi yang nyaman.",
-    "Duduklah di mesin dengan punggung bersandar dan kaki selebar bahu di pijakan.",
-    "Pegang pegangan di sisi dudukan agar stabil.",
-    "Dorong pijakan menjauh dari badan dengan meluruskan kaki, tumit tetap menempel di pijakan.",
-    "Terus dorong sampai kaki hampir lurus sepenuhnya, tetapi tanpa mengunci lutut.",
-    "Berhenti sejenak di puncak gerakan, lalu perlahan turunkan pijakan kembali ke arah badan dengan menekuk lutut.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"1323": {
-  "name": "Seated row tali kabel",
-  "description": "Seated row dengan tali pada mesin kabel. Genggaman netral melatih punggung atas, lat, dan bisep.",
-  "instructions": [
-    "Duduklah di mesin dayung dengan kaki menapak rata pada pijakan dan lutut sedikit menekuk.",
-    "Pegang tali kabel dengan genggaman dari atas, telapak tangan saling berhadapan.",
-    "Jaga punggung tetap lurus dan condong sedikit ke depan, dengan siku tetap sedikit menekuk.",
-    "Tarik tali kabel ke arah badan sambil merapatkan tulang belikat.",
-    "Berhenti sejenak di puncak gerakan, lalu perlahan lepaskan ketegangan dan kembali ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-},
-"2330": {
-  "name": "Lat pulldown kabel jangkauan penuh",
-  "description": "Lat pulldown kabel dengan jangkauan gerak penuh. Membentuk lat dan punggung atas.",
-  "instructions": [
-    "Duduklah di mesin lat pulldown dengan lutut berada di bawah bantalan.",
-    "Pegang batang kabel dengan genggaman dari atas, sedikit lebih lebar dari lebar bahu.",
-    "Condongkan badan sedikit ke belakang dan jaga dada tetap terangkat, dengan punggung bawah sedikit melengkung.",
-    "Tarik batang ke arah dada bagian atas sambil merapatkan tulang belikat.",
-    "Berhenti sejenak di bawah, lalu perlahan lepaskan batang kembali ke posisi awal.",
-    "Ulangi sebanyak jumlah repetisi yang diinginkan."
-  ]
-}
+  "1323": {
+    "name": "Seated row tali kabel",
+    "description": "Seated row dengan tali pada mesin kabel. Genggaman netral melatih punggung atas, lat, dan bisep.",
+    "instructions": [
+      "Duduklah di mesin dayung dengan kaki menapak rata pada pijakan dan lutut sedikit menekuk.",
+      "Pegang tali kabel dengan genggaman dari atas, telapak tangan saling berhadapan.",
+      "Jaga punggung tetap lurus dan condong sedikit ke depan, dengan siku tetap sedikit menekuk.",
+      "Tarik tali kabel ke arah badan sambil merapatkan tulang belikat.",
+      "Berhenti sejenak di puncak gerakan, lalu perlahan lepaskan ketegangan dan kembali ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "2330": {
+    "name": "Lat pulldown kabel jangkauan penuh",
+    "description": "Lat pulldown kabel dengan jangkauan gerak penuh. Membentuk lat dan punggung atas.",
+    "instructions": [
+      "Duduklah di mesin lat pulldown dengan lutut berada di bawah bantalan.",
+      "Pegang batang kabel dengan genggaman dari atas, sedikit lebih lebar dari lebar bahu.",
+      "Condongkan badan sedikit ke belakang dan jaga dada tetap terangkat, dengan punggung bawah sedikit melengkung.",
+      "Tarik batang ke arah dada bagian atas sambil merapatkan tulang belikat.",
+      "Berhenti sejenak di bawah, lalu perlahan lepaskan batang kembali ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0001": {
+    "name": "Sit-up 3/4"
+  },
+  "0002": {
+    "name": "Side bend 45°"
+  },
+  "0003": {
+    "name": "Air bike"
+  },
+  "0005": {
+    "name": "Curl bisep bergantian dengan band"
+  },
+  "0006": {
+    "name": "Sentuh tumit bergantian"
+  },
+  "0007": {
+    "name": "Lateral pulldown bergantian"
+  },
+  "0009": {
+    "name": "Chest dip berbantuan (berlutut)"
+  },
+  "0010": {
+    "name": "Knee raise gantung berbantuan dengan lempar ke bawah"
+  },
+  "0011": {
+    "name": "Knee raise gantung berbantuan"
+  },
+  "0012": {
+    "name": "Leg raise berbaring berbantuan dengan lempar ke samping"
+  },
+  "0013": {
+    "name": "Leg raise berbaring berbantuan dengan lempar ke bawah"
+  },
+  "0014": {
+    "name": "Russian twist berbantuan"
+  },
+  "0015": {
+    "name": "Pull-up genggaman sempit paralel berbantuan"
+  },
+  "0016": {
+    "name": "Hamstring telungkup berbantuan"
+  },
+  "0017": {
+    "name": "Pull-up berbantuan"
+  },
+  "0018": {
+    "name": "Ekstensi trisep berdiri berbantuan (dengan handuk)"
+  },
+  "0019": {
+    "name": "Triceps dip berbantuan (berlutut)"
+  },
+  "0020": {
+    "name": "Balance board"
+  },
+  "0021": {
+    "name": "Sit-up dengan bola stabilitas"
+  },
+  "0022": {
+    "name": "Pullover ke press dengan barbel"
+  },
+  "0023": {
+    "name": "Curl bisep bergantian dengan barbel"
+  },
+  "0024": {
+    "name": "Front squat bangku dengan barbel"
+  },
+  "0025": {
+    "name": "Bench press barbel",
+    "description": "Bench press datar yang klasik. Turunkan barbel ke dada lalu dorong ke atas untuk membentuk dada, bahu, dan trisep.",
+    "instructions": [
+      "Berbaringlah telentang di bangku dengan kaki menapak rata di lantai dan punggung menempel pada bangku.",
+      "Pegang barbel dengan genggaman dari atas, sedikit lebih lebar dari lebar bahu.",
+      "Angkat barbel dari penyangga dan tahan tepat di atas dada dengan lengan lurus sepenuhnya.",
+      "Turunkan barbel perlahan ke arah dada sambil menjaga siku tetap dekat dengan badan.",
+      "Berhenti sejenak saat barbel menyentuh dada.",
+      "Dorong barbel kembali ke posisi awal dengan meluruskan lengan.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0026": {
+    "name": "Squat bangku dengan barbel"
+  },
+  "0027": {
+    "name": "Barbell bent over row",
+    "description": "Dayung dengan pinggul menekuk, menarik barbel ke dada bagian bawah. Gerakan utama untuk punggung atas dan lat.",
+    "instructions": [
+      "Berdirilah dengan kaki selebar bahu dan lutut sedikit menekuk.",
+      "Condongkan badan ke depan dari pinggul sambil menjaga punggung tetap lurus dan dada terangkat.",
+      "Pegang barbel dengan genggaman dari atas, kedua tangan sedikit lebih lebar dari lebar bahu.",
+      "Tarik barbel ke arah dada bagian bawah dengan merapatkan tulang belikat dan mengencangkan otot punggung.",
+      "Berhenti sejenak di atas, lalu turunkan barbel perlahan ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0028": {
+    "name": "Clean and press dengan barbel"
+  },
+  "0029": {
+    "name": "Front squat genggaman clean dengan barbel"
+  },
+  "0030": {
+    "name": "Bench press genggaman sempit dengan barbel"
+  },
+  "0031": {
+    "name": "Barbell curl",
+    "description": "Curl barbel berdiri yang standar. Cara sederhana dan efektif untuk membentuk bisep.",
+    "instructions": [
+      "Berdirilah tegak dengan kaki selebar bahu dan pegang barbel dengan genggaman dari bawah, telapak tangan menghadap ke depan.",
+      "Jaga siku tetap dekat dengan badan, lalu hembuskan napas sambil mengangkat beban dan mengencangkan bisep.",
+      "Teruskan mengangkat barbel sampai bisep berkontraksi penuh dan barbel berada setinggi bahu.",
+      "Tahan posisi kontraksi sejenak sambil meremas bisep.",
+      "Tarik napas sambil perlahan menurunkan barbel ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0032": {
+    "name": "Deadlift barbel"
+  },
+  "0033": {
+    "name": "Decline bench press barbel"
+  },
+  "0034": {
+    "name": "Pullover siku menekuk decline dengan barbel"
+  },
+  "0035": {
+    "name": "Skull press genggaman sempit decline dengan barbel"
+  },
+  "0036": {
+    "name": "Press genggaman lebar decline dengan barbel"
+  },
+  "0037": {
+    "name": "Pullover genggaman lebar decline dengan barbel"
+  },
+  "0038": {
+    "name": "Drag curl barbel"
+  },
+  "0039": {
+    "name": "Front squat dada dengan barbel"
+  },
+  "0040": {
+    "name": "Front raise dan pullover dengan barbel"
+  },
+  "0041": {
+    "name": "Front raise barbel"
+  },
+  "0042": {
+    "name": "Front squat barbel"
+  },
+  "0043": {
+    "name": "Squat penuh barbel",
+    "description": "Back squat dalam dengan barbel di punggung atas. Membentuk paha depan, bokong, dan kekuatan kaki secara keseluruhan.",
+    "instructions": [
+      "Berdirilah dengan kaki selebar bahu dan ujung kaki sedikit mengarah ke luar.",
+      "Letakkan barbel di punggung atas, bertumpu pada otot trapezius atau bahu belakang.",
+      "Kencangkan perut dan jaga dada tetap terangkat saat mulai menurunkan badan.",
+      "Tekuk lutut dan pinggul, dorong pinggul ke belakang dan ke bawah seolah-olah duduk di kursi.",
+      "Turunkan badan sampai paha sejajar dengan lantai atau sedikit lebih rendah.",
+      "Jaga lutut tetap searah dengan ujung kaki dan beban tubuh bertumpu pada tumit.",
+      "Dorong lewat tumit untuk berdiri kembali sambil meluruskan pinggul dan lutut.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0044": {
+    "name": "Good morning barbel"
+  },
+  "0045": {
+    "name": "Guillotine bench press barbel"
+  },
+  "0046": {
+    "name": "Hack squat barbel"
+  },
+  "0047": {
+    "name": "Incline bench press barbel",
+    "description": "Press barbel di bangku miring, menekankan dada bagian atas dan bahu depan.",
+    "instructions": [
+      "Atur bangku miring pada sudut 45 derajat.",
+      "Berbaringlah di bangku dengan kaki menapak rata di lantai.",
+      "Pegang barbel dengan genggaman dari atas, sedikit lebih lebar dari lebar bahu.",
+      "Angkat barbel dari penyangga dan turunkan perlahan ke arah dada, dengan siku membentuk sudut 45 derajat.",
+      "Berhenti sejenak di bawah, lalu dorong barbel kembali ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0048": {
+    "name": "Incline press genggaman terbalik dengan barbel"
+  },
+  "0049": {
+    "name": "Incline row barbel"
+  },
+  "0050": {
+    "name": "Incline shoulder raise barbel"
+  },
+  "0051": {
+    "name": "Jefferson squat barbel"
+  },
+  "0052": {
+    "name": "JM bench press barbel"
+  },
+  "0053": {
+    "name": "Jump squat barbel"
+  },
+  "0054": {
+    "name": "Lunge barbel"
+  },
+  "0055": {
+    "name": "Press genggaman sempit berbaring dengan barbel"
+  },
+  "0056": {
+    "name": "Ekstensi trisep genggaman sempit berbaring dengan barbel"
+  },
+  "0057": {
+    "name": "Ekstensi berbaring dengan barbel"
+  },
+  "0058": {
+    "name": "Angkat barbel berbaring (di pinggul)"
+  },
+  "0059": {
+    "name": "Preacher curl berbaring dengan barbel"
+  },
+  "0060": {
+    "name": "Skull crusher ekstensi trisep berbaring dengan barbel"
+  },
+  "0061": {
+    "name": "Ekstensi trisep berbaring dengan barbel"
+  },
+  "0062": {
+    "name": "Row sempit barbel"
+  },
+  "0063": {
+    "name": "Squat kaki sempit barbel"
+  },
+  "0064": {
+    "name": "Bent over row satu lengan barbel"
+  },
+  "0065": {
+    "name": "Floor press satu lengan barbel"
+  },
+  "0066": {
+    "name": "Deadlift samping satu lengan barbel"
+  },
+  "0067": {
+    "name": "Snatch satu lengan barbel"
+  },
+  "0068": {
+    "name": "Squat satu kaki barbel"
+  },
+  "0069": {
+    "name": "Overhead squat barbel"
+  },
+  "0070": {
+    "name": "Preacher curl barbel"
+  },
+  "0071": {
+    "name": "Sit-up dengan press barbel"
+  },
+  "0072": {
+    "name": "Curl incline telungkup barbel"
+  },
+  "0073": {
+    "name": "Pullover barbel"
+  },
+  "0074": {
+    "name": "Rack pull barbel"
+  },
+  "0075": {
+    "name": "Rear delt raise barbel"
+  },
+  "0076": {
+    "name": "Rear delt row barbel"
+  },
+  "0077": {
+    "name": "Rear lunge barbel v. 2"
+  },
+  "0078": {
+    "name": "Rear lunge barbel"
+  },
+  "0079": {
+    "name": "Wrist curl terbalik barbel v. 2"
+  },
+  "0080": {
+    "name": "Reverse curl barbel"
+  },
+  "0081": {
+    "name": "Reverse preacher curl barbel"
+  },
+  "0082": {
+    "name": "Wrist curl terbalik barbel"
+  },
+  "0083": {
+    "name": "Roller-out dari bangku dengan barbel"
+  },
+  "0084": {
+    "name": "Roller-out barbel"
+  },
+  "0085": {
+    "name": "Romanian deadlift barbel",
+    "description": "Tekuk pinggul dengan barbel dekat kaki hingga hamstring terasa teregang, lalu berdiri tegak. Melatih hamstring dan bokong.",
+    "instructions": [
+      "Berdirilah dengan kaki selebar bahu dan ujung kaki menghadap ke depan.",
+      "Pegang barbel dengan genggaman dari atas, kedua tangan sedikit lebih lebar dari lebar bahu.",
+      "Tekuk pinggul sambil menjaga punggung tetap lurus dan lutut sedikit menekuk.",
+      "Turunkan barbel ke arah lantai dengan tetap dekat dengan badan.",
+      "Rasakan regangan pada hamstring saat menurunkan barbel.",
+      "Setelah hamstring terasa teregang, dorong pinggul ke depan dan berdiri tegak.",
+      "Kencangkan bokong di puncak gerakan.",
+      "Turunkan barbel kembali ke posisi awal dan ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0086": {
+    "name": "Military press di belakang kepala duduk dengan barbel"
+  },
+  "0087": {
+    "name": "Bradford rocky press duduk dengan barbel"
+  },
+  "0088": {
+    "name": "Calf raise duduk barbel"
+  },
+  "0089": {
+    "name": "Concentration curl genggaman sempit duduk dengan barbel"
+  },
+  "0090": {
+    "name": "Good morning duduk barbel"
+  },
+  "0091": {
+    "name": "Overhead press duduk barbel"
+  },
+  "0092": {
+    "name": "Ekstensi trisep di atas kepala duduk dengan barbel"
+  },
+  "0093": {
+    "name": "Twist duduk dengan barbel (di bola stabilitas)"
+  },
+  "0094": {
+    "name": "Twist duduk dengan barbel"
+  },
+  "0095": {
+    "name": "Shrug barbel"
+  },
+  "0096": {
+    "name": "Side bend barbel v. 2"
+  },
+  "0097": {
+    "name": "Side split squat barbel v. 2"
+  },
+  "0098": {
+    "name": "Side split squat barbel"
+  },
+  "0099": {
+    "name": "Split squat satu kaki barbel"
+  },
+  "0100": {
+    "name": "Skier barbel"
+  },
+  "0101": {
+    "name": "Speed squat barbel"
+  },
+  "0102": {
+    "name": "Squat berlutut dengan barbel"
+  },
+  "0103": {
+    "name": "Ab roller-out berdiri dengan barbel"
+  },
+  "0104": {
+    "name": "Back wrist curl berdiri dengan barbel"
+  },
+  "0105": {
+    "name": "Bradford press berdiri dengan barbel"
+  },
+  "0106": {
+    "name": "Curl genggaman sempit berdiri dengan barbel"
+  },
+  "0107": {
+    "name": "Front raise di atas kepala berdiri dengan barbel"
+  },
+  "0108": {
+    "name": "Calf raise berdiri dengan barbel"
+  },
+  "0109": {
+    "name": "Ekstensi trisep di atas kepala berdiri dengan barbel"
+  },
+  "0110": {
+    "name": "Curl genggaman terbalik berdiri dengan barbel"
+  },
+  "0111": {
+    "name": "Rocking calf raise berdiri dengan barbel"
+  },
+  "0112": {
+    "name": "Twist berdiri dengan barbel"
+  },
+  "0113": {
+    "name": "Curl genggaman lebar berdiri dengan barbel"
+  },
+  "0114": {
+    "name": "Step-up barbel"
+  },
+  "0115": {
+    "name": "Stiff leg good morning barbel"
+  },
+  "0116": {
+    "name": "Straight leg deadlift barbel"
+  },
+  "0117": {
+    "name": "Sumo deadlift barbel"
+  },
+  "0118": {
+    "name": "Bent over row genggaman terbalik barbel"
+  },
+  "0119": {
+    "name": "Upright row barbel v. 2"
+  },
+  "0120": {
+    "name": "Upright row barbel"
+  },
+  "0121": {
+    "name": "Upright row barbel v. 3"
+  },
+  "0122": {
+    "name": "Bench press lebar barbel"
+  },
+  "0123": {
+    "name": "Upright row genggaman lebar barbel"
+  },
+  "0124": {
+    "name": "Squat lebar barbel"
+  },
+  "0125": {
+    "name": "Wrist curl barbel v. 2"
+  },
+  "0126": {
+    "name": "Wrist curl barbel"
+  },
+  "0127": {
+    "name": "Zercher squat barbel"
+  },
+  "0128": {
+    "name": "Battle rope"
+  },
+  "0129": {
+    "name": "Bench dip (lutut menekuk)"
+  },
+  "0130": {
+    "name": "Ekstensi pinggul di bangku"
+  },
+  "0131": {
+    "name": "Twist berbaring lutut menekuk (di bola stabilitas)"
+  },
+  "0133": {
+    "name": "Side plank lutut menekuk"
+  },
+  "0134": {
+    "name": "Push-up lutut menyamping"
+  },
+  "0136": {
+    "name": "Pose perahu (yoga)"
+  },
+  "0137": {
+    "name": "Body-up"
+  },
+  "0138": {
+    "name": "Bottoms-up"
+  },
+  "0139": {
+    "name": "Pull-up bisep genggaman sempit"
+  },
+  "0140": {
+    "name": "Pull-up bisep"
+  },
+  "0142": {
+    "name": "Bridge (berlutut)"
+  },
+  "0143": {
+    "name": "Bridge (lengan lurus)"
+  },
+  "0145": {
+    "name": "Glute bridge"
+  },
+  "0147": {
+    "name": "Crunch memutar sepeda"
+  },
+  "0148": {
+    "name": "Shoulder press bergantian dengan kabel"
+  },
+  "0149": {
+    "name": "Ekstensi trisep bergantian dengan kabel"
+  },
+  "0150": {
+    "name": "Lateral pulldown batang kabel"
+  },
+  "0151": {
+    "name": "Bench press kabel"
+  },
+  "0152": {
+    "name": "Concentration extension kabel (di lutut)"
+  },
+  "0153": {
+    "name": "Lateral pulldown silang kabel"
+  },
+  "0154": {
+    "name": "Reverse fly silang kabel"
+  },
+  "0155": {
+    "name": "Variasi cross-over kabel"
+  },
+  "0157": {
+    "name": "Deadlift kabel"
+  },
+  "0158": {
+    "name": "Decline fly kabel"
+  },
+  "0159": {
+    "name": "Wide-grip row decline duduk dengan kabel"
+  },
+  "0160": {
+    "name": "Wide-grip row duduk di lantai dengan kabel"
+  },
+  "0161": {
+    "name": "Forward raise kabel"
+  },
+  "0162": {
+    "name": "Front raise kabel"
+  },
+  "0163": {
+    "name": "Front seated row kabel"
+  },
+  "0164": {
+    "name": "Front shoulder raise kabel"
+  },
+  "0165": {
+    "name": "Hammer curl kabel (dengan tali)"
+  },
+  "0166": {
+    "name": "Hammer curl kabel"
+  },
+  "0167": {
+    "name": "High row kabel (berlutut)"
+  },
+  "0168": {
+    "name": "Adduksi pinggul kabel"
+  },
+  "0169": {
+    "name": "Incline bench press kabel"
+  },
+  "0170": {
+    "name": "Incline fly kabel (di bola stabilitas)"
+  },
+  "0171": {
+    "name": "Incline fly kabel"
+  },
+  "0172": {
+    "name": "Incline pushdown kabel"
+  },
+  "0173": {
+    "name": "Ekstensi trisep incline dengan kabel"
+  },
+  "0174": {
+    "name": "Judo flip kabel"
+  },
+  "0175": {
+    "name": "Crunch berlutut kabel"
+  },
+  "0176": {
+    "name": "Ekstensi trisep berlutut dengan kabel"
+  },
+  "0177": {
+    "name": "Lateral pulldown kabel (dengan tali)"
+  },
+  "0178": {
+    "name": "Lateral raise kabel"
+  },
+  "0179": {
+    "name": "Low fly kabel"
+  },
+  "0180": {
+    "name": "Low seated row kabel"
+  },
+  "0181": {
+    "name": "Curl genggaman sempit berbaring dengan kabel"
+  },
+  "0182": {
+    "name": "Curl genggaman sempit berbaring dengan kabel"
+  },
+  "0183": {
+    "name": "Curl berbaring dengan kabel"
+  },
+  "0184": {
+    "name": "Pullover ekstensi berbaring dengan kabel (dengan tali)"
+  },
+  "0185": {
+    "name": "Fly berbaring dengan kabel"
+  },
+  "0186": {
+    "name": "Ekstensi trisep berbaring dengan kabel v. 2"
+  },
+  "0187": {
+    "name": "Ekstensi trisep berbaring dengan kabel"
+  },
+  "0188": {
+    "name": "Middle fly kabel"
+  },
+  "0189": {
+    "name": "Bent over row satu lengan kabel"
+  },
+  "0190": {
+    "name": "Curl satu lengan kabel"
+  },
+  "0191": {
+    "name": "Lateral bent-over satu lengan kabel"
+  },
+  "0192": {
+    "name": "Lateral raise satu lengan kabel"
+  },
+  "0193": {
+    "name": "High row punggung lurus satu lengan kabel (berlutut)"
+  },
+  "0194": {
+    "name": "Ekstensi trisep di atas kepala kabel (dengan tali)"
+  },
+  "0195": {
+    "name": "Preacher curl kabel"
+  },
+  "0196": {
+    "name": "Pull through kabel (dengan tali)"
+  },
+  "0197": {
+    "name": "Pulldown kabel (pro lat bar)"
+  },
+  "0198": {
+    "name": "Pulldown kabel"
+  },
+  "0199": {
+    "name": "Pushdown kabel (lengan lurus) v. 2"
+  },
+  "0200": {
+    "name": "Pushdown kabel (dengan tali)"
+  },
+  "0201": {
+    "name": "Pushdown kabel"
+  },
+  "0202": {
+    "name": "Rear delt row kabel (dengan stirrup)"
+  },
+  "0203": {
+    "name": "Rear delt row kabel (dengan tali)"
+  },
+  "0204": {
+    "name": "Rear drive kabel"
+  },
+  "0205": {
+    "name": "Rear pulldown kabel"
+  },
+  "0206": {
+    "name": "Reverse curl kabel"
+  },
+  "0207": {
+    "name": "Pushdown genggaman terbalik kabel"
+  },
+  "0208": {
+    "name": "High row duduk punggung lurus genggaman terbalik dengan kabel"
+  },
+  "0209": {
+    "name": "Reverse preacher curl kabel"
+  },
+  "0210": {
+    "name": "Reverse wrist curl kabel"
+  },
+  "0211": {
+    "name": "Russian twist kabel (di bola stabilitas)"
+  },
+  "0212": {
+    "name": "Crunch duduk kabel"
+  },
+  "0213": {
+    "name": "High row duduk kabel (V-bar)"
+  },
+  "0214": {
+    "name": "Row bergantian satu lengan duduk dengan kabel"
+  },
+  "0241": {
+    "name": "Triceps pushdown kabel (V-bar)",
+    "description": "Triceps pushdown dengan V-bar pada katrol tinggi. Genggaman bersudut memungkinkan Anda menekan kuat dan meremas trisep.",
+    "instructions": [
+      "Pasang V-bar pada mesin kabel di posisi tertinggi.",
+      "Berdirilah menghadap mesin kabel dengan kaki selebar bahu.",
+      "Pegang V-bar dengan genggaman dari atas, telapak tangan menghadap ke bawah, kedua tangan selebar bahu.",
+      "Jaga siku tetap dekat dengan sisi badan dan lengan atas tidak bergerak selama latihan.",
+      "Kencangkan trisep dan hembuskan napas sambil mendorong V-bar ke bawah sampai lengan lurus sepenuhnya.",
+      "Berhenti sejenak di bawah sambil meremas trisep.",
+      "Tarik napas sambil perlahan mengembalikan V-bar ke posisi awal dengan terkendali.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0251": {
+    "name": "Chest dip",
+    "description": "Dip berat badan dengan badan condong ke depan pada palang paralel. Menargetkan dada bagian bawah, trisep, dan bahu.",
+    "instructions": [
+      "Posisikan diri di palang paralel dengan lengan lurus sepenuhnya dan badan tegak lurus.",
+      "Turunkan badan dengan menekuk siku sampai bahu berada di bawah siku.",
+      "Dorong badan kembali ke posisi awal dengan meluruskan lengan.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0313": {
+    "name": "Hammer curl dumbbell",
+    "description": "Hammer curl standar dengan telapak tangan menghadap ke dalam. Melatih brakialis, bisep, dan lengan bawah.",
+    "instructions": [
+      "Berdirilah tegak dengan dumbbell di kedua tangan, telapak tangan menghadap ke badan.",
+      "Jaga siku tetap dekat dengan badan dan putar telapak tangan sampai menghadap ke depan.",
+      "Ini adalah posisi awal Anda.",
+      "Sekarang, dengan lengan atas tidak bergerak, hembuskan napas dan angkat beban sambil mengencangkan bisep.",
+      "Teruskan mengangkat beban sampai bisep berkontraksi penuh dan dumbbell setinggi bahu.",
+      "Tahan posisi kontraksi sejenak sambil meremas bisep.",
+      "Kemudian tarik napas dan perlahan turunkan dumbbell ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang dianjurkan."
+    ]
+  },
+  "0334": {
+    "name": "Lateral raise dumbbell",
+    "description": "Lateral raise dumbbell berdiri yang standar. Mengangkat lengan ke samping membentuk bahu samping.",
+    "instructions": [
+      "Berdirilah dengan kaki selebar bahu dan pegang dumbbell di kedua tangan, telapak tangan menghadap badan.",
+      "Jaga punggung tetap lurus dan kencangkan perut.",
+      "Angkat lengan ke samping sampai sejajar dengan lantai, dengan siku tetap sedikit menekuk.",
+      "Berhenti sejenak di atas, lalu perlahan turunkan lengan ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0426": {
+    "name": "Overhead press dumbbell berdiri",
+    "description": "Sambil berdiri, Anda menekan dumbbell dari bahu ke atas kepala. Membentuk bahu, trisep, dan kestabilan badan.",
+    "instructions": [
+      "Berdirilah dengan kaki selebar bahu, pegang dumbbell di kedua tangan setinggi bahu dengan telapak tangan menghadap ke depan.",
+      "Dorong dumbbell ke atas sampai lengan lurus sepenuhnya di atas kepala.",
+      "Berhenti sejenak di atas, lalu perlahan turunkan dumbbell ke ketinggian bahu.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0585": {
+    "name": "Leg extension mesin",
+    "description": "Sambil duduk di mesin, Anda meluruskan kaki melawan bantalan. Latihan sederhana untuk membentuk paha depan.",
+    "instructions": [
+      "Sesuaikan tinggi dudukan dan sandaran mesin dengan tubuh Anda.",
+      "Duduklah di mesin dengan punggung bersandar dan kaki pada bantalan kaki.",
+      "Pegang pegangan atau sisi mesin agar stabil.",
+      "Luruskan kaki ke depan dengan meluruskan lutut sambil mengangkat beban.",
+      "Berhenti sejenak di atas, lalu perlahan turunkan beban ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0586": {
+    "name": "Lying leg curl mesin",
+    "description": "Berbaring telungkup di mesin, Anda menekuk tumit ke arah bokong. Mengisolasi hamstring.",
+    "instructions": [
+      "Sesuaikan mesin dengan tubuh Anda dan pilih beban yang diinginkan.",
+      "Berbaringlah telungkup di mesin dengan kaki lurus dan tumit menempel pada tuas berbantalan.",
+      "Pegang pegangan atau sisi mesin agar stabil.",
+      "Dengan tubuh bagian atas tidak bergerak, hembuskan napas dan tekuk kaki ke atas sejauh mungkin tanpa mengangkat pinggul dari bantalan.",
+      "Tahan posisi kontraksi sejenak sambil meremas hamstring.",
+      "Tarik napas dan perlahan turunkan tuas ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0605": {
+    "name": "Calf raise mesin berdiri",
+    "description": "Sambil berdiri dengan bantalan di bahu, Anda berjinjit lalu turun kembali. Mengisolasi betis.",
+    "instructions": [
+      "Sesuaikan mesin dengan tinggi badan Anda dan berdirilah dengan kaki selebar bahu.",
+      "Letakkan bahu di bawah bantalan dan pegang pegangan agar stabil.",
+      "Angkat tumit setinggi mungkin dengan meluruskan pergelangan kaki.",
+      "Berhenti sejenak di atas, lalu perlahan turunkan tumit ke posisi awal.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0662": {
+    "name": "Push-up",
+    "description": "Push-up klasik dari posisi plank tinggi. Melatih dada, bahu, trisep, dan inti tubuh dalam satu gerakan.",
+    "instructions": [
+      "Mulailah dalam posisi plank tinggi dengan tangan sedikit lebih lebar dari lebar bahu dan kaki rapat.",
+      "Kencangkan perut dan turunkan badan ke arah lantai dengan menekuk siku, sambil menjaga badan tetap lurus.",
+      "Berhenti sejenak saat dada tepat di atas lantai, lalu dorong badan kembali ke posisi awal dengan meluruskan lengan.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  },
+  "0739": {
+    "name": "Leg press sled 45°",
+    "description": "Pada sled 45 derajat, Anda mendorong pijakan menjauh dengan kaki. Melatih paha depan dan bokong.",
+    "instructions": [
+      "Sesuaikan dudukan dan pijakan kaki mesin sled ke posisi yang nyaman.",
+      "Duduklah di mesin dengan punggung bersandar dan kaki selebar bahu di pijakan.",
+      "Pegang pegangan di sisi dudukan agar stabil.",
+      "Dorong pijakan menjauh dari badan dengan meluruskan kaki, tumit tetap menempel di pijakan.",
+      "Terus dorong sampai kaki hampir lurus sepenuhnya, tetapi tanpa mengunci lutut.",
+      "Berhenti sejenak di puncak gerakan, lalu perlahan turunkan pijakan kembali ke arah badan dengan menekuk lutut.",
+      "Ulangi sebanyak jumlah repetisi yang diinginkan."
+    ]
+  }
 }
