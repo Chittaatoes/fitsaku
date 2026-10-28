@@ -4,7 +4,7 @@ import { useStore } from '../store/useStore.js'
 import { workoutVolume, effectiveRoutines, effectiveRoutineIds, nextTrainingDay, streakWeeks, lastBW, setsDoneActive } from '../lib/history.js'
 import { fmtNum, fmtDate, durPart, todayISO, isoOf, weekStartOf, weekDayOffset, DAYS, DAYN } from '../lib/format.js'
 import { t, tn, dateLocale } from '../lib/i18n.js'
-import { bwSheet, goalSheet, dayOverrideSheet, calendarSheet, startFlow, starterPlanSheet, bwDeltaColor, weighInsSheet } from '../sheets.jsx'
+import { bwSheet, goalSheet, dayOverrideSheet, calendarSheet, startFlow, starterPlanSheet, bwDeltaColor, weighInsSheet, workoutDetailSheet } from '../sheets.jsx'
 import LineChart from '../components/LineChart.jsx'
 import Icon from '../components/Icon.jsx'
 import QueueRow from '../components/QueueRow.jsx'
@@ -103,7 +103,13 @@ export default function Home() {
   const quests = generateQuests(S, ws_iso)
 
   // today's session shown right under the week strip
-  const onToday = () => { if (S.active) nav('/workout'); else if (todayRoutines.length) startFlow(effectiveRoutineIds(S, todayISO())); else dayOverrideSheet(todayISO()) }
+  // Once today's session is logged the row shows it (its details) instead of starting it again; another session is
+  // still one tap away under the week ("Choose a different workout").
+  const onToday = () => { if (S.active) nav('/workout'); else if (doneToday) workoutDetailSheet(doneToday); else if (todayRoutines.length) startFlow(effectiveRoutineIds(S, todayISO())); else dayOverrideSheet(todayISO()) }
+  // What the done session was, under its name: how long it took and what it lifted.
+  const doneDur = doneToday && Number.isFinite(doneToday.start) && Number.isFinite(doneToday.end) ? doneToday.end - doneToday.start : 0
+  const doneVol = doneToday ? Math.round(workoutVolume(doneToday)) : 0
+  const doneSub = doneToday ? [...durPart(doneDur), doneVol > 0 ? fmtNum(doneVol) + ' ' + S.unit : null].filter(Boolean).join(' · ') : ''
   // A chip on the coach week's progress row starts that one routine, in any order. A session
   // already in progress wins, as on the today row — starting another would overwrite it.
   const onQueueStart = id => { if (S.active) nav('/workout'); else startFlow([id]) }
@@ -134,8 +140,8 @@ export default function Home() {
 
     {/* Hero: what to do now, then the week around it. */}
     <div className="card home-hero">
-      {/* Once today's session is logged the row stops asking for it (issue #4). An in-progress
-          session still wins. Tapping keeps working, so a second session is a tap away. */}
+      {/* Once today's session is logged the row stops asking for it (issue #4) and opens that session instead. An
+          in-progress session still wins. */}
       <div className="today-row" {...tappable(onToday)}>
         <div className="row" style={{ gap: 12, minWidth: 0 }}>
           <span className="lrow-i" style={{ background: S.active ? 'var(--orange)' : doneToday ? 'var(--surface-3)' : routine ? 'var(--acc)' : 'var(--surface-3)', color: !S.active && !doneToday && routine ? 'var(--on-acc)' : undefined }}>
@@ -145,9 +151,10 @@ export default function Home() {
           <div style={{ minWidth: 0 }}>
             <div className="lbl2">{t('Today')}</div>
             <div className="ttl">{S.active ? (editingSaved ? S.active.name : t('{0} (in progress)', S.active.name))
-              : doneToday ? (doneToday.name ? t('{0} (done)', doneToday.name) : t('Workout done'))
+              : doneToday ? (doneToday.name || t('Workout done'))
               : routine ? todayName : t('Rest day')}{todayOvr && routine && !doneToday ? ' · ' + t('rescheduled') : ''}</div>
             {next && !doneToday && <div className="ss">{t('Next session: {0}, {1}', t(DAYN[next.weekday]), next.routine.name)}</div>}
+            {doneToday && !S.active && doneSub && <div className="ss">{doneSub}</div>}
           </div>
         </div>
         {S.active ? <span className="tag" style={{ color: 'var(--orange)', background: 'color-mix(in srgb,var(--orange) 16%,transparent)' }}>{editingSaved ? t('Edit') : t('Resume')}</span>

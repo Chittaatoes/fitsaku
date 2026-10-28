@@ -1499,7 +1499,7 @@ export default {
   "{0} workouts and {1} weigh-in were logged on this device while signed out. Add them to your profile, or keep the profile exactly as it is on the server.": "{0} sesi latihan dan {1} penimbangan dicatat di perangkat ini saat keluar. Tambahkan ke profilmu, atau biarkan profil persis seperti di server.",
   "Add them": "Tambahkan",
   "Keep profile as is": "Biarkan profil",
-  "Offline. Your changes are saved on this device and sync when you’re back online.": "Offline. Perubahanmu tersimpan di perangkat ini dan tersinkron saat kamu online lagi.",
+  "Offline. Your changes are saved on this device and sync when you’re back online.": "Datamu akan tersimpan apabila terkoneksi internet.",
   "Offline. Showing the last copy synced with the server.": "Offline. Menampilkan salinan terakhir yang tersinkron dengan server.",
   "Not synced yet. Tap to retry.": "Belum tersinkron. Ketuk untuk mencoba lagi.",
   "Back online and synced with the server.": "Online lagi dan tersinkron dengan server.",

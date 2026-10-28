@@ -76,10 +76,12 @@ export function connectionView(sync, { mobile = MOBILE, online = isOnline() } = 
         line: err.code === 'timeout' ? t('The server did not answer in time.') : t('The server cannot be reached'),
         banner: sync.pending ? t('Your server can’t be reached. Your changes are saved on this device and sync once it answers again.') : t('Your server can’t be reached. Showing the last copy synced with it.'),
       }
+      // The device itself has no network: a retry could only fail, so the banner offers none. It says what is true
+      // either way: what is entered is kept here, and reaches the server once the connection is back.
       return {
-        tone: 'off', icon: 'cloudSlash', action: 'retry',
+        tone: 'off', icon: 'cloudSlash', action: null,
         line: err.code === 'timeout' ? t('The server did not answer in time.') : t('Offline. The server can’t be reached'),
-        banner: sync.pending ? t('Offline. Your changes are saved on this device and sync when you’re back online.') : t('Offline. Showing the last copy synced with the server.'),
+        banner: t('Offline. Your changes are saved on this device and sync when you’re back online.'),
       }
     case 'error':
       return err.code === 'bad-response'

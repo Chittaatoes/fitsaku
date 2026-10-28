@@ -93,9 +93,10 @@ describe('connected and in step', () => {
     render()
     expect(bar()).toBeNull()
     act(() => network(false))
-    expect(text()).toBe('Offline. Showing the last copy synced with the server.')
+    expect(text()).toBe('Offline. Your changes are saved on this device and sync when you’re back online.')
     expect(bar().className).toContain('off')
-    expect(label()).toBe('Try again')
+    expect(label()).toBeNull()      // no network on the device: nothing a retry could do
+    expect(button()).toBeNull()
     expect(connectionView(sync('ok'), { online: false }).line).toBe('Offline. The server can’t be reached')
     act(() => network(true))
     expect(bar()).toBeNull()
@@ -113,25 +114,23 @@ describe('connected and in step', () => {
 })
 
 describe('not connected — it says so, and what to do', () => {
-  it('offline with changes waiting: kept on this device, and a retry that reports back', async () => {
+  it('offline with changes waiting: kept on this device, and no retry to offer without a network', () => {
     network(false)
     mocks.sync = sync('offline', { offline: true, pending: true, lastError: { status: 0, code: 'network' } })
     render()
     expect(text()).toBe('Offline. Your changes are saved on this device and sync when you’re back online.')
     expect(bar().className).toContain('off')
-    expect(label()).toBe('Try again')
+    expect(label()).toBeNull()
+    expect(button()).toBeNull()
     // Its row's height is what the page and the pinned headers leave free.
     expect(conn()).not.toBe('')
-    await act(async () => { button().click() })
-    expect(mocks.syncNow).toHaveBeenCalledTimes(1)
-    expect(mocks.toast).toHaveBeenCalledWith('Offline. The server can’t be reached')
   })
 
-  it('offline with nothing waiting: the copy on screen is the last synced one', () => {
+  it('offline with nothing waiting says the same: what is entered is kept and syncs when back online', () => {
     network(false)
     mocks.sync = sync('offline', { offline: true, lastError: { status: 0, code: 'timeout' } })
     render()
-    expect(text()).toBe('Offline. Showing the last copy synced with the server.')
+    expect(text()).toBe('Offline. Your changes are saved on this device and sync when you’re back online.')
   })
 
   // A proxy answering 502 without a CORS header fails fetch exactly as no network does; the phone
@@ -151,7 +150,7 @@ describe('not connected — it says so, and what to do', () => {
     render()
     expect(text()).toBe('Your server can’t be reached. Showing the last copy synced with it.')
     act(() => network(false))
-    expect(text()).toBe('Offline. Showing the last copy synced with the server.')
+    expect(text()).toBe('Offline. Your changes are saved on this device and sync when you’re back online.')
     act(() => network(true))
     expect(text()).toBe('Your server can’t be reached. Showing the last copy synced with it.')
   })

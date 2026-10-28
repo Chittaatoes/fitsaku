@@ -8,7 +8,7 @@ import React, { act } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createRoot } from 'react-dom/client'
 import { useStore } from '../store/useStore.js'
-import { startFlow } from '../sheets.jsx'
+import { startFlow, workoutDetailSheet } from '../sheets.jsx'
 import { todayISO, isoOf, fmtDate } from '../lib/format.js'
 import Home from './Home.jsx'
 import { setLang } from '../lib/i18n.js'
@@ -16,7 +16,7 @@ import { setLang } from '../lib/i18n.js'
 vi.mock('react-router-dom', () => ({ useNavigate: () => () => {} }))
 vi.mock('../sheets.jsx', () => ({
   starterPlanSheet: vi.fn(), bwSheet: vi.fn(), goalSheet: vi.fn(), dayOverrideSheet: vi.fn(),
-  calendarSheet: vi.fn(), startFlow: vi.fn(), bwDeltaColor: () => '',
+  calendarSheet: vi.fn(), startFlow: vi.fn(), workoutDetailSheet: vi.fn(), bwDeltaColor: () => '',
 }))
 
 const routines = [
@@ -316,8 +316,29 @@ describe('Home — the today row follows today\'s plan, not just the last sessio
     const wd = new Date(today + 'T12:00:00').getDay()
     setS({ queue: null, week: { [wd]: ['own'] }, workouts: [at('own', Date.now() - 3600000)] })
     mount()
-    expect(todayTitle()).toBe('Core (done)')
+    expect(todayTitle()).toBe('Core')
     expect(tag()).toBe('Done')
+  })
+
+  it('tapping the row of a session already done today opens that session; it does not start a workout again', () => {
+    const wd = new Date(today + 'T12:00:00').getDay()
+    const w = at('own', Date.now() - 3600000)
+    setS({ queue: null, week: { [wd]: ['own'] }, workouts: [w] })
+    mount()
+    startFlow.mockClear(); workoutDetailSheet.mockClear()
+    act(() => { host.querySelector('.today-row').click() })
+    expect(startFlow).not.toHaveBeenCalled()
+    expect(workoutDetailSheet).toHaveBeenCalledTimes(1)
+    expect(workoutDetailSheet.mock.calls[0][0].id).toBe(w.id)
+  })
+
+  it('the done row says how long it took under the name, not "(done)" in it', () => {
+    const wd = new Date(today + 'T12:00:00').getDay()
+    const start = Date.now() - 3600000
+    setS({ queue: null, week: { [wd]: ['own'] }, workouts: [{ ...at('own', start), end: start + 45 * 60000 }] })
+    mount()
+    expect(todayTitle()).not.toMatch(/done/i)
+    expect(host.querySelector('.today-row .ss')?.textContent).toMatch(/45/)
   })
 
   it('Start new pass after a session today: the pass runs today, from its first session', () => {
