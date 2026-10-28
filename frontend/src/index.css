@@ -2594,3 +2594,13 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 .wtip-chk{width:30px;height:30px;border-radius:50%;background:var(--acc);color:var(--on-acc)}
 .wtip-stp{width:26px;height:26px;border-radius:8px;background:var(--surface-2);color:var(--label)}
 .wtip-next{width:30px;height:30px;border-radius:10px;background:var(--acc-soft);color:var(--acc)}
+
+/* --- Train: the card that replaces "Today's Workout" once a workout is finished today (views/Train.jsx) --- */
+.train-done-top{display:flex;gap:12px;align-items:flex-start}
+.train-done-i{flex:none;width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green)}
+.train-done-t{font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.train-done-m{margin-top:4px;font-size:15px;line-height:1.4;color:var(--label-2)}
+.train-done-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.train-done-chips span{padding:5px 11px;border-radius:99px;background:var(--surface-2);font-size:13px;font-weight:600;color:var(--label-2)}
+.train-done-chips .part{background:var(--acc-soft);color:var(--acc)}
+.train-done-chips .pr{background:color-mix(in srgb,var(--yellow) 18%,transparent);color:var(--yellow)}

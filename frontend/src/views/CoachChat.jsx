@@ -38,6 +38,7 @@ import Icon from '../components/Icon.jsx'
 import { glyphOf } from '../lib/glyphs.js'
 import LineChart from '../components/LineChart.jsx'
 import { Button, Check, Switch, Section, Row, SelectRow } from '../components/ui.jsx'
+import { bpLabel } from '../lib/body-parts.js'
 import '../coach.css'
 
 export default function CoachChat() {
@@ -469,8 +470,6 @@ const Notes = ({ notes }) => !!notes?.length && <div className="pcard-notes">
 
 /* ---------------------------------- insights ---------------------------------- */
 
-const BP_LABEL = { back: 'Back muscles', cardio: 'Cardio', chest: 'Chest', 'lower arms': 'Forearms', 'lower legs': 'Calves', neck: 'Neck', shoulders: 'Shoulders', 'upper arms': 'Arms', 'upper legs': 'Legs', waist: 'Core', other: 'Other' }
-const bpLabel = bp => t(BP_LABEL[bp] || bp)
 
 /**
  * The numbers the Coach read, drawn: how much and how often, where the body weight went,

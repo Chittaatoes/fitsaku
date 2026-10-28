@@ -1,7 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore.js'
 import { effectiveRoutines, effectiveRoutineIds } from '../lib/history.js'
-import { todayISO, exCount, weekOrder, weekStartOf, DAYS, DAYN } from '../lib/format.js'
+import { exCount, weekOrder, weekStartOf, DAYS, DAYN } from '../lib/format.js'
+import { useLocalToday } from '../lib/use-local-today.js'
+import { completedToday, doneCard } from '../lib/day-summary.js'
+import { bpLabel } from '../lib/body-parts.js'
 import { t } from '../lib/i18n.js'
 import { Button } from '../components/ui.jsx'
 import { startFlow } from '../sheets.jsx'
@@ -11,14 +14,20 @@ import { loadDraft, isEmptyDraft } from '../lib/workout-draft.js'
 export default function Train() {
   const nav = useNavigate()
   const S = useStore(s => s.S)
-  const todayRoutines = effectiveRoutines(S, todayISO())
-  const routineIds = effectiveRoutineIds(S, todayISO())
+  // Today on the person's own clock, kept current: the card below follows the day, not the day the screen was opened.
+  const today = useLocalToday()
+  const todayRoutines = effectiveRoutines(S, today)
+  const routineIds = effectiveRoutineIds(S, today)
+  // Finished today (at least one set done, saved in the store the moment it was finished, synced or not): the card says
+  // so instead of offering to start the day's plan again. A session in progress is not finished.
+  const finished = !S.active ? completedToday(S, today) : null
+  const card = finished ? doneCard(finished, { unit: S.unit, label: bpLabel }) : null
   // A workout started in Create your own and left unfinished (kept on this device).
   const draft = loadDraft()
   const hasDraft = !isEmptyDraft(draft)
   const order = weekOrder(weekStartOf(S))
   const daysOf = id => order.filter(d => [].concat(S.week[d] || []).includes(id))
-  const todayDow = new Date().getDay()
+  const todayDow = new Date(today + 'T12:00:00').getDay()
 
   const handleStartWorkout = () => {
     if (routineIds.length > 0) startFlow(routineIds)
@@ -42,8 +51,24 @@ export default function Train() {
         <Icon name="chevronRight" className="train-create-c" />
       </button>}
 
+      {/* Today, once a workout is finished: what was done, and no button to start the day again. */}
+      {card && <section className="card train-today train-done" aria-live="polite">
+        <div className="train-done-top">
+          <span className="train-done-i"><Icon name="checkCircle" /></span>
+          <div>
+            <div className="train-done-t">{card.title}</div>
+            <div className="train-done-m">{card.message}</div>
+          </div>
+        </div>
+        {(card.parts.length > 0 || card.chips.length > 0 || card.prs > 0) && <div className="train-done-chips">
+          {card.parts.map(p => <span key={'bp-' + p} className="part">{p}</span>)}
+          {card.chips.map(c => <span key={c}>{c}</span>)}
+          {card.prs > 0 && <span className="pr">{card.prs} PR</span>}
+        </div>}
+      </section>}
+
       {/* Today: what is planned and one big way to start it. */}
-      <section className="card train-today">
+      {!card && <section className="card train-today">
         <div className="train-h">{t("Today's Workout")}</div>
         {todayRoutines.length > 0 ? <>
           <ul className="train-today-list">
@@ -59,7 +84,7 @@ export default function Train() {
           <Button size="sm" variant="tinted" onClick={() => nav('/plan')}>{t('View Schedule')}</Button>
         </div>}
         {!S.active && <Button size="sm" variant="ghost" className="dim" icon="swap" onClick={() => nav('/workout')}>{t('Choose a different workout')}</Button>}
-      </section>
+      </section>}
 
       {/* Make your own: one tap target (views/CreateWorkout.jsx). */}
       <button type="button" className="card train-create" onClick={() => nav('/train/new')}>
