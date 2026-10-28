@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync, cpSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, cpSync, statSync, mkdirSync, copyFileSync, readdirSync, createReadStream } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -51,6 +51,49 @@ const bundleMedia = {
     const out = resolve(fileURLToPath(new URL('.', import.meta.url)), 'dist/exercise-media')
     if (!existsSync(join(src, 'still'))) { console.warn('VITE_BUNDLE_MEDIA=1 but catalogue/media/still is missing: no exercise media bundled'); return }
     for (const d of ['still', 'clip', 'NOTICE.md']) if (existsSync(join(src, d))) cpSync(join(src, d), join(out, d), { recursive: true })
+  }
+}
+
+// The workout's own songs (lib/music.js): assets/music/music1.mp3 … in the repository, outside frontend/. The dev server
+// answers /music/<name>.mp3 from there (with byte ranges, which an audio element asks for to seek), and a build copies
+// them to dist/music so any static host serves them from the app's own origin. A missing folder only means no music:
+// the app plays nothing and says the song was not found.
+const musicDir = resolve(fileURLToPath(new URL('.', import.meta.url)), '../assets/music')
+const MUSIC_FILE = /^music\d+\.mp3$/
+const fitsakuMusic = {
+  name: 'fitsaku-music',
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      const m = /^\/music\/([^/?]+\.mp3)(?:\?.*)?$/.exec(req.url || '')
+      if (!m) return next()
+      const name = decodeURIComponent(m[1])
+      const file = join(musicDir, name)
+      if (!MUSIC_FILE.test(name) || !existsSync(file)) { res.statusCode = 404; return res.end() }
+      const size = statSync(file).size
+      const r = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '')
+      res.setHeader('Content-Type', 'audio/mpeg')
+      res.setHeader('Accept-Ranges', 'bytes')
+      if (r && (r[1] || r[2])) {
+        const start = r[1] ? Number(r[1]) : Math.max(0, size - Number(r[2]))
+        const end = r[1] && r[2] ? Math.min(Number(r[2]), size - 1) : size - 1
+        if (start > end || start >= size) { res.statusCode = 416; res.setHeader('Content-Range', 'bytes */' + size); return res.end() }
+        res.statusCode = 206
+        res.setHeader('Content-Range', `bytes ${start}-${end}/${size}`)
+        res.setHeader('Content-Length', String(end - start + 1))
+        return createReadStream(file, { start, end }).pipe(res)
+      }
+      res.setHeader('Content-Length', String(size))
+      createReadStream(file).pipe(res)
+    })
+  },
+  closeBundle() {
+    if (process.env.VITE_MOBILE === '1') return
+    const out = resolve(fileURLToPath(new URL('.', import.meta.url)), 'dist/music')
+    if (!existsSync(musicDir)) { console.warn('music: assets/music is missing, so no music is bundled'); return }
+    const files = readdirSync(musicDir).filter(f => MUSIC_FILE.test(f))
+    if (!files.length) { console.warn('music: assets/music holds no music<N>.mp3, so no music is bundled'); return }
+    mkdirSync(out, { recursive: true })
+    for (const f of files) copyFileSync(join(musicDir, f), join(out, f))
   }
 }
 
@@ -126,7 +169,7 @@ export default defineConfig({
   // __BUILD_ID__: when this bundle was built (UTC, to the minute), shown in Settings > About and the viewport readout, so a
   // phone can say which deploy it is actually running.
   define: { __APP_VERSION__: JSON.stringify(appVersion), __BUILD_ID__: JSON.stringify(new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '')) },
-  plugins: [react(), umami, flavor, swStamp, catalogueMedia, bundleMedia],
+  plugins: [react(), umami, flavor, swStamp, catalogueMedia, bundleMedia, fitsakuMusic],
   base: './',
   server: {
     // The Coach's core (payload, validator, prompts, HTTP adapters) lives in ../api/coach/core

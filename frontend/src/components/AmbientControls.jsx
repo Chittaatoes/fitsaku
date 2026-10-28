@@ -27,7 +27,7 @@ export default function AmbientControls({ compact = false }) {
       <input type="range" min="0" max="100" step="5" value={Math.round(vol * 100)} aria-label={t('Volume')}
         onChange={e => update(s => { s.ambientVol = Number(e.target.value) / 100 })} />
     </label>}
-    {!compact && <p className="small muted amb-note">{t('A built-in beat while you train and a calm sound while you rest. It follows your Sound setting and pauses while Spotify plays from here.')}</p>}
+    {!compact && <p className="small muted amb-note">{t('A built-in beat while you train and a calm sound while you rest. It follows your Sound setting and stays quiet while the workout music plays.')}</p>}
     {setting !== 'off' && !S.sound && <p className="small amb-warn">{t('Sound is off, so nothing plays. Turn it on in Settings.')}</p>}
   </div>
 }

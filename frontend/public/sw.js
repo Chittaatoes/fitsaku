@@ -455,6 +455,10 @@ self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET' || url.origin !== location.origin) return
   if (url.pathname.startsWith('/api/') || url.pathname.startsWith(API)) return    // never cache auth/data
 
+  // The workout's songs (/music/music1.mp3 …): a few MB each, asked for in byte ranges by the audio element. Left to the
+  // browser and the network: a cached copy would be one more 14 MB in every build's cache.
+  if (/\/music\/[^/]+\.mp3$/.test(url.pathname)) return
+
   if (isMediaPath(url.pathname)) {
     e.respondWith(media(e))
     return

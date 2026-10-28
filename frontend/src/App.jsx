@@ -47,6 +47,7 @@ import Home from './views/Home.jsx'
 import Train from './views/Train.jsx'
 import Workout from './views/Workout.jsx'
 import AmbientController from './components/AmbientController.jsx'
+import MusicController from './components/MusicController.jsx'
 import MediaFilters from './components/MediaFilters.jsx'
 import ViewportDebug from './components/ViewportDebug.jsx'
 import AppNotices from './components/AppNotices.jsx'
@@ -65,7 +66,6 @@ const Profile = lazyView(() => import('./views/Profile.jsx'))
 const Muscles = lazyView(() => import('./views/Muscles.jsx'))
 const StructuralBalance = lazyView(() => import('./views/StructuralBalance.jsx'))
 const ProgressPhotos = lazyView(() => import('./views/ProgressPhotos.jsx'))
-const SpotifyCallback = lazyView(() => import('./views/SpotifyCallback.jsx'))
 const CreateWorkout = lazyView(() => import('./views/CreateWorkout.jsx'))
 const Admin = lazyView(() => import('./views/Admin.jsx'))
 const CoachChat = lazyView(() => import('./views/CoachChat.jsx'))
@@ -282,7 +282,6 @@ function Shell() {
       <Route path="/progress-photos" element={<ProgressPhotos />} />
       <Route path="/measurements" element={<Measurements />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/spotify/callback" element={<SpotifyCallback />} />
       <Route path="/settings" element={<SettingsRoute />} />
       <Route path="/settings/:page" element={<SettingsRoute />} />
       {/* The Coach screens gate themselves on the instance config; the routes exist
@@ -317,6 +316,7 @@ function Shell() {
           including on the sign-in screen, when the server has just ended the session. */}
       <SyncBanner />
       <AmbientController />
+      <MusicController />
       {!noTabs && <TabBar onStart={startFlow} />}
       <RestTimer />
       <Modals />

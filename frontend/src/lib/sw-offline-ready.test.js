@@ -309,6 +309,14 @@ describe('files with a content hash in their name', () => {
     expect(await served('/assets/sub/x-12345678.js')).toEqual({ body: 'fresh', network: 1 })    // only files directly under assets/
   })
 
+  it('leave the workout songs to the browser: no cache, no answer from the worker', async () => {
+    const dev = device(), html = indexOf('a')
+    const w = await ready(dev, html)
+    const e = await w.fetch('/music/music1.mp3')
+    expect(e._res).toBeUndefined()
+    expect(await (await dev.caches.open(w.cache)).keys()).not.toContain(ORIGIN + '/music/music1.mp3')
+  })
+
   it('leave /api/ alone, and a name that is not a hash is the old network-first way', async () => {
     const dev = device(), html = indexOf('a')
     const w = await ready(dev, html)

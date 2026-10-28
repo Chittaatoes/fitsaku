@@ -23,7 +23,7 @@ export default function AmbientController() {
     else ambient.stop()
   }, [kind])                                                   // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { ambient.setVolume(vol) }, [vol])
-  // The panel only knows what Spotify is doing while it is open: when the session is over, forget it.
+  // The music (components/MusicController.jsx) stops with the session: forget that it was playing.
   useEffect(() => { if (!active && useUI.getState().extMusic) useUI.setState({ extMusic: false }) }, [active])
   useEffect(() => () => ambient.stop(0.2), [])
   return null

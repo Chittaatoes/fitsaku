@@ -5,7 +5,7 @@
 //
 // Nothing plays unless there is a live workout of the user's own (not the editor of a saved one, not
 // one logged into the past), the app's Sound setting is on, and the user is not already playing
-// music from the Spotify panel (`external`). A counting rest is the calm sound; a paused rest, a
+// the workout's own music (`external`). A counting rest is the calm sound; a paused rest, a
 // finished one ("Ready") and the short "switch sides" gap go back to the training sound.
 
 export const AMBIENT_SETTINGS = ['off', 'rest', 'all']

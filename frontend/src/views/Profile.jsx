@@ -6,7 +6,6 @@ import { goalSheet } from '../sheets.jsx'
 import { ACCENTS, ACCENT_NAMES } from '../lib/format.js'
 import Icon from '../components/Icon.jsx'
 import { Section, Row, SelectRow, Switch, Button } from '../components/ui.jsx'
-import SpotifyCard from '../components/SpotifyCard.jsx'
 import AmbientControls from '../components/AmbientControls.jsx'
 
 export default function Profile() {
@@ -108,9 +107,6 @@ export default function Profile() {
       <Section title={t('Music')}>
         <div className="card"><AmbientControls /></div>
       </Section>
-
-      {/* Spotify (optional) */}
-      <SpotifyCard />
 
       {/* Data & Backup */}
       <Section title={t('Data & Backup')}>

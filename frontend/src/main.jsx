@@ -7,10 +7,6 @@ import { startMediaSync } from './lib/media-sync.js'
 import { startNativeKeyboard } from './lib/native-keyboard.js'
 import './index.css'
 import { hideBoot } from './lib/boot.js'
-import { captureSpotifyReturn } from './lib/spotify.js'
-
-// Spotify's redirect arrives on a path with the code in the query: take it off the address first.
-captureSpotifyReturn()
 
 // App.jsx restores per-route scroll itself; the browser's own attempt races it.
 // A script that dies before the app draws would otherwise leave the boot logo lifting forever.

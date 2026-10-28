@@ -254,9 +254,8 @@ export const DEF = {
   // XP twice (lib/gamification.js awardWorkoutXp). Only live finishes are in it: history that
   // predates the system, and workouts logged into the past, earn nothing.
   xpAwarded: {},
-  // The workout playlist chosen from Spotify: { id, uri, name, image, url } or null. Only what is
-  // needed to show it and start it; the tokens never come near this state (api/spotify.js).
-  spotifyPlaylist: null,
+  // The workout's own music (lib/music.js): played from the start of a workout unless this is false.
+  musicAuto: true,
   // The built-in workout sound (lib/ambient.js): 'off' | 'rest' | 'all', and its volume 0–1.
   ambient: 'all', ambientVol: 0.5,
   // Weekly quests: [{ id, title, target, progress, completed, completedAt }]

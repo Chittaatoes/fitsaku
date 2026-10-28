@@ -2604,3 +2604,17 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 .train-done-chips span{padding:5px 11px;border-radius:99px;background:var(--surface-2);font-size:13px;font-weight:600;color:var(--label-2)}
 .train-done-chips .part{background:var(--acc-soft);color:var(--acc)}
 .train-done-chips .pr{background:color-mix(in srgb,var(--yellow) 18%,transparent);color:var(--yellow)}
+
+/* --- the workout's music card (components/MusicPanel.jsx): one row, settings folded under it --- */
+.mp{margin:0 0 10px;border-radius:14px;background:var(--bg-el)}
+.mp-row{display:flex;align-items:center;gap:4px;min-height:44px;padding:4px 6px 4px 12px}
+.mp-i{flex:none;font-size:18px;color:var(--label-3);margin-inline-end:6px}
+.mp-i.on{color:var(--acc)}
+.mp-t{flex:1;min-width:0}
+.mp-name{font-weight:600;font-size:14px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mp-sub{line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mp-b{flex:none;width:36px;height:36px;font-size:17px}
+.mp-b.on{background:var(--acc-soft);color:var(--acc)}
+.mp-play{background:var(--acc);color:var(--on-acc)}
+.mp-set{display:flex;flex-direction:column;gap:12px;padding:4px 12px 12px}
+.mp-auto{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px}

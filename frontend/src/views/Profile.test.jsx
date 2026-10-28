@@ -24,7 +24,6 @@ vi.mock('../store/useStore.js', () => {
 })
 vi.mock('react-router-dom', () => ({ useNavigate: () => (...a) => mocks.navs.push(a) }))
 vi.mock('../sheets.jsx', () => ({ goalSheet: (...a) => mocks.goal(...a) }))
-vi.mock('../components/SpotifyCard.jsx', () => ({ default: () => null }))
 vi.mock('../components/AmbientControls.jsx', () => ({ default: () => null }))
 
 let host, root
