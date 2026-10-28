@@ -50,6 +50,7 @@ import { durationSheet } from '../components/DurationWheel.jsx'
 import { showsConnection, showsLocalLine } from '../components/SyncBanner.jsx'
 import BackupFolderRow, { useBackupFolder, autoBackupSubtitle } from '../components/BackupFolderRow.jsx'
 import { AnimationQualityRow } from '../components/Animations.jsx'
+import OfflineCard from '../components/OfflineCard.jsx'
 import { ServerSyncSection, KeptChangesRows, leaveServer, connectServer, passkeySignIn } from '../components/ServerSync.jsx'
 import { passwordOn, PasswordRow, openPasswordSignIn, openPasswordRegister } from '../components/PasswordAuth.jsx'
 import { usePasskeys, PasskeysRow, DeviceLinkRow, openDeviceLinkRedeem } from '../components/Passkeys.jsx'
@@ -912,6 +913,9 @@ export default function Settings({ page = null, find = null, via = null, entryKe
               subtitle={t('Download the APK from opengym.ch')} accessory="chevron"
               onClick={() => window.open('https://opengym.ch/#download', '_blank', 'noopener')} />}
       </Section>
+      {/* Whether the app starts with no network, and the way to rebuild its cache: the web app only (the phone app has no
+          service worker, and the card draws nothing without one). */}
+      {!MOBILE && <OfflineCard />}
       {/* "Add to Home screen": not inside the phone app, and not once it is installed. */}
       {!MOBILE && !standalone() && <Section title={t('Tip')}>
         <Row icon="share" iconTint="var(--blue)"

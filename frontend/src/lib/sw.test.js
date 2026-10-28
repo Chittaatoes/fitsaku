@@ -22,6 +22,7 @@ class FakeCaches {
   async match(req) { for (const c of this.c.values()) { const hit = await c.match(req); if (hit) return hit } return undefined }
 }
 
+const PREFS = 'opengym-prefs'   // what the worker keeps across builds (the language, which builds are kept)
 const CACHE = 'opengym-rt-__BUILD__'   // the placeholder the build rewrites (vite.config.js swStamp)
 const handlers = {}
 let skipWaiting = 0
@@ -140,7 +141,7 @@ describe('sw.js install and activate', () => {
     expect(skipWaiting).toBe(1)
     await fire('activate')
 
-    expect(await globalThis.caches.keys()).toEqual([CACHE])
+    expect((await globalThis.caches.keys()).sort()).toEqual([CACHE, PREFS].sort())
     const c = await globalThis.caches.open(CACHE)
     expect(c.keys()).toEqual(expect.arrayContaining(['./assets/index-new.js', './assets/index-new.css', 'index.html']))
   })
@@ -156,7 +157,7 @@ describe('sw.js install and activate', () => {
     expect(skipWaiting).toBe(1)
     await fire('activate')
 
-    expect(await globalThis.caches.keys()).toEqual([CACHE])
+    expect((await globalThis.caches.keys()).sort()).toEqual([CACHE, PREFS].sort())
     expect((await globalThis.caches.open(CACHE)).keys()).toContain('index.html')
   })
 })
@@ -217,7 +218,7 @@ describe('sw.js re-registers a rotated push subscription with the page\'s device
       : { ok: true, status: 200, clone: () => ({}) })
     await fire('install')
     await fire('activate')
-    expect((await globalThis.caches.keys()).sort()).toEqual([CACHE, DEVICE_CACHE].sort())
+    expect((await globalThis.caches.keys()).sort()).toEqual([CACHE, DEVICE_CACHE, PREFS].sort())
     expect(await (await (await globalThis.caches.open(DEVICE_CACHE)).match(DEVICE_URL)).text()).toBe('dev1234abcd')
   })
 })

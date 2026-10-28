@@ -11,6 +11,38 @@ const CACHE = 'opengym-rt-__BUILD__'
 const DEVICE_CACHE = 'opengym-device'
 const DEVICE_URL = '/opengym-device-id'
 
+/* What the page tells the worker and the worker needs across builds lives in a cache of its own, which no sweep
+   touches: the language the app is shown in (so a new build's install fetches that language's packs before it takes
+   over) and which build caches are kept (the running one and the one before it). */
+const PREFS_CACHE = 'opengym-prefs'
+const BUILD_PREFIX = 'opengym-rt-'
+const BUILD = CACHE.slice(BUILD_PREFIX.length)
+const STAMPED = BUILD !== '__BUILD__'           // false in a dev server or a test: nothing was stamped in
+const MANIFEST_URL = '/opengym-manifest'
+const prefKey = n => '/opengym-pref-' + n
+async function getPref(name) {
+  try { const r = await (await caches.open(PREFS_CACHE)).match(prefKey(name)); return r ? JSON.parse(await r.text()) : undefined } catch { return undefined }
+}
+async function setPref(name, value) {
+  try { await (await caches.open(PREFS_CACHE)).put(prefKey(name), new Response(JSON.stringify(value))) } catch { /* the next boot says it again */ }
+}
+
+/* The language packs, per language, for this build (scripts/sw-stamp.mjs langPacks): { de: ['./assets/de-x.js', …] }.
+   Unstamped it is empty. */
+const LANGS = '__LANGS__'
+const langMap = () => { try { const m = JSON.parse(LANGS); return m && typeof m === 'object' && !Array.isArray(m) ? m : {} } catch { return {} } }
+const langFiles = lang => { const f = langMap()[lang]; return Array.isArray(f) ? f : [] }
+const goodLang = l => typeof l === 'string' && /^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})?$/.test(l)
+
+// A page is never a script or a stylesheet. A server that answers a missing file with the app's own index.html (the
+// SPA fallback of Vercel's rewrite) must not get that page stored, or served, under a .js or .css name.
+const isHtml = r => /text\/html/i.test((r && r.headers && typeof r.headers.get === 'function' && r.headers.get('content-type')) || '')
+const goodAsset = (u, r) => !!r && r.ok && !r.redirected && !(/\.(?:js|css|mjs)(?:\?|$)/.test(String(u)) && isHtml(r))
+// One file of this build into a cache, if it is really that file. False, never a throw: callers decide what a miss means.
+async function fetchInto(c, u) {
+  try { const r = await fetch(u, { cache: 'no-cache' }); if (!goodAsset(u, r)) return false; await c.put(u, r); return true } catch { return false }
+}
+
 /* Exercise media (img/, gif/) lives in a cache of its own that outlives builds (#281). It used to
    share the build's cache, so every update swept every animation along with the old bundle, and
    an installed app opened offline after an update showed broken tiles for exercises it had shown
@@ -44,9 +76,9 @@ const lazyAssets = () => { try { const a = JSON.parse(LAZY); return Array.isArra
 // What the shell needs to boot without a network: index.html plus every script/style/icon it
 // references. Read from the served index.html so the list follows the build, not a hand-kept
 // manifest that would go stale the first time a chunk is renamed.
-async function precache() {
-  const c = await caches.open(CACHE)
-  const res = await fetch('index.html', { cache: 'no-cache' })
+async function precache(into = CACHE, preHtml) {
+  const c = await caches.open(into)
+  const res = preHtml === undefined ? await fetch('index.html', { cache: 'no-cache' }) : { ok: true, redirected: false, text: async () => preHtml }
   // Whatever came back is not the shell: the server was restarting mid-deploy (5xx), or the
   // request was answered by something else after a redirect — an auth proxy in front (Authelia,
   // Cloudflare Access; docs/SELF_HOSTING.md) sends its login page once the session there expires.
@@ -70,7 +102,7 @@ async function precache() {
   // the install would report success and then sweep the build that still worked.
   await Promise.all(code.map(async u => {
     const r = await fetch(u, { cache: 'no-cache' }).catch(e => { throw new Error('precache: ' + u + ' — ' + (e?.message || e)) })
-    if (!r.ok || r.redirected) throw new Error('precache: ' + u + ' ' + r.status + (r.redirected ? ' redirected' : ''))
+    if (!goodAsset(u, r)) throw new Error('precache: ' + u + ' ' + r.status + (r.redirected ? ' redirected' : isHtml(r) ? ' html' : ''))
     await c.put(u, r)
   }))
   await Promise.all(refs.filter(u => !code.includes(u)).map(u => c.add(u).catch(() => {})))
@@ -79,12 +111,32 @@ async function precache() {
   await Promise.all(lazyAssets().filter(u => !code.includes(u)).map(async u => {
     try {
       const r = await fetch(u, { cache: 'no-cache' })
-      if (r.ok && !r.redirected) await c.put(u, r)
+      if (goodAsset(u, r)) await c.put(u, r)
     } catch { /* fetched on demand instead */ }
   }))
+  // The language the app is shown in: its packs come with the build, so an offline start right after an update is
+  // not missing them. Best effort, like the chunks above: one that does not come shows as "partial" in the status
+  // (below) and can be fetched again, but is no reason to keep a working build from installing.
+  const lang = await getPref('lang')
+  if (goodLang(lang)) await Promise.all(langFiles(lang).map(u => fetchInto(c, u)))
+  // What this build needs to run offline, written for the status check (and for the rule about older builds'
+  // files: a file this build owns is never taken from an older build's cache).
+  await c.put(MANIFEST_URL, new Response(JSON.stringify({ build: BUILD, required: ['index.html', ...code], lazy: lazyAssets().filter(u => !code.includes(u)) }), { headers: { 'content-type': 'application/json' } }))
   // The shell goes in last, so activate's guard — an index.html in THIS build's cache — means the
   // whole shell is there rather than just its first file.
   await c.put('index.html', new Response(html, { headers: { 'content-type': 'text/html; charset=utf-8' } }))
+}
+
+// The builds whose caches stay: this one and the one it replaced, newest first, remembered across workers. A page
+// that is still open when an update takes over (skipWaiting, below) goes on asking for the files of the build it
+// loaded; they are in the previous build's cache, and a request the network answers for a file that no longer exists
+// would be the app's own index.html.
+async function keptBuilds() {
+  const before = await getPref('builds')
+  const prev = Array.isArray(before) ? before.filter(n => typeof n === 'string' && n.startsWith(BUILD_PREFIX) && n !== CACHE) : []
+  const next = [CACHE, ...prev].slice(0, 2)
+  await setPref('builds', next)
+  return next
 }
 
 self.addEventListener('install', e => {
@@ -99,8 +151,10 @@ self.addEventListener('activate', e => {
     const c = await caches.open(CACHE)
     if (await c.match('index.html')) {
       // DEVICE_CACHE holds this browser's device id (the push re-register below needs it): not a
-      // build, so an update never sweeps it.
-      const old = (await caches.keys()).filter(k => k !== CACHE && k !== MEDIA && k !== DEVICE_CACHE)
+      // build, so an update never sweeps it. Nor does PREFS_CACHE. The build before this one stays too (see
+      // keptBuilds): a page still running it keeps getting its files from there.
+      const kept = await keptBuilds()
+      const old = (await caches.keys()).filter(k => k !== CACHE && k !== MEDIA && k !== DEVICE_CACHE && k !== PREFS_CACHE && !kept.includes(k))
       // A build from before MEDIA existed kept its media in its own cache: move it across first,
       // so the first update to this worker does not cost what the device already had offline.
       await Promise.all(old.map(k => adoptMedia(k).catch(() => {})))
@@ -246,6 +300,146 @@ self.addEventListener('pushsubscriptionchange', e => {
   })())
 })
 
+/* ---------- offline readiness, repair and reset (the page asks through lib/offline-status.js) ---------- */
+async function readManifest(c) {
+  try { const r = await c.match(MANIFEST_URL); return r ? await r.json() : null } catch { return null }
+}
+
+/* Whether this build's own files are in its cache, each one really there and not a page standing in for it:
+     'ready'    the shell, the code that loads on demand, and the language's packs;
+     'partial'  the shell is complete (the app opens) but a chunk or a pack is missing, or the language has no packs
+                known to this build;
+     'none'     the shell is not complete, or this cache holds no record of what the build needs.
+   `lang` is the language the app is shown in now (the base language of a derived locale). */
+async function offlineStatus(lang) {
+  const c = await caches.open(CACHE)
+  const man = await readManifest(c)
+  if (!man || man.build !== BUILD) return { state: 'none', build: BUILD, shell: -1, lazy: 0, lang: 0, reason: 'manifest' }
+  const missing = async list => {
+    const out = []
+    for (const u of list || []) { const r = await c.match(u); if (!r || !goodAsset(u, r)) out.push(u) }
+    return out
+  }
+  const shell = await missing(man.required)
+  const lazy = await missing(man.lazy)
+  const files = goodLang(lang) && lang !== 'en' ? langFiles(lang) : []
+  const langMissing = await missing(files)
+  // A language with no packs on record is not "available": the build is asked about, not assumed.
+  const unmapped = STAMPED && goodLang(lang) && lang !== 'en' && files.length === 0
+  const state = shell.length ? 'none' : (lazy.length || langMissing.length || unmapped) ? 'partial' : 'ready'
+  return { state, build: BUILD, shell: shell.length, lazy: lazy.length, lang: langMissing.length + (unmapped ? 1 : 0), reason: unmapped ? 'lang-unmapped' : undefined }
+}
+
+// Fetches what a status says is missing, apart from index.html (that is a reset's job: it is checked against the
+// build). Whatever does not come stays missing and the status says so.
+async function offlineRepair(lang) {
+  const c = await caches.open(CACHE)
+  const man = await readManifest(c)
+  if (man && man.build === BUILD) {
+    const want = [...(man.required || []).filter(u => u !== 'index.html'), ...(man.lazy || []), ...(goodLang(lang) && lang !== 'en' ? langFiles(lang) : [])]
+    for (const u of want) { const r = await c.match(u); if (!r || !goodAsset(u, r)) await fetchInto(c, u) }
+  }
+  return offlineStatus(lang)
+}
+
+async function sha10(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text))
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('').slice(0, 10)
+}
+
+/* Builds this worker's cache again from the network. Nothing is deleted until a whole new build is in a cache beside
+   the old one, and only the app's own build caches (BUILD_PREFIX) are ever deleted: not the media, the device id, the
+   preferences, and nothing of the page's (localStorage, IndexedDB), which a worker cannot reach anyway.
+   Refused, with the old cache untouched, when the server cannot be reached, or when it serves a build other than the one
+   this worker belongs to (the worker is then asked to update, and the rebuilt cache would carry the wrong lists). */
+async function offlineReset(lang) {
+  let res
+  try { res = await fetch('index.html', { cache: 'no-cache' }) } catch { return { ok: false, error: 'offline' } }
+  if (!res.ok || res.redirected) return { ok: false, error: 'offline' }
+  const html = await res.text()
+  if (STAMPED && (await sha10(html)) !== BUILD) {
+    try { self.registration.update() } catch { /* the page's own check runs too */ }
+    return { ok: false, error: 'newer' }
+  }
+  const staging = CACHE + '-reset'
+  try {
+    if (goodLang(lang)) await setPref('lang', lang)
+    await caches.delete(staging)
+    await precache(staging, html)
+  } catch {
+    await caches.delete(staging).catch(() => {})
+    return { ok: false, error: 'failed' }
+  }
+  try {
+    const s = await caches.open(staging)
+    for (const k of (await caches.keys())) if (k.startsWith(BUILD_PREFIX) && k !== staging) await caches.delete(k)
+    const c = await caches.open(CACHE)
+    for (const req of await s.keys()) { const r = await s.match(req); if (r) await c.put(req, r) }   // index.html was written last, so it is copied last
+    await caches.delete(staging)
+    await setPref('builds', [CACHE])
+  } catch {
+    return { ok: false, error: 'failed' }
+  }
+  return { ok: true, ...(await offlineStatus(lang)) }
+}
+
+self.addEventListener('message', e => {
+  const d = e.data || {}
+  const port = e.ports && e.ports[0]
+  const reply = v => { try { if (port) port.postMessage(v) } catch { /* the page went away */ } }
+  const task = fn => e.waitUntil(fn().then(reply, () => reply({ ok: false, error: 'failed' })))
+  if (d.type === 'lang') {
+    if (!goodLang(d.lang)) return
+    task(async () => {
+      await setPref('lang', d.lang)
+      const c = await caches.open(CACHE)
+      for (const u of langFiles(d.lang)) { const r = await c.match(u); if (!r || !goodAsset(u, r)) await fetchInto(c, u) }
+      return { ok: true }
+    })
+  } else if (d.type === 'status') task(() => offlineStatus(d.lang))
+  else if (d.type === 'repair') task(() => offlineRepair(d.lang))
+  else if (d.type === 'reset') task(() => offlineReset(d.lang))
+})
+
+/* The files with a content hash in their name (assets/index-AbC123xY.js): the name is the content, so a copy in the
+   cache is the file, whenever it was stored. Looked up in this build's cache first. An older build's cache is asked
+   only about a file this build does not own, for the page that is still running that build; and only a real file is
+   ever kept (goodAsset: a page standing in for a script is neither stored nor trusted). */
+const ASSETS_DIR = (() => { try { return new URL('assets/', location.href).pathname } catch { return '/assets/' } })()
+// Eight characters of hash (which may include a '-'), plus up to two the bundler adds to tell two chunks of one name apart.
+const HASHED = /^[^/]+-[A-Za-z0-9_-]{8,10}\.(?:js|css|woff2?)$/
+const isHashedAsset = p => p.startsWith(ASSETS_DIR) && HASHED.test(p.slice(ASSETS_DIR.length))
+const pathOf = u => { try { return new URL(u, location.href).pathname } catch { return String(u) } }
+
+async function ownedPaths() {
+  const man = await readManifest(await caches.open(CACHE))
+  if (!man || man.build !== BUILD) return null
+  const owned = new Set([...(man.required || []), ...(man.lazy || [])].map(pathOf))
+  for (const files of Object.values(langMap())) for (const u of files) owned.add(pathOf(u))
+  return owned
+}
+
+async function hashedAsset(e) {
+  const req = e.request
+  const cur = await caches.open(CACHE)
+  const hit = await cur.match(req)
+  if (hit) return hit
+  const path = new URL(req.url).pathname
+  const owned = await ownedPaths()
+  if (owned && !owned.has(path)) {
+    const before = await getPref('builds')
+    for (const name of Array.isArray(before) ? before : []) {
+      if (name === CACHE) continue
+      const old = await caches.open(name)
+      const prev = await old.match(req)
+      if (prev && goodAsset(req.url, prev)) return prev
+    }
+  }
+  const res = await fetch(req)
+  if (goodAsset(req.url, res)) e.waitUntil(cur.put(req, res.clone()).catch(() => {}))
+  return res
+}
+
 // The API sits next to the app, wherever the app is served: /api/ at the site root, /myGym/api/
 // under a subpath (#238). Matching '/api/' alone let a subpath deployment's data answers into
 // the network-first branch below, which cached them and handed an old document back as a 200
@@ -263,6 +457,10 @@ self.addEventListener('fetch', e => {
 
   if (isMediaPath(url.pathname)) {
     e.respondWith(media(e))
+    return
+  }
+  if (isHashedAsset(url.pathname)) {
+    e.respondWith(hashedAsset(e))
     return
   }
   // Network first; the copy for the cache is cloned before the response is handed to the page —
@@ -284,7 +482,7 @@ self.addEventListener('fetch', e => {
     const slow = setTimeout(() => fromCache().then(hit => { if (hit) resolve(hit) }, () => {}), NET_WAIT_MS)
     fetch(e.request).then(res => {
       clearTimeout(slow)
-      if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {}) }
+      if (goodAsset(e.request.url, res)) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)).catch(() => {}) }
       resolve(res)
     }, () => {
       clearTimeout(slow)

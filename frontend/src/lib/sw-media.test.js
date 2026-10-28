@@ -121,7 +121,7 @@ describe('sw.js exercise media', () => {
     const shell = await w.caches.open(BUILD)
     await shell.put('index.html', new Response('<html></html>'))
     await w.activate()
-    expect(await w.caches.keys()).toEqual([BUILD])
+    expect((await w.caches.keys()).sort()).toEqual([BUILD, 'opengym-prefs'].sort())   // the build's and the worker's own preferences: no media cache
   })
 
   it('keeps no login page, redirect or refusal under an image\'s URL', async () => {

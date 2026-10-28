@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import vm from 'node:vm'
 import { describe, expect, it } from 'vitest'
-import { lazyAssets, stampSw } from '../../scripts/sw-stamp.mjs'
+import { lazyAssets, keepBuilt, stampSw } from '../../scripts/sw-stamp.mjs'
 
 const source = readFileSync(fileURLToPath(new URL('../../public/sw.js', import.meta.url)), 'utf8')
 const shell = '<html><head><script src="./assets/index-new.js"></script></head></html>'
@@ -75,10 +75,21 @@ describe('the worker keeps the on-demand code too', () => {
 
   it('the build stamps the worker with both', () => {
     const vite = readFileSync(fileURLToPath(new URL('../../vite.config.js', import.meta.url)), 'utf8')
-    expect(vite).toMatch(/generateBundle\(_, bundle\) \{ lazy = lazyAssets\(bundle\) \}/)
-    expect(vite).toMatch(/stampSw\(readFileSync\(sw, 'utf8'\), \{ stamp, lazy \}\)/)
+    expect(vite).toMatch(/generateBundle\(_, bundle\) \{ lazy = lazyAssets\(bundle\); langs = langPacks\(bundle\) \}/)
+    expect(vite).toMatch(/stampSw\(readFileSync\(sw, 'utf8'\), \{ stamp, lazy: built\.lazy, langs: built\.langs \}\)/)
     const sw = stampSw(source, { stamp: 'abc', lazy: ["./assets/it's.js"] })
     expect(sw).toContain("const CACHE = 'opengym-rt-abc'")
     expect(sw).not.toContain('__LAZY__')
+    expect(sw).not.toContain('__LANGS__')
+  })
+})
+
+describe('the lists the worker is stamped with name only files that exist', () => {
+  it('drops what the build output does not hold, and says which', () => {
+    const have = new Set(['./assets/a-11111111.js', './assets/de-22222222.js'])
+    const r = keepBuilt({ lazy: ['./assets/a-11111111.js', './assets/coach-33333333.js'], langs: { de: ['./assets/de-22222222.js', './assets/de-44444444.js'], id: [] } }, u => have.has(u))
+    expect(r.lazy).toEqual(['./assets/a-11111111.js'])
+    expect(r.langs).toEqual({ de: ['./assets/de-22222222.js'], id: [] })
+    expect(r.dropped).toEqual(['./assets/coach-33333333.js', './assets/de-44444444.js'])
   })
 })

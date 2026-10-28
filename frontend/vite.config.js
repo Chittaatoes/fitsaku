@@ -4,7 +4,7 @@ import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { lazyAssets, stampSw } from './scripts/sw-stamp.mjs'
+import { lazyAssets, langPacks, keepBuilt, stampSw } from './scripts/sw-stamp.mjs'
 
 const backend = process.env.API_TARGET || 'http://127.0.0.1:3000'
 // The API refuses a state-changing request that a browser sent from anywhere other than its own
@@ -82,16 +82,19 @@ const umami = {
 // so it is there offline before the page has ever needed it.
 let outDir = fileURLToPath(new URL('./dist/', import.meta.url))
 let lazy = []
+let langs = {}
 const swStamp = {
   name: 'opengym-sw-stamp',
   apply: 'build',
   configResolved(config) { outDir = resolve(config.root, config.build.outDir) },
-  generateBundle(_, bundle) { lazy = lazyAssets(bundle) },
+  generateBundle(_, bundle) { lazy = lazyAssets(bundle); langs = langPacks(bundle) },
   closeBundle() {
     const html = join(outDir, 'index.html'), sw = join(outDir, 'sw.js')
     if (!existsSync(html) || !existsSync(sw)) return
     const stamp = createHash('sha256').update(readFileSync(html)).digest('hex').slice(0, 10)
-    writeFileSync(sw, stampSw(readFileSync(sw, 'utf8'), { stamp, lazy }))
+    const built = keepBuilt({ lazy, langs }, u => existsSync(join(outDir, u.replace(/^\.\//, ''))))
+    if (built.dropped.length) console.warn('sw: not in the build output, left out of the lists stamped into the worker:', built.dropped.join(', '))
+    writeFileSync(sw, stampSw(readFileSync(sw, 'utf8'), { stamp, lazy: built.lazy, langs: built.langs }))
   }
 }
 

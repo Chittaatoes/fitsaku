@@ -4,6 +4,7 @@
 // subscription hook `useLang`.
 
 import { useSyncExternalStore } from 'react'
+import { announceLanguage } from './offline-status.js'
 import {
   LANGS, INSTR_LANGS, EXERCISE_NAME_LANGS, DATE_LOCALES, DERIVED_LOCALES, RTL_LANGS,
   getLang, dateLocale, t, tn, instrFor, exerciseNameFor, exerciseNameSearchText, getVersion,
@@ -77,6 +78,7 @@ export async function setLang(l, showEn, enOnly) {
   if (detailsLoaded) loadDetails()
   document.documentElement.lang = l
   document.documentElement.dir = RTL_LANGS.has(l) ? 'rtl' : 'ltr'
+  announceLanguage(l)   // the service worker keeps this language's packs offline (lib/offline-status.js)
   notify()
 }
 
