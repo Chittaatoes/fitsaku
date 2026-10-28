@@ -1,0 +1,26 @@
+# Tells every FitSaku user "FitSaku was just updated" once a release is live.
+#
+# Vercel reports each finished deployment of the repo back to GitHub as a deployment_status event; a
+# successful production one calls the API's POST /api/announce-update with the commit as the release id. The API
+# sends the push once per release, so this and the server's own start-up announcement (RENDER_GIT_COMMIT) never
+# double up. Needs two repository secrets: ANNOUNCE_API_URL (the API's address, no trailing slash) and
+# ANNOUNCE_SECRET (the same value as the API's ANNOUNCE_SECRET variable). Without them the job stops quietly.
+name: Announce update
+on:
+  deployment_status:
+
+jobs:
+  announce:
+    if: github.event.deployment_status.state == 'success' && github.event.deployment.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Announce the release
+        env:
+          API_URL: ${{ secrets.ANNOUNCE_API_URL }}
+          SECRET: ${{ secrets.ANNOUNCE_SECRET }}
+          SHA: ${{ github.event.deployment.sha }}
+        run: |
+          if [ -z "$API_URL" ] || [ -z "$SECRET" ]; then echo "ANNOUNCE_API_URL / ANNOUNCE_SECRET not set: nothing to do"; exit 0; fi
+          curl --fail-with-body --silent --show-error --max-time 60 -X POST "$API_URL/api/announce-update" \
+            -H "Authorization: Bearer $SECRET" -H "Content-Type: application/json" \
+            -d "{\"id\":\"$SHA\"}"

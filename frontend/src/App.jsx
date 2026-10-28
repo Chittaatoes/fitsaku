@@ -49,6 +49,7 @@ import Workout from './views/Workout.jsx'
 import AmbientController from './components/AmbientController.jsx'
 import MediaFilters from './components/MediaFilters.jsx'
 import ViewportDebug from './components/ViewportDebug.jsx'
+import AppNotices from './components/AppNotices.jsx'
 import { installViewportGap } from './lib/viewport-gap.js'
 
 // Screens other than the four tabs' first pages load as their own chunks and are fetched in the background once idle
@@ -306,6 +307,7 @@ function Shell() {
           the route again. */}
       <MediaFilters />
       <ViewportDebug />
+      <AppNotices />
       <div id="app">
         <Page key={loc.pathname} loc={loc} render={view} />
         {showPreview && <Page key={preview} loc={previewLoc(preview)} render={view} under scrollY={scrollPositions.get(preview) || 0} />}

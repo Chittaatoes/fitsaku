@@ -47,6 +47,19 @@ export function restTimerPush(lang) {
   return { title: copy.restTitle, body: copy.restBody, tag: 'rest-timer' };
 }
 
+// The "a new version is out" push (server.js announceUpdate). Only a few languages here, English for the rest,
+// like the strings above.
+const UPDATE_COPY = {
+  en: { title: 'FitSaku', body: 'FitSaku was just updated' },
+  id: { title: 'FitSaku', body: 'FitSaku baru saja diupdate' },
+  'pt-BR': { title: 'FitSaku', body: 'O FitSaku acabou de ser atualizado' },
+};
+
+export function updatePush(lang) {
+  const c = UPDATE_COPY[lang] || UPDATE_COPY.en;
+  return { title: c.title, body: c.body, tag: 'app-update', update: true };
+}
+
 export function testPush(lang) {
   return { title: 'FitSaku', body: copyFor(lang).testBody, tag: 'test' };
 }

@@ -2280,6 +2280,35 @@ paths:
               schema: { $ref: '#/components/schemas/Ok' }
         '401': { $ref: '#/components/responses/Unauthorized' }
 
+  /api/announce-update:
+    post:
+      tags: [push]
+      operationId: announceUpdate
+      summary: Announce a new release to every subscribed device
+      description: >-
+        Called by the deploy pipeline once a release is live. Authenticates with
+        `Authorization: Bearer <ANNOUNCE_SECRET>` (not a session); the route answers 404 when
+        the server has no `ANNOUNCE_SECRET`. Sends "FitSaku was just updated" to every account
+        holding a push subscription, localized with the `lang` in their synced state. A release
+        `id` already announced (also by the server's own start-up announcement, which uses
+        `APP_BUILD_ID` or `RENDER_GIT_COMMIT`) is skipped.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [id]
+              properties:
+                id: { type: string, description: 'The release, usually the git commit (4–64 of A-Z a-z 0-9 . _ -).' }
+      responses:
+        '200':
+          description: "`{ sent }` accounts tried, or `{ sent: 0, skipped }`."
+        '400': { description: Invalid release id. }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { description: ANNOUNCE_SECRET is not set on this server. }
+
   /api/push/rest-timer:
     post:
       tags: [push]

@@ -19,7 +19,7 @@ import { coachRoutes } from './coach/routes.js';
 import { createSpotify, spotifyRoutes } from './spotify.js';
 import { startCadence } from './coach/cadence.js';
 import { startWarmup } from './coach/warmup.js';
-import { dayReminderPush, nudgePush, restTimerPush, testPush } from './push-messages.js';
+import { dayReminderPush, nudgePush, restTimerPush, testPush, updatePush } from './push-messages.js';
 import { verifyError } from './verify-error.js';
 import {
   hashPassword, verifyPassword, needsRehash, passwordProblem, passwordLength, nameKey, BusyError,
@@ -519,6 +519,33 @@ async function sendPush(userId, payload, deviceId) {
   // writes it out, and a restart re-reads the old file and prunes it again on the next send.
   if (dirty) { try { saveDbSoft(); } catch (e) { console.error('push: could not save db.json', e.message); } }
 }
+
+// "FitSaku was just updated": one push to every device that holds a subscription, once per release. `id` is the
+// release (the git commit); the last one announced is kept in db.json, so the same release reaching here twice
+// (the host's restart and the deploy webhook below both report it) is sent once. The first release an instance
+// ever sees is only recorded: turning this on must not push everyone about a version they already have.
+async function announceUpdate(id, { record = false } = {}) {
+  id = String(id || '').trim().slice(0, 64);
+  if (!/^[A-Za-z0-9._-]{4,64}$/.test(id)) return { sent: 0, skipped: 'invalid id' };
+  if (db.announced?.id === id) return { sent: 0, skipped: 'already announced' };
+  const first = !db.announced;
+  db.announced = { id, at: new Date().toISOString() };
+  saveDbSoft();
+  if (first && record) return { sent: 0, skipped: 'first release recorded' };
+  const users = [...new Set(db.subs.map(s => s.userId))];
+  for (const uid of users) {
+    try { await sendPush(uid, updatePush(readStateCached(uid)?.lang)); } catch (e) { console.error('announce failed', uid, e.message); }
+  }
+  console.log('announced release', id, 'to', users.length, 'account(s)');
+  return { sent: users.length };
+}
+const ANNOUNCE_SECRET = process.env.ANNOUNCE_SECRET || '';
+const announceAuthorised = req => {
+  if (!ANNOUNCE_SECRET) return false;
+  const given = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+  const h = v => crypto.createHash('sha256').update(String(v)).digest();
+  return crypto.timingSafeEqual(h(given), h(ANNOUNCE_SECRET));
+};
 
 // Rest-timer alerts: client schedules on start/extend, cancels on skip or on-screen completion —
 // this only fires when the tab was backgrounded/suspended and never got to cancel it itself.
@@ -2899,6 +2926,16 @@ const routes = {
     json(res, 200, { ok: true });
   },
 
+  // Called by the deploy pipeline once a release is live (.github/workflows/announce-update.yml): a Bearer of
+  // ANNOUNCE_SECRET and the release id. Without ANNOUNCE_SECRET set the route does not exist.
+  'POST /api/announce-update': async (req, res) => {
+    if (!ANNOUNCE_SECRET) return json(res, 404, { error: 'not found' });
+    if (!announceAuthorised(req)) return json(res, 401, { error: 'unauthorized' });
+    const body = await readBody(req);
+    const r = await announceUpdate(body.id);
+    json(res, r.skipped === 'invalid id' ? 400 : 200, r);
+  },
+
   'POST /api/push/rest-timer': async (req, res) => {
     const user = readSession(req);
     if (!user) return json(res, 401, { error: 'not signed in' });
@@ -3298,6 +3335,12 @@ server.headersTimeout = 60000;
 // A database means a hosted platform (Render): bind every interface, as the platform routes to it.
 const HOST = process.env.HOST || (PG ? '0.0.0.0' : undefined);
 server.listen(PORT, HOST, () => console.log(`gym-api on :${server.address().port} (rpID=${RP_ID}, origin=${ORIGIN}, storage=${PG ? 'postgres' : 'files'})`));
+// A backend release announces itself once it is up: the host's commit id (Render sets RENDER_GIT_COMMIT) or an
+// APP_BUILD_ID of the deployer's choosing. ANNOUNCE_ON_BOOT=0 leaves it to the webhook alone.
+{
+  const release = process.env.APP_BUILD_ID || process.env.RENDER_GIT_COMMIT || '';
+  if (release && process.env.ANNOUNCE_ON_BOOT !== '0') setTimeout(() => { announceUpdate(release, { record: true }).catch(e => console.error('announce failed', e.message)); }, 5000).unref();
+}
 if (PG) {
   // Push whatever is queued before the platform stops this instance (deploys send SIGTERM).
   for (const sig of ['SIGTERM', 'SIGINT']) process.once(sig, () => { PG.close().finally(() => process.exit(0)); });

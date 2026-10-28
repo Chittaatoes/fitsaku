@@ -218,6 +218,10 @@ self.addEventListener('push', e => {
       tag,
       renotify: true
     })
+    // A release announcement also tells the pages that are open, which show their own "reload" banner.
+    if (data.update) {
+      try { for (const c of await self.clients.matchAll({ type: 'window' })) c.postMessage({ type: 'fs-update' }) } catch {}
+    }
   })())
 })
 self.addEventListener('notificationclick', e => {
