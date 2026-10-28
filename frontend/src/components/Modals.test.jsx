@@ -38,7 +38,7 @@ vi.mock('../store/useUI.js', async () => {
   return { useUI }
 })
 
-vi.mock('../lib/viewport-gap.js', () => ({ isAppleStandalone: () => mocks.apple }))
+vi.mock('../lib/ios-standalone.js', () => ({ isAppleStandalone: () => mocks.apple }))
 
 let dom
 let root

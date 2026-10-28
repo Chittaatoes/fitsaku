@@ -31,7 +31,6 @@ function read() {
   }
   probe.remove()
   const rect = sel => { const e = d.querySelector(sel); if (!e) return '-'; const r = e.getBoundingClientRect(); return `${px(r.top)}..${px(r.bottom)}` }
-  m.vgap = getComputedStyle(d.documentElement).getPropertyValue('--vgap').trim() || '(unset)'
   m.standalone = String(w.navigator.standalone === true || !!w.matchMedia?.('(display-mode: standalone)').matches)
   m.modalRoot = rect('#modal-root.open')
   m.sheet = rect('#modal-root .sheet')
@@ -57,7 +56,7 @@ export default function ViewportDebug() {
   if (!on || !m) return null
   const build = typeof __BUILD_ID__ !== 'undefined' ? __BUILD_ID__ : 'dev'
   const lines = [`build ${build}`, `inner ${m.inner}  screen ${m.screen}`, `visual ${m.visual}`, `vh ${m.vh} dvh ${m.dvh} lvh ${m.lvh} svh ${m.svh}`,
-    `safe top ${m.safeTop} bottom ${m.safeBottom}`, `vgap ${m.vgap}  standalone ${m.standalone}`, `body ${m.body}`, `modal ${m.modalRoot}`, `sheet ${m.sheet}`]
+    `safe top ${m.safeTop} bottom ${m.safeBottom}`, `standalone ${m.standalone}`, `body ${m.body}`, `modal ${m.modalRoot}`, `sheet ${m.sheet}`]
   return <pre aria-hidden="true" style={{ position: 'fixed', left: 4, top: 'calc(var(--sat) + 2px)', zIndex: 99999, margin: 0, padding: '4px 6px', borderRadius: 6,
     background: 'rgba(0,0,0,.78)', color: '#7CFFB2', font: '10px/1.35 ui-monospace,Menlo,monospace', pointerEvents: 'none', whiteSpace: 'pre' }}>{lines.join('\n')}</pre>
 }

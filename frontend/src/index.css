@@ -1510,15 +1510,10 @@ body.no-tabbar #timer.working{box-shadow:inset 0 var(--hair) 0 var(--acc),0 -10p
 }
 
 /* ---------------------------------------------------------------- modal -- */
-/* The layer is at least as tall as the whole screen, not just whatever the browser reports as the layout viewport:
-   in the iOS home-screen app that can stop short of the bottom edge while the page is pinned behind a popup, which
-   left a blank strip under every sheet and dialog. `100lvh` is the full-height viewport; the others are fallbacks. */
 #modal-root{position:fixed;inset:0;z-index:100;display:none}
 #modal-root.open{display:block}
 .mback{
-  /* Only the backdrop reaches past the layout viewport (--vgap): in the iOS home-screen app what a scrolling sheet
-     paints outside it is cut off, so the sheet and everything in it stay inside, and the area below is filled. */
-  position:absolute;inset:0;bottom:calc(-1 * var(--vgap,0px));background:rgba(0,0,0,.4);
+  position:absolute;inset:0;background:rgba(0,0,0,.4);
   -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
   touch-action:none;overscroll-behavior:none;
 }
@@ -1530,9 +1525,6 @@ body.no-tabbar #timer.working{box-shadow:inset 0 var(--hair) 0 var(--acc),0 -10p
      safe-area inset, which the layout viewport does not (viewport-fit=cover). */
   max-height:90vh;max-height:min(90vh,calc(100dvh - var(--sat) - 8px - var(--native-kb,0px)));
   overflow-y:auto;scroll-padding-bottom:calc(20px + var(--sab));
-  /* The last box-shadow of a sheet (the glass rule further down) is a solid fill 120px below its edge: where the
-     iOS home-screen app ends the layout viewport above the screen's bottom edge, the sheet still reads as reaching
-     the bottom, whether or not --vgap could be measured. */
   animation:sheetup .34s var(--ease);
   overscroll-behavior:contain;touch-action:pan-y;will-change:transform;
 }
@@ -2501,15 +2493,14 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
   .sheet{
     background:color-mix(in srgb,var(--bg-el) 78%,transparent);
     -webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
-    box-shadow:0 -1px 0 rgba(255,255,255,.08),0 -20px 50px -20px rgba(0,0,0,.5),0 120px 0 0 var(--bg-el); /* last one: the fill under the sheet (see .sheet) */
+    box-shadow:0 -1px 0 rgba(255,255,255,.08),0 -20px 50px -20px rgba(0,0,0,.5);
   }
-  :root[data-theme="light"] .sheet{background:rgba(250,249,247,.8);box-shadow:0 -1px 0 rgba(0,0,0,.06),0 -20px 50px -22px rgba(0,0,0,.25),0 120px 0 0 var(--bg)}
+  :root[data-theme="light"] .sheet{background:rgba(250,249,247,.8);box-shadow:0 -1px 0 rgba(0,0,0,.06),0 -20px 50px -22px rgba(0,0,0,.25)}
 }
 .center{border-radius:20px;width:min(82vw,290px)}
-/* In the iOS home-screen app a sheet is solid: the strip under the layout viewport can only be a solid fill (a
-   box-shadow on the sheet), and a translucent sheet over it showed as two different colours. */
-:root[data-ios-standalone] .sheet{background:var(--bg-el);-webkit-backdrop-filter:none;backdrop-filter:none}
-:root[data-ios-standalone][data-theme="light"] .sheet{background:var(--bg)}
+/* In the iOS home-screen app the sheet stands on the screen's bottom edge, so its foot is the home-indicator inset
+   (--sab) and a short breath above it; the 20px every other platform keeps read as a gap there. */
+:root[data-ios-standalone] .sheet{padding-bottom:calc(10px + var(--sab));scroll-padding-bottom:calc(10px + var(--sab))}
 .center:has(.ios-alert){padding:0;overflow:hidden;width:min(80vw,280px)}
 .ios-alert{display:flex;flex-direction:column;text-align:center}
 .ios-alert-body{padding:20px 18px 18px}

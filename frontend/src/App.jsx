@@ -50,7 +50,7 @@ import AmbientController from './components/AmbientController.jsx'
 import MediaFilters from './components/MediaFilters.jsx'
 import ViewportDebug from './components/ViewportDebug.jsx'
 import AppNotices from './components/AppNotices.jsx'
-import { installViewportGap } from './lib/viewport-gap.js'
+import { markIosStandalone } from './lib/ios-standalone.js'
 
 // Screens other than the four tabs' first pages load as their own chunks and are fetched in the background once idle
 // (lib/lazy-view.js), so the first download is small and a tab switch is still instant.
@@ -157,8 +157,8 @@ function Shell() {
   const pathRef = useRef(null)
   // iOS leaves the page displaced after the keyboard goes away (see lib/viewport-guard.js).
   useEffect(() => installViewportGuard(), [])
-  // The strip under popups in the iOS home-screen app: measured and published as --vgap (lib/viewport-gap.js).
-  useEffect(() => installViewportGap(), [])
+  // The iOS home-screen app is marked on <html> for the CSS that is specific to it (lib/ios-standalone.js).
+  useEffect(() => markIosStandalone(), [])
   // Click-drag a horizontal chip strip to scroll it sideways (lib/hchips.js) — on a desktop
   // browser there's otherwise no way to reach the filters past the edge.
   useEffect(() => installChipDrag(), [])

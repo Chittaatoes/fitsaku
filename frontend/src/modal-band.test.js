@@ -16,16 +16,18 @@ describe('the strip under a popup', () => {
 })
 
 describe('the popup layer', () => {
-  it('paints a solid fill under the sheet, so it reaches the bottom even when the gap cannot be measured', () => {
-    expect(css).toMatch(/0 120px 0 0 var\(--bg-el\)/)
-    expect(css).toMatch(/0 120px 0 0 var\(--bg\)/)
-  })
-  it('draws a sheet solid in the iOS home-screen app, so the fill below it is the same colour', () => {
-    expect(css).toMatch(/:root\[data-ios-standalone\] \.sheet\{background:var\(--bg-el\)/)
-  })
-  it('keeps the sheet and its content inside the layout viewport; only the backdrop reaches below by --vgap', () => {
+  it('stands on the layout viewport with no compensation for a missing strip', () => {
     expect(css).toMatch(/#modal-root\{position:fixed;inset:0;z-index:100/)
-    expect(css).toMatch(/\.mback\{[^}]*bottom:calc\(-1 \* var\(--vgap,0px\)\)/)
+    expect(css).toMatch(/\.mback\{[^}]*position:absolute;inset:0;/)
+    expect(css).not.toMatch(/--vgap/)
+    expect(css).not.toMatch(/0 120px 0 0/)
+  })
+  it('keeps the glass: a sheet is translucent and blurs what is behind it, in the iOS home-screen app too', () => {
+    expect(css).toMatch(/\.sheet\{\s*background:color-mix\(in srgb,var\(--bg-el\) 78%,transparent\);\s*-webkit-backdrop-filter:blur\(30px\)/)
+    expect(css).not.toMatch(/\[data-ios-standalone\][^{]*\.sheet\{[^}]*(background|backdrop-filter)/)
+  })
+  it('gives a sheet in the iOS home-screen app the home-indicator inset and a short breath, nothing more', () => {
     expect(css).toMatch(/padding:8px 18px calc\(20px \+ var\(--sab\)\);/)
+    expect(css).toMatch(/:root\[data-ios-standalone\] \.sheet\{padding-bottom:calc\(10px \+ var\(--sab\)\);scroll-padding-bottom:calc\(10px \+ var\(--sab\)\)\}/)
   })
 })
