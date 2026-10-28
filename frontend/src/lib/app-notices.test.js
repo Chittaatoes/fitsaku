@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { shouldAskNotifications, ASK_AGAIN_MS, noticeCopy, watchAppUpdates } from './app-notices.js'
+import { shouldAskNotifications, ASK_AGAIN_MS, noticeCopy, watchAppUpdates, UPDATE_POLL_MS } from './app-notices.js'
 
 const base = { supported: true, permission: 'default', signedIn: true, askedAt: 0, now: 1_000_000_000_000 }
 
@@ -57,6 +57,50 @@ describe('watchAppUpdates', () => {
     expect(fn).toHaveBeenCalledTimes(1)
     stop()
     expect(l.message).toBeUndefined()
+  })
+  it('reports a second controller change on a page that had none at first, but not the first', () => {
+    const { l, nav } = fakeNav(null)
+    const fn = vi.fn()
+    watchAppUpdates(fn, nav)
+    l.controllerchange()
+    expect(fn).not.toHaveBeenCalled()
+    l.controllerchange()
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+  describe('looking for a release while the page is open', () => {
+    const rig = (visibility = 'visible') => {
+      const update = vi.fn(() => Promise.resolve())
+      const l = {}
+      const nav = { serviceWorker: { controller: {}, addEventListener() {}, removeEventListener() {}, getRegistration: () => Promise.resolve({ update }) } }
+      const mk = o => ({ addEventListener: (n, f) => { o[n] = f }, removeEventListener: n => { delete o[n] } })
+      const doc = { visibilityState: visibility, ...mk(l.doc = {}) }
+      const win = mk(l.win = {})
+      return { update, l, nav, doc, win }
+    }
+    it('asks the worker for an update every minute while the page is visible', async () => {
+      vi.useFakeTimers()
+      const r = rig()
+      const stop = watchAppUpdates(() => {}, r.nav, { doc: r.doc, win: r.win })
+      await vi.advanceTimersByTimeAsync(UPDATE_POLL_MS * 2)
+      expect(r.update).toHaveBeenCalledTimes(2)
+      stop()
+      await vi.advanceTimersByTimeAsync(UPDATE_POLL_MS * 2)
+      expect(r.update).toHaveBeenCalledTimes(2)
+      vi.useRealTimers()
+    })
+    it('does not ask while the page is hidden, and asks as soon as it is back or online', async () => {
+      vi.useFakeTimers()
+      const r = rig('hidden')
+      watchAppUpdates(() => {}, r.nav, { doc: r.doc, win: r.win })
+      await vi.advanceTimersByTimeAsync(UPDATE_POLL_MS)
+      expect(r.update).not.toHaveBeenCalled()
+      r.doc.visibilityState = 'visible'
+      r.l.doc.visibilitychange()
+      r.l.win.online()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(r.update).toHaveBeenCalledTimes(2)
+      vi.useRealTimers()
+    })
   })
   it('is a no-op without service workers', () => {
     expect(() => watchAppUpdates(() => {}, {})()).not.toThrow()

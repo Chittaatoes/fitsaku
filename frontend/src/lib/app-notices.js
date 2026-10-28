@@ -40,15 +40,39 @@ export function shouldAskNotifications({ supported, permission, signedIn, askedA
   return !(at && now - at < ASK_AGAIN_MS)
 }
 
-/** Calls `onUpdate` when a new build of the app takes over from the one this page loaded with, or the worker is told
- *  by a push that one is out. A first install (no controller before) is not an update. Returns the stop function. */
-export function watchAppUpdates(onUpdate, nav = typeof navigator !== 'undefined' ? navigator : null) {
+// A browser looks for a new service worker only when a page loads (and about once a day), so a page that stays open
+// never learned a release was out until it was reloaded. It is asked here instead: every minute while it is on
+// screen, and the moment it comes back to the foreground or gets its connection back.
+export const UPDATE_POLL_MS = 60 * 1000
+
+/** Calls `onUpdate` when a new build of the app takes over from the one this page runs, or the worker is told by a
+ *  push that one is out. A worker taking control for the first time (the page had none) is not an update. The worker
+ *  is looked up again on a timer and on return to the page, so a release shows up while the app is open, not at the
+ *  next reload. Returns the stop function. */
+export function watchAppUpdates(onUpdate, nav = typeof navigator !== 'undefined' ? navigator : null, env = {}) {
   const sw = nav && nav.serviceWorker
   if (!sw) return () => {}
-  const had = !!sw.controller
+  const win = env.win || (typeof window !== 'undefined' ? window : null)
+  const doc = env.doc || (typeof document !== 'undefined' ? document : null)
+  let controlled = !!sw.controller
   const onMessage = e => { if (e.data && e.data.type === 'fs-update') onUpdate() }
-  const onChange = () => { if (had) onUpdate() }
+  const onChange = () => { if (controlled) onUpdate(); controlled = true }
   sw.addEventListener('message', onMessage)
   sw.addEventListener('controllerchange', onChange)
-  return () => { sw.removeEventListener('message', onMessage); sw.removeEventListener('controllerchange', onChange) }
+
+  const check = () => {
+    if (doc && doc.visibilityState === 'hidden') return
+    try { Promise.resolve(sw.getRegistration?.()).then(reg => reg && reg.update && reg.update()).catch(() => {}) } catch { /* offline: next time */ }
+  }
+  const timer = setInterval(check, UPDATE_POLL_MS)
+  doc?.addEventListener('visibilitychange', check)
+  win?.addEventListener('focus', check)
+  win?.addEventListener('online', check)
+  return () => {
+    sw.removeEventListener('message', onMessage); sw.removeEventListener('controllerchange', onChange)
+    clearInterval(timer)
+    doc?.removeEventListener('visibilitychange', check)
+    win?.removeEventListener('focus', check)
+    win?.removeEventListener('online', check)
+  }
 }
