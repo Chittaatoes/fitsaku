@@ -1,40 +1,37 @@
 import { useStore } from '../store/useStore.js'
 import { t, getLang, useLang } from '../lib/i18n.js'
-import { ambientSettingOf, ambientVolumeOf } from '../lib/ambient-plan.js'
+import { ambientVolumeOf } from '../lib/ambient-plan.js'
+import { Switch } from './ui.jsx'
 
-// Functions, so each word is a literal t() call the string checks can see.
-const OPTIONS = [
-  ['off', () => t('Off')],
-  ['rest', () => t('Rest only')],
-]
-
-const NOTE = {
-  en: 'A calm sound while you rest. The volume sets the workout music and this sound.',
-  id: 'Suara tenang saat istirahat. Volume mengatur musik latihan dan suara ini.',
-  'pt-BR': 'Um som calmo durante o descanso. O volume ajusta a música do treino e este som.',
+// The few words of these controls that are new, in the languages the app's other notices speak (English for the rest).
+const COPY = {
+  en: { auto: 'Play music in a workout', note: 'Music plays while you train and stops when a set is done, for the calm rest sound. The volume sets both.' },
+  id: { auto: 'Putar musik saat latihan', note: 'Musik diputar saat latihan dan berhenti saat satu set selesai, diganti suara istirahat yang tenang. Volume mengatur keduanya.' },
+  'pt-BR': { auto: 'Tocar música no treino', note: 'A música toca enquanto você treina e para quando uma série termina, dando lugar ao som calmo do descanso. O volume ajusta os dois.' },
 }
-const note = () => { const l = getLang(); return NOTE[l] || NOTE[String(l).split('-')[0]] || NOTE.en }
+const copy = () => { const l = getLang(); return COPY[l] || COPY[String(l).split('-')[0]] || COPY.en }
 
-/* The workout sound's settings: the calm sound while resting (on or off), and the volume, which is the loudness of the
-   workout's own music (lib/music.js) as well as of that sound. Used in Profile and in the workout's music card. */
+/* The workout sound's settings: the volume (the loudness of the workout's own music, lib/music.js, and of the calm rest sound
+   it hands over to) and whether the music plays in a workout. Used in Profile and in the workout's music card. */
 export default function AmbientControls({ compact = false }) {
   useLang()
   const S = useStore(s => s.S)
   const update = useStore(s => s.update)
-  const setting = ambientSettingOf(S)
   const vol = ambientVolumeOf(S)
+  const c = copy()
+  const auto = S.musicAuto !== false
   return <div className={'amb' + (compact ? ' compact' : '')}>
     <div className="amb-t">{t('Workout sound')}</div>
-    <div className="amb-opts" role="radiogroup" aria-label={t('Workout sound')}>
-      {OPTIONS.map(([key, label]) => <button key={key} type="button" role="radio" aria-checked={setting === key}
-        className={'chip' + (setting === key ? ' on' : '')} onClick={() => update(s => { s.ambient = key })}>{label()}</button>)}
-    </div>
     <label className="amb-vol">
       <span className="small muted">{t('Volume')}</span>
       <input type="range" min="0" max="100" step="5" value={Math.round(vol * 100)} aria-label={t('Volume')}
         onChange={e => update(s => { s.ambientVol = Number(e.target.value) / 100 })} />
     </label>
-    {!compact && <p className="small muted amb-note">{note()}</p>}
+    <div className="mp-auto">
+      <span>{c.auto}</span>
+      <Switch checked={auto} aria-label={c.auto} onChange={v => update(s => { s.musicAuto = v })} />
+    </div>
+    {!compact && <p className="small muted amb-note">{c.note}</p>}
     {!S.sound && <p className="small amb-warn">{t('Sound is off, so nothing plays. Turn it on in Settings.')}</p>}
   </div>
 }

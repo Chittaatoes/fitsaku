@@ -1,17 +1,15 @@
 import { useState, useSyncExternalStore } from 'react'
-import { useStore } from '../store/useStore.js'
 import { t, getLang, useLang } from '../lib/i18n.js'
 import { music, TRACKS } from '../lib/music.js'
 import Icon from './Icon.jsx'
 import AmbientControls from './AmbientControls.jsx'
-import { Switch } from './ui.jsx'
 
 // The few words of this card, in the languages the app's other notices speak (English for the rest); the track controls
 // reuse words the app already has in every language.
 const COPY = {
-  en: { settings: 'Workout sound settings', auto: 'Play music in a workout', tap: 'Tap to start the music', missing: 'Song not found' },
-  id: { settings: 'Pengaturan suara latihan', auto: 'Putar musik saat latihan', tap: 'Ketuk untuk memulai musik', missing: 'Lagu tidak ditemukan' },
-  'pt-BR': { settings: 'Configurações do som do treino', auto: 'Tocar música no treino', tap: 'Toque para iniciar a música', missing: 'Música não encontrada' },
+  en: { settings: 'Workout sound settings', tap: 'Tap to start the music', missing: 'Song not found' },
+  id: { settings: 'Pengaturan suara latihan', tap: 'Ketuk untuk memulai musik', missing: 'Lagu tidak ditemukan' },
+  'pt-BR': { settings: 'Configurações do som do treino', tap: 'Toque para iniciar a música', missing: 'Música não encontrada' },
 }
 const copy = () => { const l = getLang(); return COPY[l] || COPY[String(l).split('-')[0]] || COPY.en }
 
@@ -23,8 +21,6 @@ const useMusic = () => useSyncExternalStore(music.subscribe, () => music.state, 
 export default function MusicPanel() {
   useLang()
   const m = useMusic()
-  const auto = useStore(s => s.S.musicAuto !== false)
-  const update = useStore(s => s.update)
   const [open, setOpen] = useState(false)
   const c = copy()
   const track = TRACKS[m.index] || TRACKS[0]
@@ -49,12 +45,6 @@ export default function MusicPanel() {
         <Icon name="gear" />
       </button>
     </div>
-    {open && <div className="mp-set">
-      <AmbientControls compact />
-      <div className="mp-auto">
-        <span>{c.auto}</span>
-        <Switch checked={auto} aria-label={c.auto} onChange={v => update(s => { s.musicAuto = v })} />
-      </div>
-    </div>}
+    {open && <div className="mp-set"><AmbientControls compact /></div>}
   </div>
 }

@@ -58,15 +58,11 @@ describe('the controller follows the workout', () => {
     expect(amb.play.mock.calls.length).toBe(calls)
   })
 
-  it('an older profile that chose "workout + rest" gets the rest sound, and "off" stays off', () => {
-    setS({ active: live, ambient: 'all' })
+  it('the old on/off choice is gone: whatever an older profile holds, the rest sound plays', () => {
+    setS({ active: live, ambient: 'off' })
     mount(<AmbientController />)
     act(() => useUI.setState({ timer: { left: 30, total: 30 } }))
     expect(lastPlay()[0]).toBe('rest')
-    amb.play.mockClear(); amb.stop.mockClear()
-    setS({ ambient: 'off' })
-    expect(amb.stop).toHaveBeenCalled()
-    expect(amb.play).not.toHaveBeenCalled()
   })
 
   it('stays quiet with Sound off, and plays the rest sound when it is turned on', () => {
@@ -89,32 +85,38 @@ describe('the controller follows the workout', () => {
 })
 
 describe('the controls', () => {
-  const radios = () => [...host.querySelectorAll('[role=radio]')]
-  it('offer the rest sound on or off, with the current one chosen: no "workout" option is left', () => {
-    mount(<AmbientControls />)
-    expect(radios().map(r => r.textContent)).toEqual(['Off', 'Rest only'])
-    expect(radios().map(r => r.getAttribute('aria-checked'))).toEqual(['false', 'true'])   // on by default
-  })
-  it('a profile that holds the old "all" shows the rest sound as chosen', () => {
-    setS({ ambient: 'all' })
-    mount(<AmbientControls />)
-    expect(radios().map(r => r.getAttribute('aria-checked'))).toEqual(['false', 'true'])
-  })
-  it('changing them is stored in the settings, and the volume slider stays, because it is the music\'s too', () => {
-    mount(<AmbientControls />)
-    act(() => radios()[0].click())
-    expect(useStore.getState().S.ambient).toBe('off')
+  const sw = () => host.querySelector('button[role="switch"]')
+  const slide = v => {
     const slider = host.querySelector('input[type=range]')
-    expect(slider).not.toBeNull()
     act(() => {
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(slider, '30')
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(slider, v)
       slider.dispatchEvent(new Event('input', { bubbles: true }))
     })
-    expect(useStore.getState().S.ambientVol).toBe(0.3)
-  })
-  it('say that the volume sets the music too', () => {
+  }
+  it('are the volume and the switch for the music: no on/off choice for the sound is left', () => {
     mount(<AmbientControls />)
-    expect(host.textContent).toContain('The volume sets the workout music and this sound.')
+    expect(host.querySelectorAll('[role=radio]')).toHaveLength(0)
+    expect(host.querySelector('input[type=range]')).not.toBeNull()
+    expect(sw().getAttribute('aria-checked')).toBe('true')            // on unless turned off
+    expect(host.textContent).toContain('Play music in a workout')
+  })
+  it('the slider sets the volume that the music and the rest sound share, and the switch the music', () => {
+    mount(<AmbientControls />)
+    slide('30')
+    expect(useStore.getState().S.ambientVol).toBe(0.3)
+    act(() => sw().click())
+    expect(useStore.getState().S.musicAuto).toBe(false)
+    expect(sw().getAttribute('aria-checked')).toBe('false')
+  })
+  it('say how the music and the rest sound take turns', () => {
+    mount(<AmbientControls />)
+    expect(host.textContent).toContain('stops when a set is done')
+    expect(host.textContent).toContain('The volume sets both.')
+  })
+  it('the compact one, in the music card, has the slider and the switch but not the long note', () => {
+    mount(<AmbientControls compact />)
+    expect(host.querySelector('input[type=range]')).not.toBeNull()
+    expect(host.querySelector('.amb-note')).toBeNull()
   })
   it('say when Sound is off in Settings, so silence is not a mystery', () => {
     setS({ sound: false })
@@ -124,8 +126,8 @@ describe('the controls', () => {
   it('read in Indonesian', async () => {
     await setLang('id')
     mount(<AmbientControls key="id" />)
-    expect(radios().map(r => r.textContent)).toEqual(['Matikan', 'Hanya istirahat'])
     expect(host.textContent).toContain('Suara latihan')
-    expect(host.textContent).toContain('Volume mengatur musik latihan')
+    expect(host.textContent).toContain('Putar musik saat latihan')
+    expect(host.textContent).toContain('Volume mengatur keduanya.')
   })
 })

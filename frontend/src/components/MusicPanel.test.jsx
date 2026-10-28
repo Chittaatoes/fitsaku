@@ -28,7 +28,7 @@ beforeEach(async () => {
   mm.state = { index: 0, playing: false, blocked: false, error: false }
   mm.toggle.mockClear(); mm.next.mockClear(); mm.prev.mockClear()
   host = document.createElement('div'); document.body.appendChild(host); root = createRoot(host)
-  act(() => useStore.setState(s => ({ S: { ...s.S, musicAuto: undefined, sound: true, ambient: 'all' } })))
+  act(() => useStore.setState(s => ({ S: { ...s.S, musicAuto: undefined, sound: true, ambientVol: 0.8 } })))
   act(() => root.render(<MusicPanel />))
 })
 afterEach(() => { act(() => root.unmount()); host.remove() })
@@ -56,24 +56,25 @@ describe('the workout music card', () => {
     expect(text()).toContain('Music 1')
   })
 
-  it('the settings button opens the workout sound options and the auto-play switch, and closes them again', () => {
+  it('the settings button opens just the volume and the music switch, and closes them again', () => {
     act(() => btn('Workout sound settings').click())
     const set = host.querySelector('.mp-set')
     expect(set).not.toBeNull()
-    expect(set.textContent).toContain('Workout sound')
-    expect(set.textContent).toContain('Rest only')
-    expect(set.textContent).not.toContain('Workout + rest')           // the training beat is gone
     expect(set.querySelector('input[type=range]')).not.toBeNull()     // the volume: the music's
     expect(set.textContent).toContain('Play music in a workout')
+    expect(set.querySelectorAll('[role=radio]')).toHaveLength(0)      // no on/off choice for the sound
     act(() => btn('Workout sound settings').click())
     expect(host.querySelector('.mp-set')).toBeNull()
   })
 
-  it('the options change the workout sound setting, and the switch the music auto-play', () => {
+  it('the slider and the switch change the settings', () => {
     act(() => btn('Workout sound settings').click())
-    const chip = [...host.querySelectorAll('.amb-opts .chip')].find(c => c.textContent === 'Off')
-    act(() => chip.click())
-    expect(useStore.getState().S.ambient).toBe('off')
+    const slider = host.querySelector('.mp-set input[type=range]')
+    act(() => {
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(slider, '40')
+      slider.dispatchEvent(new Event('input', { bubbles: true }))
+    })
+    expect(useStore.getState().S.ambientVol).toBe(0.4)
     const sw = host.querySelector('button[role="switch"][aria-label="Play music in a workout"]')
     expect(sw.getAttribute('aria-checked')).toBe('true')               // on unless turned off
     act(() => sw.click())

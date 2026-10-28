@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { createAmbient, KINDS } from './ambient.js'
-import { ambientKindFor, ambientSettingOf, ambientVolumeOf } from './ambient-plan.js'
+import { ambientKindFor, ambientVolumeOf } from './ambient-plan.js'
 
 /* A Web Audio stand-in that records what is built and scheduled, with a clock the test moves. */
 function fakeAudio() {
@@ -126,39 +126,32 @@ describe('the built-in rest sound', () => {
 
 describe('when the rest sound plays', () => {
   const live = { id: 'a', entries: [], cur: 0, start: 1 }
-  const base = { active: live, timer: null, setting: 'rest', soundOn: true }
+  const base = { active: live, timer: null, soundOn: true }
   const k = o => ambientKindFor({ ...base, ...o })
 
   it('only while a rest counts down: a running set is silent', () => {
     expect(k({})).toBe(null)
     expect(k({ timer: { left: 40, total: 60 } })).toBe('rest')
   })
-  it('a paused rest, a finished one and the switch-sides gap are silent', () => {
+  it('a paused rest, a finished one and the switch-sides gap are training: no rest sound', () => {
     expect(k({ timer: { left: 40, paused: true } })).toBe(null)
     expect(k({ timer: { left: 0, ready: true } })).toBe(null)
     expect(k({ timer: { left: 8, kind: 'switch' } })).toBe(null)
-  })
-  it('"off" is silent always', () => {
-    expect(k({ setting: 'off', timer: { left: 30 } })).toBe(null)
   })
   it('nothing plays with Sound off or with no workout', () => {
     expect(k({ soundOn: false, timer: { left: 30 } })).toBe(null)
     expect(k({ active: null })).toBe(null)
     expect(k({ active: null, timer: { left: 30 } })).toBe(null)
   })
-  it('the music playing does not silence it: it has its own switch', () => {
-    expect(k({ timer: { left: 30 }, external: true })).toBe('rest')
-  })
   it('not while editing a saved workout or logging one into the past', () => {
     expect(k({ active: { ...live, editingWorkoutId: 'w' }, timer: { left: 30 } })).toBe(null)
     expect(k({ active: { ...live, backfill: {} }, timer: { left: 30 } })).toBe(null)
   })
-  it('settings fall back to sensible values, and the old "workout + rest" is now the rest sound', () => {
-    expect(ambientSettingOf({})).toBe('rest')
-    expect(ambientSettingOf({ ambient: 'weird' })).toBe('rest')
-    expect(ambientSettingOf({ ambient: 'all' })).toBe('rest')
-    expect(ambientSettingOf({ ambient: 'rest' })).toBe('rest')
-    expect(ambientSettingOf({ ambient: 'off' })).toBe('off')
+  it('the old on/off choice is not read any more: a profile that held "off" or "all" gets the rest sound like any other', () => {
+    expect(k({ setting: 'off', timer: { left: 30 } })).toBe('rest')
+    expect(k({ setting: 'all', timer: { left: 30 } })).toBe('rest')
+  })
+  it('the volume falls back to a sensible value and is clamped', () => {
     expect(ambientVolumeOf({})).toBe(0.8)
     expect(ambientVolumeOf({ ambientVol: 7 })).toBe(1)
     expect(ambientVolumeOf({ ambientVol: -1 })).toBe(0)
