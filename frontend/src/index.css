@@ -1513,17 +1513,19 @@ body.no-tabbar #timer.working{box-shadow:inset 0 var(--hair) 0 var(--acc),0 -10p
 /* The layer is at least as tall as the whole screen, not just whatever the browser reports as the layout viewport:
    in the iOS home-screen app that can stop short of the bottom edge while the page is pinned behind a popup, which
    left a blank strip under every sheet and dialog. `100lvh` is the full-height viewport; the others are fallbacks. */
-#modal-root{position:fixed;inset:0;bottom:calc(-1 * var(--vgap,0px));z-index:100;display:none}
+#modal-root{position:fixed;inset:0;z-index:100;display:none}
 #modal-root.open{display:block}
 .mback{
-  position:absolute;inset:0;background:rgba(0,0,0,.4);
+  /* Only the backdrop reaches past the layout viewport (--vgap): in the iOS home-screen app what a scrolling sheet
+     paints outside it is cut off, so the sheet and everything in it stay inside, and the area below is filled. */
+  position:absolute;inset:0;bottom:calc(-1 * var(--vgap,0px));background:rgba(0,0,0,.4);
   -webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);
   touch-action:none;overscroll-behavior:none;
 }
 .sheet{
   position:absolute;inset-inline-start:0;inset-inline-end:0;bottom:0;background:var(--bg-el);
   border-radius:var(--r-xl) var(--r-xl) 0 0;
-  padding:8px 18px calc(20px + var(--sab) + var(--vgap,0px));
+  padding:8px 18px calc(20px + var(--sab));
   /* A tall sheet stops short of the status bar / Dynamic Island: every cap carries the top
      safe-area inset, which the layout viewport does not (viewport-fit=cover). */
   max-height:90vh;max-height:min(90vh,calc(100dvh - var(--sat) - 8px - var(--native-kb,0px)));
@@ -2503,7 +2505,7 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
   }
   :root[data-theme="light"] .sheet{background:rgba(250,249,247,.8);box-shadow:0 -1px 0 rgba(0,0,0,.06),0 -20px 50px -22px rgba(0,0,0,.25),0 120px 0 0 var(--bg)}
 }
-.center{border-radius:20px;width:min(82vw,290px);margin-top:calc(var(--vgap,0px) / -2)}
+.center{border-radius:20px;width:min(82vw,290px)}
 .center:has(.ios-alert){padding:0;overflow:hidden;width:min(80vw,280px)}
 .ios-alert{display:flex;flex-direction:column;text-align:center}
 .ios-alert-body{padding:20px 18px 18px}

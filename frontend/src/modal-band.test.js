@@ -20,9 +20,9 @@ describe('the popup layer', () => {
     expect(css).toMatch(/0 120px 0 0 var\(--bg-el\)/)
     expect(css).toMatch(/0 120px 0 0 var\(--bg\)/)
   })
-  it('extends below the layout viewport by the measured gap (--vgap), and the sheet pads for it', () => {
-    expect(css).toMatch(/#modal-root\{position:fixed;inset:0;bottom:calc\(-1 \* var\(--vgap,0px\)\)/)
-    expect(css).toMatch(/padding:8px 18px calc\(20px \+ var\(--sab\) \+ var\(--vgap,0px\)\)/)
-    expect(css).toMatch(/\.center\{[^}]*margin-top:calc\(var\(--vgap,0px\) \/ -2\)/)
+  it('keeps the sheet and its content inside the layout viewport; only the backdrop reaches below by --vgap', () => {
+    expect(css).toMatch(/#modal-root\{position:fixed;inset:0;z-index:100/)
+    expect(css).toMatch(/\.mback\{[^}]*bottom:calc\(-1 \* var\(--vgap,0px\)\)/)
+    expect(css).toMatch(/padding:8px 18px calc\(20px \+ var\(--sab\)\);/)
   })
 })
