@@ -1510,7 +1510,10 @@ body.no-tabbar #timer.working{box-shadow:inset 0 var(--hair) 0 var(--acc),0 -10p
 }
 
 /* ---------------------------------------------------------------- modal -- */
-#modal-root{position:fixed;inset:0;z-index:100;display:none}
+/* The layer is at least as tall as the whole screen, not just whatever the browser reports as the layout viewport:
+   in the iOS home-screen app that can stop short of the bottom edge while the page is pinned behind a popup, which
+   left a blank strip under every sheet and dialog. `100lvh` is the full-height viewport; the others are fallbacks. */
+#modal-root{position:fixed;inset:0;height:100%;height:max(100%,100vh);height:max(100%,100vh,100lvh);z-index:100;display:none}
 #modal-root.open{display:block}
 .mback{
   position:absolute;inset:0;background:rgba(0,0,0,.4);

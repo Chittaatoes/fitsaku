@@ -24,70 +24,92 @@
     ]
   },
   "0001": {
-    "name": "Sit-up 3/4"
+    "name": "Sit-up 3/4",
+    "description": "Sit-up yang dipersingkat dan berhenti sekitar 45 derajat, sehingga otot perut tetap tegang sepanjang gerakan."
   },
   "0002": {
-    "name": "Side bend 45°"
+    "name": "Side bend 45°",
+    "description": "Side bend berdiri yang melatih otot oblik dengan memiringkan badan ke samping lalu kembali tegak."
   },
   "0003": {
-    "name": "Air bike"
+    "name": "Air bike",
+    "description": "Crunch ala sepeda di mana siku dan lutut yang berlawanan bertemu sementara kaki lainnya lurus. Melatih perut dan oblik."
   },
   "0005": {
-    "name": "Curl bisep bergantian dengan band"
+    "name": "Curl bisep bergantian dengan band",
+    "description": "Curl bisep satu lengan bergantian melawan band yang diinjak dengan kaki. Memberikan ketegangan yang meningkat menuju puncak curl."
   },
   "0006": {
-    "name": "Sentuh tumit bergantian"
+    "name": "Sentuh tumit bergantian",
+    "description": "Berbaring telentang, Anda melakukan crunch ke samping untuk menjangkau masing-masing tumit secara bergantian. Melatih oblik dan perut."
   },
   "0007": {
-    "name": "Lateral pulldown bergantian"
+    "name": "Lateral pulldown bergantian",
+    "description": "Lat pulldown kabel yang dilakukan satu pegangan bergantian, membentuk lat dengan regangan dan kontraksi di setiap sisi."
   },
   "0009": {
-    "name": "Chest dip berbantuan (berlutut)"
+    "name": "Chest dip berbantuan (berlutut)",
+    "description": "Chest dip berbantuan mesin dari bantalan berlutut, sehingga Anda bisa melatih dip dengan beban badan yang lebih ringan."
   },
   "0010": {
-    "name": "Knee raise gantung berbantuan dengan lempar ke bawah"
+    "name": "Knee raise gantung berbantuan dengan lempar ke bawah",
+    "description": "Knee raise gantung berbantuan yang diakhiri dengan menurunkan kaki kembali secara terkendali. Melatih perut dan fleksor pinggul."
   },
   "0011": {
-    "name": "Knee raise gantung berbantuan"
+    "name": "Knee raise gantung berbantuan",
+    "description": "Knee raise gantung dengan bantuan mesin atau band. Membangun kekuatan perut bagian bawah dan fleksor pinggul."
   },
   "0012": {
-    "name": "Leg raise berbaring berbantuan dengan lempar ke samping"
+    "name": "Leg raise berbaring berbantuan dengan lempar ke samping",
+    "description": "Leg raise berbaring di mana kaki diturunkan ke sisi yang bergantian, menambah tantangan oblik pada perut bagian bawah."
   },
   "0013": {
-    "name": "Leg raise berbaring berbantuan dengan lempar ke bawah"
+    "name": "Leg raise berbaring berbantuan dengan lempar ke bawah",
+    "description": "Leg raise berbaring dengan kaki diangkat lurus ke atas dan diturunkan secara terkendali. Melatih perut bagian bawah."
   },
   "0014": {
-    "name": "Russian twist berbantuan"
+    "name": "Russian twist berbantuan",
+    "description": "Twist dengan medicine ball sambil duduk, dari sisi ke sisi, yang melatih oblik dan perut dengan badan condong ke belakang."
   },
   "0015": {
-    "name": "Pull-up genggaman sempit paralel berbantuan"
+    "name": "Pull-up genggaman sempit paralel berbantuan",
+    "description": "Pull-up berbantuan mesin pada palang paralel dengan genggaman netral yang sempit. Membangun lat dan bisep dengan beban badan yang lebih ringan."
   },
   "0016": {
-    "name": "Hamstring telungkup berbantuan"
+    "name": "Hamstring telungkup berbantuan",
+    "description": "Berbaring telungkup, Anda menekuk kaki ke arah bokong melawan bantuan. Melatih hamstring."
   },
   "0017": {
-    "name": "Pull-up berbantuan"
+    "name": "Pull-up berbantuan",
+    "description": "Pull-up pada mesin berbantuan yang menopang sebagian berat badan Anda, sehingga Anda bisa membangun kekuatan menuju pull-up penuh."
   },
   "0018": {
-    "name": "Ekstensi trisep berdiri berbantuan (dengan handuk)"
+    "name": "Ekstensi trisep berdiri berbantuan (dengan handuk)",
+    "description": "Ekstensi trisep di atas kepala sambil berdiri dengan memegang handuk di belakang kepala. Cara ringan untuk melatih trisep."
   },
   "0019": {
-    "name": "Triceps dip berbantuan (berlutut)"
+    "name": "Triceps dip berbantuan (berlutut)",
+    "description": "Triceps dip berlutut berbantuan mesin yang mengurangi beban, sehingga Anda bisa membangun kekuatan dorong pada trisep."
   },
   "0020": {
-    "name": "Balance board"
+    "name": "Balance board",
+    "description": "Berdiri di atas balance board untuk menantang kestabilan. Meningkatkan keseimbangan dan mengaktifkan otot kaki dan pergelangan kaki."
   },
   "0021": {
-    "name": "Sit-up dengan bola stabilitas"
+    "name": "Sit-up dengan bola stabilitas",
+    "description": "Sit-up dengan punggung bersandar pada bola stabilitas. Permukaannya yang melengkung memungkinkan jangkauan gerak lebih besar daripada di lantai."
   },
   "0022": {
-    "name": "Pullover ke press dengan barbel"
+    "name": "Pullover ke press dengan barbel",
+    "description": "Berbaring di bangku, Anda menurunkan barbel ke belakang kepala dalam lengkungan lalu mendorongnya kembali. Melatih lat, dada, dan trisep."
   },
   "0023": {
-    "name": "Curl bisep bergantian dengan barbel"
+    "name": "Curl bisep bergantian dengan barbel",
+    "description": "Curl berdiri di mana lengan mengangkat batang secara bergantian, menjaga ketegangan pada bisep."
   },
   "0024": {
-    "name": "Front squat bangku dengan barbel"
+    "name": "Front squat bangku dengan barbel",
+    "description": "Variasi front squat dengan barbel ditahan di dada bagian atas, menekankan paha depan dan badan yang tegak."
   },
   "0025": {
     "name": "Bench press barbel",
@@ -103,7 +125,8 @@
     ]
   },
   "0026": {
-    "name": "Squat bangku dengan barbel"
+    "name": "Squat bangku dengan barbel",
+    "description": "Squat barbel dengan bangku di belakang sebagai target kedalaman. Melatih paha depan dan bokong."
   },
   "0027": {
     "name": "Barbell bent over row",
@@ -118,13 +141,16 @@
     ]
   },
   "0028": {
-    "name": "Clean and press dengan barbel"
+    "name": "Clean and press dengan barbel",
+    "description": "Angkat barbel dari lantai ke bahu dalam satu gerakan, lalu tekan ke atas kepala. Latihan tenaga seluruh tubuh."
   },
   "0029": {
-    "name": "Front squat genggaman clean dengan barbel"
+    "name": "Front squat genggaman clean dengan barbel",
+    "description": "Front squat dengan barbel diletakkan di bahu menggunakan genggaman clean. Melatih paha depan dan bokong dengan badan tegak."
   },
   "0030": {
-    "name": "Bench press genggaman sempit dengan barbel"
+    "name": "Bench press genggaman sempit dengan barbel",
+    "description": "Bench press dengan genggaman lebih sempit yang memindahkan lebih banyak kerja ke trisep sambil tetap melatih dada."
   },
   "0031": {
     "name": "Barbell curl",
@@ -139,37 +165,48 @@
     ]
   },
   "0032": {
-    "name": "Deadlift barbel"
+    "name": "Deadlift barbel",
+    "description": "Angkat barbel dari lantai dengan mendorong pinggul dan kaki sampai berdiri tegak. Melatih bokong, hamstring, dan punggung."
   },
   "0033": {
-    "name": "Decline bench press barbel"
+    "name": "Decline bench press barbel",
+    "description": "Bench press pada bangku decline yang menekankan dada bagian bawah."
   },
   "0034": {
-    "name": "Pullover siku menekuk decline dengan barbel"
+    "name": "Pullover siku menekuk decline dengan barbel",
+    "description": "Pullover pada bangku decline dengan lengan sedikit menekuk, meregangkan dan melatih lat."
   },
   "0035": {
-    "name": "Skull press genggaman sempit decline dengan barbel"
+    "name": "Skull press genggaman sempit decline dengan barbel",
+    "description": "Skull crusher decline yang menurunkan barbel ke arah dahi lalu mendorongnya kembali. Menargetkan trisep."
   },
   "0036": {
-    "name": "Press genggaman lebar decline dengan barbel"
+    "name": "Press genggaman lebar decline dengan barbel",
+    "description": "Bench press decline genggaman lebar yang menyebarkan beban ke dada bagian bawah."
   },
   "0037": {
-    "name": "Pullover genggaman lebar decline dengan barbel"
+    "name": "Pullover genggaman lebar decline dengan barbel",
+    "description": "Pullover genggaman lebar pada bangku decline. Meregangkan dan melatih lat serta dada."
   },
   "0038": {
-    "name": "Drag curl barbel"
+    "name": "Drag curl barbel",
+    "description": "Curl di mana barbel ditarik naik di sepanjang badan dengan siku bergerak ke belakang. Menargetkan bisep."
   },
   "0039": {
-    "name": "Front squat dada dengan barbel"
+    "name": "Front squat dada dengan barbel",
+    "description": "Front squat dengan barbel ditahan di depan dada. Melatih paha depan, bokong, dan inti tubuh."
   },
   "0040": {
-    "name": "Front raise dan pullover dengan barbel"
+    "name": "Front raise dan pullover dengan barbel",
+    "description": "Dua gerakan dalam satu: angkat barbel di depan sampai setinggi bahu, lalu bawa ke atas kepala. Melatih bahu dan dada."
   },
   "0041": {
-    "name": "Front raise barbel"
+    "name": "Front raise barbel",
+    "description": "Angkatan barbel lengan lurus di depan sampai setinggi bahu. Menargetkan bahu depan."
   },
   "0042": {
-    "name": "Front squat barbel"
+    "name": "Front squat barbel",
+    "description": "Front squat barbel dengan barbel bertumpu di bagian depan bahu. Berat bagi paha depan dan inti tubuh."
   },
   "0043": {
     "name": "Squat penuh barbel",
@@ -186,13 +223,16 @@
     ]
   },
   "0044": {
-    "name": "Good morning barbel"
+    "name": "Good morning barbel",
+    "description": "Membungkuk ke depan dari pinggul dengan barbel di punggung atas, lalu kembali dengan mendorong pinggul ke depan. Melatih hamstring dan bokong."
   },
   "0045": {
-    "name": "Guillotine bench press barbel"
+    "name": "Guillotine bench press barbel",
+    "description": "Bench press di mana barbel turun ke area leher. Variasi yang menantang untuk dada dan bahu."
   },
   "0046": {
-    "name": "Hack squat barbel"
+    "name": "Hack squat barbel",
+    "description": "Squat dengan barbel dipegang di belakang kaki. Memberi beban ekstra pada paha depan dan bokong."
   },
   "0047": {
     "name": "Incline bench press barbel",
@@ -207,115 +247,152 @@
     ]
   },
   "0048": {
-    "name": "Incline press genggaman terbalik dengan barbel"
+    "name": "Incline press genggaman terbalik dengan barbel",
+    "description": "Incline press dengan genggaman terbalik, membebani dada bagian atas dan trisep."
   },
   "0049": {
-    "name": "Incline row barbel"
+    "name": "Incline row barbel",
+    "description": "Dada bertumpu pada bangku incline, Anda menarik barbel ke arah dada. Melatih punggung atas dengan sedikit tekanan pada punggung bawah."
   },
   "0050": {
-    "name": "Incline shoulder raise barbel"
+    "name": "Incline shoulder raise barbel",
+    "description": "Angkatan barbel pada bangku incline yang mengangkat barbel ke atas kepala. Melatih serratus anterior dan bahu."
   },
   "0051": {
-    "name": "Jefferson squat barbel"
+    "name": "Jefferson squat barbel",
+    "description": "Squat dengan mengangkangi barbel, satu kaki di depan kaki lainnya. Melatih bokong, paha depan, dan inti tubuh."
   },
   "0052": {
-    "name": "JM bench press barbel"
+    "name": "JM bench press barbel",
+    "description": "Gabungan antara close-grip bench press dan skull crusher. Membebani trisep dengan berat."
   },
   "0053": {
-    "name": "Jump squat barbel"
+    "name": "Jump squat barbel",
+    "description": "Squat dengan lompatan eksplosif sambil memegang barbel di punggung atas. Membangun tenaga kaki."
   },
   "0054": {
-    "name": "Lunge barbel"
+    "name": "Lunge barbel",
+    "description": "Lunge gaya berjalan dengan barbel di punggung atas. Melatih bokong dan paha depan, satu kaki bergantian."
   },
   "0055": {
-    "name": "Press genggaman sempit berbaring dengan barbel"
+    "name": "Press genggaman sempit berbaring dengan barbel",
+    "description": "Press genggaman sempit dari posisi berbaring. Menargetkan trisep dengan keterlibatan dada."
   },
   "0056": {
-    "name": "Ekstensi trisep genggaman sempit berbaring dengan barbel"
+    "name": "Ekstensi trisep genggaman sempit berbaring dengan barbel",
+    "description": "Ekstensi trisep berbaring dengan genggaman sempit, menurunkan barbel ke arah dahi lalu mendorongnya kembali."
   },
   "0057": {
-    "name": "Ekstensi berbaring dengan barbel"
+    "name": "Ekstensi berbaring dengan barbel",
+    "description": "Berbaring telentang dan menekuk siku saja untuk menurunkan barbel, lalu meluruskannya lagi. Pembentuk trisep langsung."
   },
   "0058": {
-    "name": "Angkat barbel berbaring (di pinggul)"
+    "name": "Angkat barbel berbaring (di pinggul)",
+    "description": "Angkatan ala hip thrust dengan barbel bertumpu di pinggul. Latihan kuat untuk bokong."
   },
   "0059": {
-    "name": "Preacher curl berbaring dengan barbel"
+    "name": "Preacher curl berbaring dengan barbel",
+    "description": "Preacher curl yang dilakukan sambil berbaring di bangku, mengisolasi bisep tanpa ayunan badan."
   },
   "0060": {
-    "name": "Skull crusher ekstensi trisep berbaring dengan barbel"
+    "name": "Skull crusher ekstensi trisep berbaring dengan barbel",
+    "description": "Skull crusher klasik: turunkan barbel ke dahi dan luruskan lengan. Mengisolasi trisep."
   },
   "0061": {
-    "name": "Ekstensi trisep berbaring dengan barbel"
+    "name": "Ekstensi trisep berbaring dengan barbel",
+    "description": "Ekstensi trisep berbaring dengan barbel, menekuk hanya di siku. Latihan trisep yang mendasar."
   },
   "0062": {
-    "name": "Row sempit barbel"
+    "name": "Row sempit barbel",
+    "description": "Bent-over row dengan genggaman sempit yang memberi kerja ekstra pada lat dan otot di antara tulang belikat."
   },
   "0063": {
-    "name": "Squat kaki sempit barbel"
+    "name": "Squat kaki sempit barbel",
+    "description": "Back squat dengan kuda-kuda lebih sempit, memindahkan lebih banyak kerja ke paha depan."
   },
   "0064": {
-    "name": "Bent over row satu lengan barbel"
+    "name": "Bent over row satu lengan barbel",
+    "description": "Bent-over row dengan barbel dipegang satu tangan bergantian. Melatih punggung atas dan lat."
   },
   "0065": {
-    "name": "Floor press satu lengan barbel"
+    "name": "Floor press satu lengan barbel",
+    "description": "Floor press dengan satu tangan pada barbel. Membatasi jangkauan gerak agar lebih ramah bagi bahu dan melatih trisep."
   },
   "0066": {
-    "name": "Deadlift samping satu lengan barbel"
+    "name": "Deadlift samping satu lengan barbel",
+    "description": "Variasi deadlift di mana barbel diturunkan di salah satu sisi badan. Melatih bokong dan pinggul."
   },
   "0067": {
-    "name": "Snatch satu lengan barbel"
+    "name": "Snatch satu lengan barbel",
+    "description": "Snatch satu tangan yang membawa barbel dari lantai ke atas kepala dalam satu tarikan cepat. Membutuhkan tenaga dan koordinasi."
   },
   "0068": {
-    "name": "Squat satu kaki barbel"
+    "name": "Squat satu kaki barbel",
+    "description": "Squat satu kaki dengan barbel di punggung. Menantang paha depan, bokong, dan keseimbangan."
   },
   "0069": {
-    "name": "Overhead squat barbel"
+    "name": "Overhead squat barbel",
+    "description": "Squat dengan barbel dikunci lurus di atas kepala. Membangun mobilitas, kestabilan, dan kekuatan kaki."
   },
   "0070": {
-    "name": "Preacher curl barbel"
+    "name": "Preacher curl barbel",
+    "description": "Curl dengan lengan atas bertumpu pada bantalan preacher, yang menjaga fokus pada bisep."
   },
   "0071": {
-    "name": "Sit-up dengan press barbel"
+    "name": "Sit-up dengan press barbel",
+    "description": "Sit-up berbeban dengan memegang barbel di dada. Menguatkan otot perut."
   },
   "0072": {
-    "name": "Curl incline telungkup barbel"
+    "name": "Curl incline telungkup barbel",
+    "description": "Berbaring telungkup di bangku incline, Anda menekuk barbel ke atas. Melatih bisep dengan regangan ketat di bawah."
   },
   "0073": {
-    "name": "Pullover barbel"
+    "name": "Pullover barbel",
+    "description": "Berbaring di bangku, Anda menurunkan barbel ke belakang kepala dengan lengan lurus lalu membawanya kembali ke atas dada. Melatih lat dan dada."
   },
   "0074": {
-    "name": "Rack pull barbel"
+    "name": "Rack pull barbel",
+    "description": "Deadlift parsial dari rak setinggi lutut. Membebani punggung atas, bokong, dan pinggul secara berlebih."
   },
   "0075": {
-    "name": "Rear delt raise barbel"
+    "name": "Rear delt raise barbel",
+    "description": "Sambil membungkuk, Anda mengangkat barbel dengan lengan lurus sampai setinggi bahu. Menargetkan bahu belakang."
   },
   "0076": {
-    "name": "Rear delt row barbel"
+    "name": "Rear delt row barbel",
+    "description": "Bent-over row genggaman lebar yang menekankan bahu belakang dan punggung atas."
   },
   "0077": {
-    "name": "Rear lunge barbel v. 2"
+    "name": "Rear lunge barbel v. 2",
+    "description": "Reverse lunge dengan barbel di punggung, melangkah mundur lalu kembali berdiri. Melatih bokong dan paha depan."
   },
   "0078": {
-    "name": "Rear lunge barbel"
+    "name": "Rear lunge barbel",
+    "description": "Reverse lunge dengan barbel di punggung. Ramah bagi lutut dan kuat untuk bokong."
   },
   "0079": {
-    "name": "Wrist curl terbalik barbel v. 2"
+    "name": "Wrist curl terbalik barbel v. 2",
+    "description": "Reverse wrist curl dengan lengan bawah bertumpu pada paha. Membangun otot di bagian atas lengan bawah."
   },
   "0080": {
-    "name": "Reverse curl barbel"
+    "name": "Reverse curl barbel",
+    "description": "Curl dengan genggaman dari atas. Melatih bisep, brakialis, dan lengan bawah."
   },
   "0081": {
-    "name": "Reverse preacher curl barbel"
+    "name": "Reverse preacher curl barbel",
+    "description": "Preacher curl dengan genggaman dari atas, melatih brakialis dan lengan bawah bersama bisep."
   },
   "0082": {
-    "name": "Wrist curl terbalik barbel"
+    "name": "Wrist curl terbalik barbel",
+    "description": "Wrist curl dengan genggaman dari atas yang melatih otot ekstensor di bagian atas lengan bawah."
   },
   "0083": {
-    "name": "Roller-out dari bangku dengan barbel"
+    "name": "Roller-out dari bangku dengan barbel",
+    "description": "Berlutut di bangku, Anda menggulirkan barbel ke depan dan kembali. Latihan inti yang berat untuk otot perut."
   },
   "0084": {
-    "name": "Roller-out barbel"
+    "name": "Roller-out barbel",
+    "description": "Berlutut, Anda menggulirkan barbel ke depan lalu menariknya kembali. Latihan yang menuntut untuk otot perut."
   },
   "0085": {
     "name": "Romanian deadlift barbel",
@@ -332,373 +409,496 @@
     ]
   },
   "0086": {
-    "name": "Military press di belakang kepala duduk dengan barbel"
+    "name": "Military press di belakang kepala duduk dengan barbel",
+    "description": "Overhead press duduk dengan barbel diturunkan ke belakang kepala. Melatih bahu dan trisep."
   },
   "0087": {
-    "name": "Bradford rocky press duduk dengan barbel"
+    "name": "Bradford rocky press duduk dengan barbel",
+    "description": "Press duduk di mana barbel bergerak antara bagian depan bahu dan sedikit di atas kepala, tanpa pernah dikunci penuh."
   },
   "0088": {
-    "name": "Calf raise duduk barbel"
+    "name": "Calf raise duduk barbel",
+    "description": "Calf raise duduk dengan barbel bertumpu di paha. Mengisolasi soleus dan betis."
   },
   "0089": {
-    "name": "Concentration curl genggaman sempit duduk dengan barbel"
+    "name": "Concentration curl genggaman sempit duduk dengan barbel",
+    "description": "Curl genggaman sempit sambil duduk dengan lengan bertumpu pada paha. Mengisolasi bisep."
   },
   "0090": {
-    "name": "Good morning duduk barbel"
+    "name": "Good morning duduk barbel",
+    "description": "Good morning duduk dengan barbel di punggung. Melatih punggung bawah dan bokong."
   },
   "0091": {
-    "name": "Overhead press duduk barbel"
+    "name": "Overhead press duduk barbel",
+    "description": "Overhead press duduk dengan barbel. Membangun bahu dan trisep."
   },
   "0092": {
-    "name": "Ekstensi trisep di atas kepala duduk dengan barbel"
+    "name": "Ekstensi trisep di atas kepala duduk dengan barbel",
+    "description": "Ekstensi di atas kepala sambil duduk dengan memegang barbel. Mengisolasi trisep."
   },
   "0093": {
-    "name": "Twist duduk dengan barbel (di bola stabilitas)"
+    "name": "Twist duduk dengan barbel (di bola stabilitas)",
+    "description": "Rotasi badan sambil duduk dengan barbel di bahu sambil menyeimbangkan diri di atas bola stabilitas. Melatih oblik dan keseimbangan."
   },
   "0094": {
-    "name": "Twist duduk dengan barbel"
+    "name": "Twist duduk dengan barbel",
+    "description": "Twist badan sambil duduk dengan barbel di punggung. Melatih oblik dan perut."
   },
   "0095": {
-    "name": "Shrug barbel"
+    "name": "Shrug barbel",
+    "description": "Angkat bahu ke arah telinga sambil memegang barbel. Membangun trapezius atas."
   },
   "0096": {
-    "name": "Side bend barbel v. 2"
+    "name": "Side bend barbel v. 2",
+    "description": "Side bend dengan barbel di bahu. Melatih oblik."
   },
   "0097": {
-    "name": "Side split squat barbel v. 2"
+    "name": "Side split squat barbel v. 2",
+    "description": "Side split squat dengan barbel di punggung, turun ke arah satu kaki. Melatih paha depan dan adduktor."
   },
   "0098": {
-    "name": "Side split squat barbel"
+    "name": "Side split squat barbel",
+    "description": "Lunge ke samping dengan barbel di punggung. Menguatkan paha depan dan adduktor."
   },
   "0099": {
-    "name": "Split squat satu kaki barbel"
+    "name": "Split squat satu kaki barbel",
+    "description": "Split squat dengan kaki belakang ditinggikan dan barbel di punggung. Latihan kuat untuk paha depan dan bokong."
   },
   "0100": {
-    "name": "Skier barbel"
+    "name": "Skier barbel",
+    "description": "Latihan bahu di mana Anda mengayunkan barbel dalam pola seperti bermain ski. Melatih bahu dan inti tubuh."
   },
   "0101": {
-    "name": "Speed squat barbel"
+    "name": "Speed squat barbel",
+    "description": "Back squat yang cepat dan ringan. Membangun tenaga eksplosif kaki dan kecepatan keluar dari posisi bawah."
   },
   "0102": {
-    "name": "Squat berlutut dengan barbel"
+    "name": "Squat berlutut dengan barbel",
+    "description": "Squat yang dilakukan dari posisi berlutut dengan barbel di punggung. Melatih paha depan dan bokong."
   },
   "0103": {
-    "name": "Ab roller-out berdiri dengan barbel"
+    "name": "Ab roller-out berdiri dengan barbel",
+    "description": "Roll-out berdiri dengan barbel. Membutuhkan perut yang kuat dan punggung yang kokoh."
   },
   "0104": {
-    "name": "Back wrist curl berdiri dengan barbel"
+    "name": "Back wrist curl berdiri dengan barbel",
+    "description": "Wrist curl dengan barbel dipegang di belakang punggung, membangun genggaman dan lengan bawah."
   },
   "0105": {
-    "name": "Bradford press berdiri dengan barbel"
+    "name": "Bradford press berdiri dengan barbel",
+    "description": "Bradford press berdiri, mengangkat barbel dari depan bahu ke belakang kepala dan kembali. Melatih bahu."
   },
   "0106": {
-    "name": "Curl genggaman sempit berdiri dengan barbel"
+    "name": "Curl genggaman sempit berdiri dengan barbel",
+    "description": "Curl berdiri dengan genggaman sempit. Membangun bisep."
   },
   "0107": {
-    "name": "Front raise di atas kepala berdiri dengan barbel"
+    "name": "Front raise di atas kepala berdiri dengan barbel",
+    "description": "Front raise di mana barbel bergerak melewati ketinggian bahu sampai ke atas kepala. Menargetkan bahu depan."
   },
   "0108": {
-    "name": "Calf raise berdiri dengan barbel"
+    "name": "Calf raise berdiri dengan barbel",
+    "description": "Calf raise berdiri dengan barbel di bahu. Membangun betis."
   },
   "0109": {
-    "name": "Ekstensi trisep di atas kepala berdiri dengan barbel"
+    "name": "Ekstensi trisep di atas kepala berdiri dengan barbel",
+    "description": "Ekstensi trisep di atas kepala sambil berdiri dengan barbel. Mengisolasi trisep."
   },
   "0110": {
-    "name": "Curl genggaman terbalik berdiri dengan barbel"
+    "name": "Curl genggaman terbalik berdiri dengan barbel",
+    "description": "Curl berdiri dengan genggaman dari atas. Melatih bisep, brakialis, dan lengan bawah."
   },
   "0111": {
-    "name": "Rocking calf raise berdiri dengan barbel"
+    "name": "Rocking calf raise berdiri dengan barbel",
+    "description": "Calf raise berdiri dengan gerakan mengayun, membebani otot betis."
   },
   "0112": {
-    "name": "Twist berdiri dengan barbel"
+    "name": "Twist berdiri dengan barbel",
+    "description": "Twist badan sambil berdiri dengan barbel di bahu. Melatih oblik."
   },
   "0113": {
-    "name": "Curl genggaman lebar berdiri dengan barbel"
+    "name": "Curl genggaman lebar berdiri dengan barbel",
+    "description": "Curl berdiri genggaman lebar. Menekankan bisep bagian dalam."
   },
   "0114": {
-    "name": "Step-up barbel"
+    "name": "Step-up barbel",
+    "description": "Naik ke atas box dengan barbel di punggung. Melatih bokong dan paha depan, satu kaki bergantian."
   },
   "0115": {
-    "name": "Stiff leg good morning barbel"
+    "name": "Stiff leg good morning barbel",
+    "description": "Good morning kaki lurus dengan barbel di punggung atas. Melatih bokong, hamstring, dan punggung bawah."
   },
   "0116": {
-    "name": "Straight leg deadlift barbel"
+    "name": "Straight leg deadlift barbel",
+    "description": "Deadlift dengan kaki hampir lurus yang menargetkan hamstring."
   },
   "0117": {
-    "name": "Sumo deadlift barbel"
+    "name": "Sumo deadlift barbel",
+    "description": "Deadlift dengan kuda-kuda lebar dan genggaman sempit. Melatih bokong, hamstring, dan paha bagian dalam."
   },
   "0118": {
-    "name": "Bent over row genggaman terbalik barbel"
+    "name": "Bent over row genggaman terbalik barbel",
+    "description": "Bent-over row dengan genggaman dari bawah. Menargetkan punggung atas dan bisep."
   },
   "0119": {
-    "name": "Upright row barbel v. 2"
+    "name": "Upright row barbel v. 2",
+    "description": "Upright row dengan barbel ditarik ke arah dagu. Melatih bahu dan trapezius."
   },
   "0120": {
-    "name": "Upright row barbel"
+    "name": "Upright row barbel",
+    "description": "Upright row dengan barbel ditarik ke arah dagu. Melatih bahu dan trapezius."
   },
   "0121": {
-    "name": "Upright row barbel v. 3"
+    "name": "Upright row barbel v. 3",
+    "description": "Upright row dengan barbel ditarik ke arah dagu. Melatih bahu dan trapezius."
   },
   "0122": {
-    "name": "Bench press lebar barbel"
+    "name": "Bench press lebar barbel",
+    "description": "Bench press dengan genggaman lebar. Menekankan dada."
   },
   "0123": {
-    "name": "Upright row genggaman lebar barbel"
+    "name": "Upright row genggaman lebar barbel",
+    "description": "Upright row genggaman lebar, mengutamakan bahu samping dan trapezius."
   },
   "0124": {
-    "name": "Squat lebar barbel"
+    "name": "Squat lebar barbel",
+    "description": "Back squat dengan kuda-kuda lebar. Melatih paha depan, bokong, dan adduktor."
   },
   "0125": {
-    "name": "Wrist curl barbel v. 2"
+    "name": "Wrist curl barbel v. 2",
+    "description": "Wrist curl dengan telapak tangan menghadap ke atas, lengan bawah bertumpu pada bangku. Membangun fleksor lengan bawah."
   },
   "0126": {
-    "name": "Wrist curl barbel"
+    "name": "Wrist curl barbel",
+    "description": "Wrist curl sambil duduk dengan telapak tangan menghadap ke atas. Membangun fleksor lengan bawah."
   },
   "0127": {
-    "name": "Zercher squat barbel"
+    "name": "Zercher squat barbel",
+    "description": "Squat dengan barbel ditahan di lipatan siku. Melatih paha depan, bokong, dan inti tubuh."
   },
   "0128": {
-    "name": "Battle rope"
+    "name": "Battle rope",
+    "description": "Gerakkan tali berat secara berirama untuk menaikkan detak jantung dan menantang bahu serta lengan."
   },
   "0129": {
-    "name": "Bench dip (lutut menekuk)"
+    "name": "Bench dip (lutut menekuk)",
+    "description": "Bench dip dengan lutut menekuk. Cara yang lebih mudah untuk melatih trisep."
   },
   "0130": {
-    "name": "Ekstensi pinggul di bangku"
+    "name": "Ekstensi pinggul di bangku",
+    "description": "Ekstensi pinggul dari bangku, mengangkat pinggul untuk melatih bokong."
   },
   "0131": {
-    "name": "Twist berbaring lutut menekuk (di bola stabilitas)"
+    "name": "Twist berbaring lutut menekuk (di bola stabilitas)",
+    "description": "Twist berbaring dengan lutut menekuk sementara punggung atas bertumpu pada bola stabilitas. Melatih oblik dan kendali badan."
   },
   "0133": {
-    "name": "Side plank lutut menekuk"
+    "name": "Side plank lutut menekuk",
+    "description": "Side plank dengan lutut menekuk, versi yang lebih mudah dari gerakan penuhnya. Menguatkan oblik dan sisi pinggul."
   },
   "0134": {
-    "name": "Push-up lutut menyamping"
+    "name": "Push-up lutut menyamping",
+    "description": "Push-up dengan lutut menekuk dan diputar ke satu sisi, menambahkan putaran ringan pada badan. Melatih dada dan oblik."
   },
   "0136": {
-    "name": "Pose perahu (yoga)"
+    "name": "Pose perahu (yoga)",
+    "description": "Keseimbangan yoga sambil duduk di mana kaki dan dada diangkat membentuk huruf V. Membangun kekuatan inti dan fleksor pinggul."
   },
   "0137": {
-    "name": "Body-up"
+    "name": "Body-up",
+    "description": "Gerakan dorong dengan berat badan yang mendorong tubuh kembali ke arah tangan. Melatih trisep."
   },
   "0138": {
-    "name": "Bottoms-up"
+    "name": "Bottoms-up",
+    "description": "Latihan perut dengan berat badan yang menggoyangkan pinggul ke arah langit-langit. Melatih otot perut."
   },
   "0139": {
-    "name": "Pull-up bisep genggaman sempit"
+    "name": "Pull-up bisep genggaman sempit",
+    "description": "Pull-up dengan genggaman sempit. Menekankan bisep dan lat."
   },
   "0140": {
-    "name": "Pull-up bisep"
+    "name": "Pull-up bisep",
+    "description": "Pull-up dengan genggaman dari bawah. Menargetkan bisep."
   },
   "0142": {
-    "name": "Bridge (berlutut)"
+    "name": "Bridge (berlutut)",
+    "description": "Tahanan bridge ala plank yang ditopang oleh lutut. Membangun daya tahan badan dengan beban lebih ringan daripada plank penuh."
   },
   "0143": {
-    "name": "Bridge (lengan lurus)"
+    "name": "Bridge (lengan lurus)",
+    "description": "Tahanan bridge dengan lengan lurus seperti posisi atas push-up. Melatih perut dan kestabilan bahu."
   },
   "0145": {
-    "name": "Glute bridge"
+    "name": "Glute bridge",
+    "description": "Hip bridge yang mengangkat bokong dari lantai sambil berbaring telentang. Menguatkan bokong dan hamstring."
   },
   "0147": {
-    "name": "Crunch memutar sepeda"
+    "name": "Crunch memutar sepeda",
+    "description": "Crunch di mana lutut mengayuh seperti sepeda sementara siku menjangkau lutut yang berlawanan. Melatih perut dan oblik."
   },
   "0148": {
-    "name": "Shoulder press bergantian dengan kabel"
+    "name": "Shoulder press bergantian dengan kabel",
+    "description": "Shoulder press kabel dengan lengan bergantian. Melatih bahu dan trisep."
   },
   "0149": {
-    "name": "Ekstensi trisep bergantian dengan kabel"
+    "name": "Ekstensi trisep bergantian dengan kabel",
+    "description": "Ekstensi trisep kabel dengan lengan bergantian. Mengisolasi trisep."
   },
   "0150": {
-    "name": "Lateral pulldown batang kabel"
+    "name": "Lateral pulldown batang kabel",
+    "description": "Lat pulldown pada mesin kabel dengan batang lurus. Membangun lat."
   },
   "0151": {
-    "name": "Bench press kabel"
+    "name": "Bench press kabel",
+    "description": "Press kabel dari bangku. Melatih dada, bahu, dan trisep."
   },
   "0152": {
-    "name": "Concentration extension kabel (di lutut)"
+    "name": "Concentration extension kabel (di lutut)",
+    "description": "Ekstensi trisep kabel sambil berlutut, yang menjaga badan tetap stabil dan mengisolasi trisep."
   },
   "0153": {
-    "name": "Lateral pulldown silang kabel"
+    "name": "Lateral pulldown silang kabel",
+    "description": "Pulldown kabel dengan lengan bersilang. Melatih lat."
   },
   "0154": {
-    "name": "Reverse fly silang kabel"
+    "name": "Reverse fly silang kabel",
+    "description": "Reverse fly menggunakan kabel yang disilangkan. Menargetkan bahu belakang dan punggung atas."
   },
   "0155": {
-    "name": "Variasi cross-over kabel"
+    "name": "Variasi cross-over kabel",
+    "description": "Variasi cable crossover untuk dada."
   },
   "0157": {
-    "name": "Deadlift kabel"
+    "name": "Deadlift kabel",
+    "description": "Deadlift menggunakan tumpukan beban kabel. Melatih bokong, hamstring, dan punggung bawah."
   },
   "0158": {
-    "name": "Decline fly kabel"
+    "name": "Decline fly kabel",
+    "description": "Decline cable fly untuk dada bagian bawah."
   },
   "0159": {
-    "name": "Wide-grip row decline duduk dengan kabel"
+    "name": "Wide-grip row decline duduk dengan kabel",
+    "description": "Row kabel genggaman lebar sambil duduk pada posisi decline. Menargetkan punggung atas."
   },
   "0160": {
-    "name": "Wide-grip row duduk di lantai dengan kabel"
+    "name": "Wide-grip row duduk di lantai dengan kabel",
+    "description": "Row kabel genggaman lebar sambil duduk di lantai. Menargetkan punggung atas."
   },
   "0161": {
-    "name": "Forward raise kabel"
+    "name": "Forward raise kabel",
+    "description": "Angkatan kabel ke depan. Melatih bahu depan."
   },
   "0162": {
-    "name": "Front raise kabel"
+    "name": "Front raise kabel",
+    "description": "Front raise kabel. Melatih bahu depan."
   },
   "0163": {
-    "name": "Front seated row kabel"
+    "name": "Front seated row kabel",
+    "description": "Seated row menghadap tumpukan beban kabel. Membangun punggung tengah dan lat dengan ketegangan yang halus dan konstan."
   },
   "0164": {
-    "name": "Front shoulder raise kabel"
+    "name": "Front shoulder raise kabel",
+    "description": "Front raise kabel untuk bahu."
   },
   "0165": {
-    "name": "Hammer curl kabel (dengan tali)"
+    "name": "Hammer curl kabel (dengan tali)",
+    "description": "Hammer curl dengan tali. Melatih bisep dan brakialis."
   },
   "0166": {
-    "name": "Hammer curl kabel"
+    "name": "Hammer curl kabel",
+    "description": "Curl genggaman hammer menggunakan kabel rendah. Genggaman netral melatih bisep dan otot lengan bawah sekaligus."
   },
   "0167": {
-    "name": "High row kabel (berlutut)"
+    "name": "High row kabel (berlutut)",
+    "description": "High row kabel sambil berlutut. Menargetkan punggung atas dan bahu belakang."
   },
   "0168": {
-    "name": "Adduksi pinggul kabel"
+    "name": "Adduksi pinggul kabel",
+    "description": "Adduksi pinggul kabel, membawa kaki melintasi badan. Melatih paha bagian dalam."
   },
   "0169": {
-    "name": "Incline bench press kabel"
+    "name": "Incline bench press kabel",
+    "description": "Incline press kabel. Menekankan dada bagian atas."
   },
   "0170": {
-    "name": "Incline fly kabel (di bola stabilitas)"
+    "name": "Incline fly kabel (di bola stabilitas)",
+    "description": "Incline fly kabel yang dilakukan di atas bola stabilitas. Melatih dada dan kestabilan inti."
   },
   "0171": {
-    "name": "Incline fly kabel"
+    "name": "Incline fly kabel",
+    "description": "Incline fly kabel. Menargetkan dada bagian atas."
   },
   "0172": {
-    "name": "Incline pushdown kabel"
+    "name": "Incline pushdown kabel",
+    "description": "Incline pushdown kabel dengan lengan lurus. Menargetkan lat."
   },
   "0173": {
-    "name": "Ekstensi trisep incline dengan kabel"
+    "name": "Ekstensi trisep incline dengan kabel",
+    "description": "Ekstensi trisep di atas kepala dari katrol rendah dengan batang lurus. Mengisolasi trisep, terutama kepala panjang, lewat regangan dalam di belakang kepala."
   },
   "0174": {
-    "name": "Judo flip kabel"
+    "name": "Judo flip kabel",
+    "description": "Gerakan rotasi kabel di mana Anda menyapukan pegangan melintasi badan dan naik melewati bahu. Membangun tenaga putar serta melatih inti dan oblik."
   },
   "0175": {
-    "name": "Crunch berlutut kabel"
+    "name": "Crunch berlutut kabel",
+    "description": "Crunch kabel sambil berlutut dengan tali di belakang kepala. Meng-crunch ke bawah melawan katrol membebani perut dengan ketegangan yang stabil."
   },
   "0176": {
-    "name": "Ekstensi trisep berlutut dengan kabel"
+    "name": "Ekstensi trisep berlutut dengan kabel",
+    "description": "Ekstensi trisep kabel sambil berlutut dengan tali. Siku tetap di tempat sementara lengan bawah meluruskan, sehingga kerja tetap pada trisep."
   },
   "0177": {
-    "name": "Lateral pulldown kabel (dengan tali)"
+    "name": "Lateral pulldown kabel (dengan tali)",
+    "description": "Pulldown tali dari katrol tinggi yang menyapukan tangan ke samping badan. Melatih lat dan otot di antara tulang belikat."
   },
   "0178": {
-    "name": "Lateral raise kabel"
+    "name": "Lateral raise kabel",
+    "description": "Lateral raise kabel berdiri: lengan terangkat ke samping melawan ketegangan kabel yang konstan. Menargetkan bahu samping untuk bahu yang lebih lebar."
   },
   "0179": {
-    "name": "Low fly kabel"
+    "name": "Low fly kabel",
+    "description": "Cable fly dari katrol rendah, menyapukan lengan ke atas dan saling bertemu di depan Anda. Menekankan dada bagian atas dengan ketegangan konstan."
   },
   "0180": {
-    "name": "Low seated row kabel"
+    "name": "Low seated row kabel",
+    "description": "Seated row kabel dari katrol rendah. Anda menarik pegangan ke badan dan menjepit tulang belikat, membangun punggung tengah."
   },
   "0181": {
-    "name": "Curl genggaman sempit berbaring dengan kabel"
+    "name": "Curl genggaman sempit berbaring dengan kabel",
+    "description": "Curl yang dilakukan sambil berbaring di lantai menghadap kabel rendah, dengan kedua tangan berdekatan. Posisi berbaring menjaga ketegangan pada bisep di sepanjang jangkauan gerak."
   },
   "0182": {
-    "name": "Curl genggaman sempit berbaring dengan kabel"
+    "name": "Curl genggaman sempit berbaring dengan kabel",
+    "description": "Curl bisep sambil berbaring di bangku dengan genggaman sempit pada batang katrol rendah. Berbaring menjaga ketegangan pada bisep sepanjang curl."
   },
   "0183": {
-    "name": "Curl berbaring dengan kabel"
+    "name": "Curl berbaring dengan kabel",
+    "description": "Curl bisep sambil berbaring telentang dengan kabel rendah. Posisi ini menjaga badan tetap stabil dan lengan terisolasi."
   },
   "0184": {
-    "name": "Pullover ekstensi berbaring dengan kabel (dengan tali)"
+    "name": "Pullover ekstensi berbaring dengan kabel (dengan tali)",
+    "description": "Berbaring di bangku, Anda membawa tali ke atas kepala dan kembali dalam lengkungan dengan lengan lurus. Meregangkan dan melatih lat serta dada."
   },
   "0185": {
-    "name": "Fly berbaring dengan kabel"
+    "name": "Fly berbaring dengan kabel",
+    "description": "Cable fly yang dilakukan berbaring di bangku datar. Lengan terbuka dalam lengkungan lebar lalu menutup lagi, melatih dada lewat regangan dalam."
   },
   "0186": {
-    "name": "Ekstensi trisep berbaring dengan kabel v. 2"
+    "name": "Ekstensi trisep berbaring dengan kabel v. 2",
+    "description": "Ekstensi trisep kabel berbaring dengan tali. Anda menurunkan tali ke arah dahi lalu meluruskan lagi, mengisolasi trisep."
   },
   "0187": {
-    "name": "Ekstensi trisep berbaring dengan kabel"
+    "name": "Ekstensi trisep berbaring dengan kabel",
+    "description": "Ekstensi trisep berbaring menggunakan kabel, yang menjaga ketegangan konstan pada bagian belakang lengan. Bagus untuk membangun ukuran dan kekuatan trisep."
   },
   "0188": {
-    "name": "Middle fly kabel"
+    "name": "Middle fly kabel",
+    "description": "Cable fly berdiri setinggi dada. Anda mempertemukan pegangan di depan untuk meremas dada."
   },
   "0189": {
-    "name": "Bent over row satu lengan kabel"
+    "name": "Bent over row satu lengan kabel",
+    "description": "Row kabel satu lengan dari posisi membungkuk. Melatih punggung satu sisi bergantian dan menunjukkan ketidakseimbangan kekuatan."
   },
   "0190": {
-    "name": "Curl satu lengan kabel"
+    "name": "Curl satu lengan kabel",
+    "description": "Curl kabel berdiri satu lengan. Kabel menjaga bisep tetap tegang dari bawah sampai atas."
   },
   "0191": {
-    "name": "Lateral bent-over satu lengan kabel"
+    "name": "Lateral bent-over satu lengan kabel",
+    "description": "Angkatan kabel satu lengan sambil membungkuk, menggerakkan lengan ke samping. Melatih punggung atas dan bahu belakang dengan sapuan terkendali."
   },
   "0192": {
-    "name": "Lateral raise satu lengan kabel"
+    "name": "Lateral raise satu lengan kabel",
+    "description": "Lateral raise kabel satu lengan. Anda mengangkat lengan ke samping sampai sejajar, menargetkan bahu samping."
   },
   "0193": {
-    "name": "High row punggung lurus satu lengan kabel (berlutut)"
+    "name": "High row punggung lurus satu lengan kabel (berlutut)",
+    "description": "Row kabel satu lengan sambil berlutut pada katrol yang lebih tinggi, menarik lurus ke belakang ke arah dada. Menargetkan punggung atas, satu sisi bergantian."
   },
   "0194": {
-    "name": "Ekstensi trisep di atas kepala kabel (dengan tali)"
+    "name": "Ekstensi trisep di atas kepala kabel (dengan tali)",
+    "description": "Ekstensi trisep di atas kepala dengan tali pada katrol tinggi. Meluruskan lengan melawan kabel membebani trisep pada jangkauan yang panjang."
   },
   "0195": {
-    "name": "Preacher curl kabel"
+    "name": "Preacher curl kabel",
+    "description": "Curl kabel dengan lengan atas bertumpu pada bantalan preacher. Bantalan mencegah ayunan sehingga bisep yang bekerja."
   },
   "0196": {
-    "name": "Pull through kabel (dengan tali)"
+    "name": "Pull through kabel (dengan tali)",
+    "description": "Hip hinge membelakangi katrol rendah dengan tali di antara kedua kaki. Anda mendorong pinggul ke depan untuk menguatkan bokong dan hamstring."
   },
   "0197": {
-    "name": "Pulldown kabel (pro lat bar)"
+    "name": "Pulldown kabel (pro lat bar)",
+    "description": "Pulldown sambil duduk menggunakan pro lat bar. Anda menarik batang ke dada bagian atas untuk membangun lat dan punggung atas."
   },
   "0198": {
-    "name": "Pulldown kabel"
+    "name": "Pulldown kabel",
+    "description": "Pulldown kabel duduk yang klasik dengan batang lebar. Anda menarik ke dada untuk melatih lat dan otot di sekitar tulang belikat."
   },
   "0199": {
-    "name": "Pushdown kabel (lengan lurus) v. 2"
+    "name": "Pushdown kabel (lengan lurus) v. 2",
+    "description": "Pushdown lengan lurus dari katrol tinggi, menggerakkan batang dari atas kepala ke paha. Mengisolasi lat tanpa menekuk siku."
   },
   "0200": {
-    "name": "Pushdown kabel (dengan tali)"
+    "name": "Pushdown kabel (dengan tali)",
+    "description": "Triceps pushdown dengan tali. Memisahkan tali di bawah memberi remasan yang kuat pada trisep."
   },
   "0201": {
-    "name": "Pushdown kabel"
+    "name": "Pushdown kabel",
+    "description": "Triceps pushdown klasik pada katrol tinggi dengan batang lurus. Siku tetap di sisi badan sementara lengan bawah mendorong ke bawah."
   },
   "0202": {
-    "name": "Rear delt row kabel (dengan stirrup)"
+    "name": "Rear delt row kabel (dengan stirrup)",
+    "description": "Row kabel satu lengan dengan pegangan stirrup, diarahkan ke bahu belakang. Anda menarik ke belakang dan menjepit tulang belikat, lalu berganti sisi."
   },
   "0203": {
-    "name": "Rear delt row kabel (dengan tali)"
+    "name": "Rear delt row kabel (dengan tali)",
+    "description": "Bent-over row kabel dengan tali, menarik ke arah wajah dan dada. Membangun bahu belakang dan punggung atas."
   },
   "0204": {
-    "name": "Rear drive kabel"
+    "name": "Rear drive kabel",
+    "description": "Gerakan kabel di mana Anda mendorong pegangan ke belakang dengan lengan lurus. Melatih trisep dan bahu belakang."
   },
   "0205": {
-    "name": "Rear pulldown kabel"
+    "name": "Rear pulldown kabel",
+    "description": "Pulldown ke dada dari katrol tinggi, dengan sedikit condong ke belakang. Melatih lat dan punggung atas."
   },
   "0206": {
-    "name": "Reverse curl kabel"
+    "name": "Reverse curl kabel",
+    "description": "Reverse curl dengan batang pada katrol rendah menggunakan genggaman dari atas. Melatih lengan bawah dan bisep di bawah ketegangan yang stabil."
   },
   "0207": {
-    "name": "Pushdown genggaman terbalik kabel"
+    "name": "Pushdown genggaman terbalik kabel",
+    "description": "Pushdown dengan genggaman dari bawah pada katrol tinggi. Mengubah genggaman memindahkan lebih banyak beban ke kepala medial trisep."
   },
   "0208": {
-    "name": "High row duduk punggung lurus genggaman terbalik dengan kabel"
+    "name": "High row duduk punggung lurus genggaman terbalik dengan kabel",
+    "description": "Seated row dari katrol tinggi dengan genggaman dari bawah. Tarik ke badan dan jepit punggung, sambil menjaga punggung tetap lurus."
   },
   "0209": {
-    "name": "Reverse preacher curl kabel"
+    "name": "Reverse preacher curl kabel",
+    "description": "Preacher curl pada kabel dengan genggaman dari atas. Menargetkan brakialis dan lengan bawah sementara bantalan menjaga gerakan tetap ketat."
   },
   "0210": {
-    "name": "Reverse wrist curl kabel"
+    "name": "Reverse wrist curl kabel",
+    "description": "Wrist curl kabel sambil duduk dengan genggaman dari atas, dengan pergelangan tangan menggantung melewati paha. Menguatkan bagian atas lengan bawah."
   },
   "0211": {
-    "name": "Russian twist kabel (di bola stabilitas)"
+    "name": "Russian twist kabel (di bola stabilitas)",
+    "description": "Duduk di atas bola stabilitas, Anda memutar pegangan kabel dari pinggul ke pinggul. Melatih perut dan oblik serta menantang keseimbangan."
   },
   "0212": {
-    "name": "Crunch duduk kabel"
+    "name": "Crunch duduk kabel",
+    "description": "Crunch kabel duduk dengan pegangan di belakang kepala. Anda menggulung badan ke depan melawan tarikan untuk melatih perut."
   },
   "0213": {
-    "name": "High row duduk kabel (V-bar)"
+    "name": "High row duduk kabel (V-bar)",
+    "description": "Seated row kabel dari posisi tinggi menggunakan V-bar. Anda menarik ke arah badan untuk melatih lat dan punggung tengah."
   },
   "0214": {
-    "name": "Row bergantian satu lengan duduk dengan kabel"
+    "name": "Row bergantian satu lengan duduk dengan kabel",
+    "description": "Seated row kabel yang bergantian antar lengan. Melatih punggung satu sisi bergantian dengan remasan penuh di setiap repetisi."
   },
   "0241": {
     "name": "Triceps pushdown kabel (V-bar)",

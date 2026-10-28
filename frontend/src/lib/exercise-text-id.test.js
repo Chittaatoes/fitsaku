@@ -24,10 +24,19 @@ describe('Indonesian exercise texts', () => {
     }
   })
   it('is not the English text, and keeps the same number of steps everywhere', () => {
-    for (const id of Object.keys(idDesc)) {
-      expect(idDesc[id]).not.toBe(enDesc[id])
-      expect(idInstr[id].length).toBe(enInstr[id].length)
-      expect(idInstr[id].every(s => typeof s === 'string' && s.trim())).toBe(true)
+    for (const id of Object.keys(idDesc)) expect(idDesc[id], id).not.toBe(enDesc[id])
+    // steps are translated for fewer exercises than names and descriptions are (done in stages): where there are some, they line up
+    for (const id of Object.keys(idInstr)) {
+      expect(idInstr[id].length, id).toBe(enInstr[id].length)
+      expect(idInstr[id].every(s => typeof s === 'string' && s.trim()), id).toBe(true)
+    }
+    // no stray control characters or edge whitespace in any translated text
+    const control = new RegExp('[\u0000-\u001f]')
+    for (const pack of [idNames, idDesc]) {
+      for (const [id, v] of Object.entries(pack)) {
+        expect(v, id).toBe(v.trim())
+        expect(control.test(v), id).toBe(false)
+      }
     }
   })
 })
