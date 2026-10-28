@@ -24,7 +24,12 @@ const pages = () => [...document.querySelectorAll('#app > .page')]
 const under = () => document.querySelector('#app > .page.under')
 const send = detail => act(() => { window.dispatchEvent(new CustomEvent(BACK_PREVIEW_EVENT, { detail })) })
 // Screens load as their own chunks (lib/lazy-view.js): let the one being shown arrive before looking at it.
-const settle = () => act(async () => { await new Promise(r => setTimeout(r, 60)) })
+const settle = async () => {
+  for (let i = 0; i < 80; i++) {
+    await act(async () => { await new Promise(r => setTimeout(r, 25)) })
+    if ([...document.querySelectorAll('#app > .page:not(.under) .page-in')].every(p => p.childElementCount > 0)) return
+  }
+}
 const go = async hash => { await act(async () => { window.location.hash = hash; window.dispatchEvent(new HashChangeEvent('hashchange')); window.dispatchEvent(new PopStateEvent('popstate')) }); await settle() }
 const scrolledTo = async y => {
   Object.defineProperty(window, 'scrollY', { configurable: true, value: y })

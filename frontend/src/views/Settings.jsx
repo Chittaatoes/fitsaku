@@ -17,6 +17,9 @@ import { figureOf, BUILTIN_MEDIA } from '../lib/exercises.js'
 
 // Where the source of this build is offered (AGPL §13). Set VITE_SOURCE_URL to the fork's address.
 const SOURCE_URL = import.meta.env?.VITE_SOURCE_URL || 'https://github.com/DuarteSantos8/openGym'
+// Languages whose exercise texts exist for only some exercises (catalogue/i18n/<lang>.json, scripts/catalogue/translate.mjs):
+// the rest stay in English, so the note under the language keeps saying so.
+const PARTIAL_INSTR_LANGS = ['id']
 import { unlock, chime, sfx, setLoudness, playOnSilentSupported, vibrateSupported, appleTouchDevice } from '../lib/sound.js'
 import { REST_SOUND_IDS, restSoundOf } from '../lib/rest-sounds.js'
 import { scheduleModeOf, chooseFixedWeek, chooseRotation } from '../lib/rotation.js'
@@ -730,7 +733,7 @@ export default function Settings({ page = null, find = null, via = null, entryKe
           value={lang} onChange={v => update(s => { s.lang = v; s.langAuto = false })}
           options={Object.entries(LANGS).map(([k, name]) => ({
             value: k, label: name,
-            subtitle: INSTR_LANGS.includes(k) ? null : t("Exercise instructions aren't translated into this language yet, so they stay in English."),
+            subtitle: INSTR_LANGS.includes(k) && !PARTIAL_INSTR_LANGS.includes(k) ? null : t("Exercise instructions aren't translated into this language yet, so they stay in English."),
           }))}
         />
         {ctx.nameLang && <>
