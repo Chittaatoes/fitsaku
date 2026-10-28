@@ -2546,3 +2546,12 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 @keyframes fin-confetti2{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(90px,-40px) rotate(-240deg)}}
 @media (prefers-reduced-motion:reduce){.fin-hero::before,.fin-hero::after{animation:none}}
 
+
+/* --- the strip under a sheet or dialog in the iOS home-screen app ---
+   With the page pinned behind a popup, iOS leaves the strip at the very bottom of the screen (the home-indicator
+   area) outside the popup's layer, and the page background shows there as a flat band. The page background itself
+   follows the popup while one is open, so the sheet reads as running to the edge of the screen and a dialog sits on
+   an evenly dimmed page. Nothing changes when no popup is open. */
+html:has(#modal-root .sheet){background:var(--bg-el)}
+html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
+:root[data-theme="light"]:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 78%,#000)}
