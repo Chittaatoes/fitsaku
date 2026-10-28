@@ -48,6 +48,8 @@ import Train from './views/Train.jsx'
 import Workout from './views/Workout.jsx'
 import AmbientController from './components/AmbientController.jsx'
 import MediaFilters from './components/MediaFilters.jsx'
+import ViewportDebug from './components/ViewportDebug.jsx'
+import { installViewportGap } from './lib/viewport-gap.js'
 
 // Screens other than the four tabs' first pages load as their own chunks and are fetched in the background once idle
 // (lib/lazy-view.js), so the first download is small and a tab switch is still instant.
@@ -154,6 +156,8 @@ function Shell() {
   const pathRef = useRef(null)
   // iOS leaves the page displaced after the keyboard goes away (see lib/viewport-guard.js).
   useEffect(() => installViewportGuard(), [])
+  // The strip under popups in the iOS home-screen app: measured and published as --vgap (lib/viewport-gap.js).
+  useEffect(() => installViewportGap(), [])
   // Click-drag a horizontal chip strip to scroll it sideways (lib/hchips.js) — on a desktop
   // browser there's otherwise no way to reach the filters past the edge.
   useEffect(() => installChipDrag(), [])
@@ -301,6 +305,7 @@ function Shell() {
           lands it simply stays: same key, same parent, so React keeps it instead of mounting
           the route again. */}
       <MediaFilters />
+      <ViewportDebug />
       <div id="app">
         <Page key={loc.pathname} loc={loc} render={view} />
         {showPreview && <Page key={preview} loc={previewLoc(preview)} render={view} under scrollY={scrollPositions.get(preview) || 0} />}

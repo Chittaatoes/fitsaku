@@ -16,7 +16,9 @@ describe('the strip under a popup', () => {
 })
 
 describe('the popup layer', () => {
-  it('is at least as tall as the whole screen (100lvh), so no strip is left under a sheet', () => {
-    expect(css).toMatch(/#modal-root\{position:fixed;inset:0;height:100%;height:max\(100%,100vh\);height:max\(100%,100vh,100lvh\)/)
+  it('extends below the layout viewport by the measured gap (--vgap), and the sheet pads for it', () => {
+    expect(css).toMatch(/#modal-root\{position:fixed;inset:0;bottom:calc\(-1 \* var\(--vgap,0px\)\)/)
+    expect(css).toMatch(/padding:8px 18px calc\(20px \+ var\(--sab\) \+ var\(--vgap,0px\)\)/)
+    expect(css).toMatch(/\.center\{[^}]*margin-top:calc\(var\(--vgap,0px\) \/ -2\)/)
   })
 })

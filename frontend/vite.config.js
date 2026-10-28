@@ -120,7 +120,9 @@ const pkgVersion = JSON.parse(readFileSync(new URL('./package.json', import.meta
 const appVersion = process.env.APP_BUILD ? `${pkgVersion}+${process.env.APP_BUILD}` : pkgVersion
 
 export default defineConfig({
-  define: { __APP_VERSION__: JSON.stringify(appVersion) },
+  // __BUILD_ID__: when this bundle was built (UTC, to the minute), shown in Settings > About and the viewport readout, so a
+  // phone can say which deploy it is actually running.
+  define: { __APP_VERSION__: JSON.stringify(appVersion), __BUILD_ID__: JSON.stringify(new Date().toISOString().slice(0, 16).replace(/[-:T]/g, '')) },
   plugins: [react(), umami, flavor, swStamp, catalogueMedia, bundleMedia],
   base: './',
   server: {

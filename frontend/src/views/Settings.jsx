@@ -14,6 +14,7 @@ import { BAR_TYPES, ownBarDefault } from '../lib/bar.js'
 import { dumbbellsOf } from '../lib/dumbbells.js'
 import { effortOf } from '../lib/history.js'
 import { figureOf, BUILTIN_MEDIA } from '../lib/exercises.js'
+import { toggleDebug } from '../components/ViewportDebug.jsx'
 
 // Where the source of this build is offered (AGPL §13). Set VITE_SOURCE_URL to the fork's address.
 const SOURCE_URL = import.meta.env?.VITE_SOURCE_URL || 'https://github.com/DuarteSantos8/openGym'
@@ -446,6 +447,13 @@ export default function Settings({ page = null, find = null, via = null, entryKe
     watch: () => '',
   }
 
+  // Five quick taps on the version line switch the on-screen viewport readout on or off (components/ViewportDebug.jsx).
+  const versionTaps = useRef({ n: 0, at: 0 })
+  const tapVersion = () => {
+    const k = versionTaps.current, now = Date.now()
+    k.n = now - k.at < 1500 ? k.n + 1 : 1; k.at = now
+    if (k.n >= 5) { k.n = 0; toast(toggleDebug() ? 'Viewport readout on' : 'Viewport readout off') }
+  }
   const open = id => {
     if (id === 'coach') { nav('/coach/setup'); return }
     nav('/settings/' + id)
@@ -913,8 +921,8 @@ export default function Settings({ page = null, find = null, via = null, entryKe
       {/* The version, where the support template tells people to look for it. On the phone
           build there is no address bar and no about box, so without this there is no way to tell
           which build you are running, or whether an update actually installed. */}
-      <div className="dim small sp-version">
-        FitSaku v{__APP_VERSION__} · {t('free & open source (AGPL v3)')}<br />
+      <div className="dim small sp-version" onClick={tapVersion}>
+        FitSaku v{__APP_VERSION__}{typeof __BUILD_ID__ !== 'undefined' ? ' · ' + __BUILD_ID__ : ''} · {t('free & open source (AGPL v3)')}<br />
         {/* AGPL §13: whoever uses the modified program over a network is offered its source. The
             fork's own address is VITE_SOURCE_URL (set it in the deployment); until it is, the
             upstream is the only address there is. */}
@@ -1061,7 +1069,7 @@ function SettingsRoot({ ctx, preview, open, user, sync, home, go, entryKey }) {
             value={preview[id]?.() || null} accessory="chevron" onClick={() => open(id)} className="sp-root-row" />)}
         </Section>
       ))}
-      <div className="dim small sp-version">FitSaku v{__APP_VERSION__}</div>
+      <div className="dim small sp-version">FitSaku v{__APP_VERSION__}{typeof __BUILD_ID__ !== 'undefined' ? ' · ' + __BUILD_ID__ : ''}</div>
     </>}
   </div>
 }
