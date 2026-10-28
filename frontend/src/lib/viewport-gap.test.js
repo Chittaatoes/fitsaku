@@ -1,13 +1,13 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest'
-import { applyViewportGap, measureGap } from './viewport-gap.js'
+import { applyViewportGap, measureGap, isAppleStandalone } from './viewport-gap.js'
 
 const IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'
 const fakeWin = (o = {}) => ({
   navigator: { userAgent: IPHONE, maxTouchPoints: 5, standalone: true, ...(o.navigator || {}) },
   innerWidth: 393, innerHeight: 793, screen: { width: 393, height: 852 },
   matchMedia: () => ({ matches: false }),
-  document: { documentElement: { style: { _v: {}, getPropertyValue(k) { return this._v[k] || '' }, setProperty(k, v) { this._v[k] = v } } } },
+  document: { documentElement: { attrs: {}, setAttribute(k, v) { this.attrs[k] = v }, style: { _v: {}, getPropertyValue(k) { return this._v[k] || '' }, setProperty(k, v) { this._v[k] = v } } } },
   ...o,
 })
 
@@ -29,5 +29,18 @@ describe('the gap under the layout viewport in the iOS home-screen app', () => {
     w.innerHeight = 852
     applyViewportGap(w)
     expect(w.document.documentElement.style.getPropertyValue('--vgap')).toBe('0px')
+  })
+})
+
+describe('isAppleStandalone', () => {
+  it('is true for the home-screen app and false for a tab or another device', () => {
+    expect(isAppleStandalone(fakeWin())).toBe(true)
+    expect(isAppleStandalone(fakeWin({ navigator: { standalone: false } }))).toBe(false)
+    expect(isAppleStandalone(fakeWin({ navigator: { userAgent: 'Mozilla/5.0 (Windows NT 10.0) Chrome/120', standalone: undefined } }))).toBe(false)
+  })
+  it('marks the document so the sheet can be drawn solid', () => {
+    const w = fakeWin()
+    applyViewportGap(w)
+    expect(w.document.documentElement.attrs['data-ios-standalone']).toBe('')
   })
 })

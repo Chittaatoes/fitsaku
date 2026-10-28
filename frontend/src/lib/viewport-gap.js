@@ -9,6 +9,15 @@
 const MIN_GAP = 8
 const MAX_GAP = 100
 
+/** The iOS home-screen app (an iPhone or iPad running the page standalone). */
+export function isAppleStandalone(win = window) {
+  try {
+    const nav = win.navigator
+    const apple = /iPhone|iPad|iPod/.test(nav.userAgent || '') || (/Macintosh/.test(nav.userAgent || '') && (nav.maxTouchPoints || 0) > 1)
+    return apple && (nav.standalone === true || !!win.matchMedia?.('(display-mode: standalone)').matches)
+  } catch { return false }
+}
+
 export function measureGap(win = window) {
   try {
     const nav = win.navigator
@@ -30,6 +39,8 @@ export function measureGap(win = window) {
 export function applyViewportGap(win = window) {
   const gap = measureGap(win)
   const root = win.document.documentElement
+  // index.css draws bottom sheets solid there, so the fill under one (the strip below the layout viewport) matches it
+  if (isAppleStandalone(win)) root.setAttribute('data-ios-standalone', '')
   const cur = root.style.getPropertyValue('--vgap')
   const next = gap + 'px'
   if (cur !== next) root.style.setProperty('--vgap', next)

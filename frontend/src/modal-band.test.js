@@ -20,6 +20,9 @@ describe('the popup layer', () => {
     expect(css).toMatch(/0 120px 0 0 var\(--bg-el\)/)
     expect(css).toMatch(/0 120px 0 0 var\(--bg\)/)
   })
+  it('draws a sheet solid in the iOS home-screen app, so the fill below it is the same colour', () => {
+    expect(css).toMatch(/:root\[data-ios-standalone\] \.sheet\{background:var\(--bg-el\)/)
+  })
   it('keeps the sheet and its content inside the layout viewport; only the backdrop reaches below by --vgap', () => {
     expect(css).toMatch(/#modal-root\{position:fixed;inset:0;z-index:100/)
     expect(css).toMatch(/\.mback\{[^}]*bottom:calc\(-1 \* var\(--vgap,0px\)\)/)
