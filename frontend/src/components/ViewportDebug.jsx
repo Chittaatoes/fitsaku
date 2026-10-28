@@ -35,7 +35,7 @@ function read() {
   m.standalone = String(w.navigator.standalone === true || !!w.matchMedia?.('(display-mode: standalone)').matches)
   m.modalRoot = rect('#modal-root.open')
   m.sheet = rect('#modal-root .sheet')
-  m.body = d.body.style.position === 'fixed' ? 'pinned' : 'free'
+  m.body = d.body.style.position === 'fixed' ? 'pinned' : d.body.style.overflow === 'hidden' ? 'locked (overflow)' : 'free'
   return m
 }
 

@@ -15,6 +15,7 @@ const mocks = vi.hoisted(() => {
   }
   return {
     state,
+    apple: false,
     subscribe(listener) {
       listeners.add(listener)
       return () => listeners.delete(listener)
@@ -36,6 +37,8 @@ vi.mock('../store/useUI.js', async () => {
   useUI.getState = () => mocks.state
   return { useUI }
 })
+
+vi.mock('../lib/viewport-gap.js', () => ({ isAppleStandalone: () => mocks.apple }))
 
 let dom
 let root
@@ -515,5 +518,42 @@ describe('the restore window under StrictMode', () => {
     vi.advanceTimersByTime(400)
     expect(onClose).toHaveBeenCalledTimes(1)
     vi.useRealTimers()
+  })
+})
+
+// EXPERIMENT: in the iOS home-screen app the page is locked with overflow:hidden instead of being pinned.
+describe('the iOS home-screen app locks the page without pinning it', () => {
+  afterEach(() => { mocks.apple = false })
+
+  it('sets overflow:hidden on html and body, leaves position alone, and puts both back on close', async () => {
+    mocks.apple = true
+    dom.document.documentElement.style.overflow = 'auto'
+    await setSheets([sheet('a')])
+    expect(document.body.style.position).toBe('')
+    expect(document.body.style.overflow).toBe('hidden')
+    expect(dom.document.documentElement.style.overflow).toBe('hidden')
+    await setSheets([])
+    expect(document.body.style.overflow).toBe('')
+    expect(dom.document.documentElement.style.overflow).toBe('auto')
+    expect(dom.scrollTo).not.toHaveBeenCalled()
+  })
+
+  it('still releases whoever waits on a close', async () => {
+    vi.useFakeTimers()
+    mocks.apple = true
+    await setSheets([sheet('a')])
+    await setSheets([])
+    const fn = vi.fn()
+    afterScrollRestore(fn)
+    expect(fn).not.toHaveBeenCalled()
+    await act(async () => { vi.advanceTimersByTime(400) })
+    expect(fn).toHaveBeenCalledTimes(1)
+    vi.useRealTimers()
+  })
+
+  it('every other platform still pins', async () => {
+    await setSheets([sheet('a')])
+    expect(document.body.style.position).toBe('fixed')
+    expect(document.body.style.overflow).toBe('')
   })
 })

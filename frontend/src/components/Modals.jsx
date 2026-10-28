@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useUI } from '../store/useUI.js'
 import { keyboardOpen } from '../lib/viewport-guard.js'
+import { isAppleStandalone } from '../lib/viewport-gap.js'
 
 // Putting the page back after a sheet closes takes up to three goes (see the un-pin below): now,
 // next frame, and once the keyboard's dismiss animation is over. Anything else that wants to
@@ -221,6 +222,23 @@ export default function Modals() {
     // sheet owns the screen now; a field inside the sheet (the picker search) is left alone.
     const a = document.activeElement
     if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable) && !a.closest?.('#modal-root')) a.blur?.()
+    // EXPERIMENT (iOS home-screen app only): readings from a device showed the layout viewport shrinking from 852 to 793
+    // pt exactly while the body is pinned below, which cut every sheet short of the screen's bottom. Here the page is
+    // locked with overflow:hidden instead and never pinned, to see whether the viewport then stays whole. Every other
+    // platform takes the pin as before.
+    if (isAppleStandalone()) {
+      const h = document.documentElement.style, bs = document.body.style
+      const was = { h: h.overflow, b: bs.overflow }
+      h.overflow = bs.overflow = 'hidden'
+      return () => {
+        h.overflow = was.h; bs.overflow = was.b
+        // Nothing was moved, so there is no scroll to put back; the bookkeeping that releases anything waiting
+        // on a close (afterScrollRestore) still runs, as it does after the pin.
+        const close = useUI.getState().sheets.length ? 0 : ++closes
+        if (close) restoreUntil = Date.now() + RESTORE_MS
+        window.setTimeout(() => drainScrollRestore(close), RESTORE_MS)
+      }
+    }
     const y = window.scrollY || 0
     const b = document.body.style
     b.position = 'fixed'; b.top = -y + 'px'; b.left = '0'; b.right = '0'; b.width = '100%'
