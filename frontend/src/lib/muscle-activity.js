@@ -1,5 +1,5 @@
 // Muscle activity: how much recorded training each drawable muscle has had, with older sessions
-// counting less. It feeds the Muscle Activity Map on Progress. It is a picture of what was logged,
+// counting less. The map that showed it has gone from Progress; the colour scale (activityColor) is what the muscle balance map uses. It is a picture of what was logged,
 // not a measurement of muscle size, growth or readiness (lib/recovery.js models fatigue; this does not).
 //
 // Everything is derived from the finished workouts each time (S.workouts is the only source), so

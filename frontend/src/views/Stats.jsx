@@ -14,7 +14,6 @@ import Icon from '../components/Icon.jsx'
 import BodyMap, { BodyMapLegend } from '../components/BodyMap.jsx'
 import GameCard from '../components/GameCard.jsx'
 import CaloriesCard from '../components/CaloriesCard.jsx'
-import MuscleActivityMap from '../components/MuscleActivityMap.jsx'
 import { activityColor } from '../lib/muscle-activity.js'
 import { loadOfWeeklyPlan, loadOfWorkouts, muscleBalanceWindow, rankOf, MUSCLES, MUSCLE_NAME, musclesOf } from '../lib/muscles.js'
 import { fatigueOf, strengthOf, STRENGTH_FLOOR, LB_TO_KG } from '../lib/recovery.js'
@@ -179,7 +178,7 @@ function MuscleBalance({ S }) {
   const completedMuscles = weekly && weeklyExpanded ? worked : top
   const max = worked.length ? load[worked[0]] : 0
   const sets = m => fmtNum(Math.round((load[m] || 0) * 10) / 10)
-  // The balance map and its bars wear the colour of the muscle activity map (red, stronger where more was done), shaded by
+  // The balance map and its bars wear the red of lib/muscle-activity.js activityColor (stronger where more was done), shaded by
   // each muscle's share of the hardest-worked one, which is what the five steps of the old ramp were too.
   const shade = m => (max > 0 && (load[m] || 0) > 0 ? activityColor(Math.max(8, (load[m] / max) * 100)) : '')
   const fills = Object.fromEntries(MUSCLES.map(m => [m, shade(m)]))
@@ -687,8 +686,6 @@ export default function Stats() {
 
     {(workouts.length > 0 || Object.keys(loadOfWeeklyPlan(S)).length > 0) && <MuscleBalance S={S} />}
     {S.routines.length > 0 && <WeeklyPlanVolume S={S} />}
-    {/* Where recent sets went, fading with time (the same colour as the balance map). */}
-    <MuscleActivityMap />
     {workouts.length > 0 && <div className="card row between" style={{ alignItems: 'center', gap: 12 }}>
       <div style={{ minWidth: 0 }}><h2 style={{ margin: 0 }}>{t('Structural balance')}</h2>
         <div className="muted small" style={{ marginTop: 4 }}>{t('See which lift is holding back the rest.')}</div></div>
