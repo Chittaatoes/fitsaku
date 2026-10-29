@@ -323,12 +323,13 @@ describe('the progress page and the colours of the muscle balance', () => {
     expect(host.querySelector('[data-weekly-volume-comparison]')).toBeTruthy()
   })
 
-  it('lists the latest workouts, with a way to all of them', () => {
+  it('lists the recent workouts once, not twice, with a way to all of them', () => {
     mocks.S = state({ workouts: [completed('2026-09-28', 'chest', 2), completed('2026-09-29', 'biceps', 2), completed('2026-09-30', 'chest', 3)] })
     mocks.nav = vi.fn()
     mount()
-    expect(host.textContent).toContain('Recent Workouts')
-    act(() => [...host.querySelectorAll('button')].find(b => b.textContent.includes('View All')).click())
+    const headings = [...host.querySelectorAll('h2, h4')].filter(h => /recent workouts/i.test(h.textContent))
+    expect(headings).toHaveLength(1)
+    act(() => [...host.querySelectorAll('button')].find(b => b.textContent.includes('All 3')).click())
     expect(mocks.nav).toHaveBeenCalledWith('/history')
   })
 })

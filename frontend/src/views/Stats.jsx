@@ -429,9 +429,6 @@ export default function Stats() {
     const frame = window.requestAnimationFrame(() => document.getElementById('weekly-volume')?.scrollIntoView?.({ block: 'start', behavior: 'smooth' }))
     return () => window.cancelAnimationFrame(frame)
   }, [])
-  // The latest three, newest first (by day, then the order they were stored in).
-  const recentWorkouts = useMemo(() => (S.workouts || []).map((w, i) => [w, i])
-    .sort((a, b) => (a[0].d < b[0].d ? 1 : a[0].d > b[0].d ? -1 : b[1] - a[1])).slice(0, 3).map(([w]) => w), [S.workouts])
   const [exId, setExId] = useState(null)
   const [exMetric, setExMetric] = useState('top')
   // Exercise progress over a date range (issue #511), All by default. Only the chart follows it:
@@ -675,14 +672,6 @@ export default function Stats() {
         onDay={iso => { const ws = workouts.filter(w => workoutDay(w) === iso); if (ws.length === 1) workoutDetailSheet(ws[0]); else if (ws.length) calendarSheet(iso); else dayOverrideSheet(iso) }}
       />
     </div>
-
-    {workouts.length > 0 && <div className="card">
-      <div className="row between" style={{ marginBottom: 8 }}>
-        <h2 style={{ margin: 0 }}>{t('Recent Workouts')}</h2>
-        <Button size="sm" variant="ghost" trailingIcon="chevronRight" onClick={() => nav('/history')}>{t('View All')}</Button>
-      </div>
-      <div className="list">{recentWorkouts.map(w => <WorkoutRow key={w.id || w.start} w={w} onClick={() => workoutDetailSheet(w)} />)}</div>
-    </div>}
 
     {(workouts.length > 0 || Object.keys(loadOfWeeklyPlan(S)).length > 0) && <MuscleBalance S={S} />}
     {S.routines.length > 0 && <WeeklyPlanVolume S={S} />}
