@@ -328,7 +328,7 @@ describe('Plan — Schedule extras', () => {
   it('links to the weekly muscle volume in Stats', () => {
     mount()
     click(byLabel('Weekly muscle volume') || [...host.querySelectorAll('.plan-link button')][0])
-    expect(mocks.nav).toHaveBeenCalledWith('/stats?focus=weekly-volume')
+    expect(mocks.nav).toHaveBeenCalledWith('/progress?focus=weekly-volume')
   })
 
   it('has no volume link before there is a routine (Stats has no card to show then)', () => {

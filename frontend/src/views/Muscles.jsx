@@ -12,9 +12,9 @@ export default function Muscles() {
   const [params] = useSearchParams()
   const m = params.get('m')
   const initial = m && MUSCLES.includes(m) ? m : null
-  const back = loc.state?.from === '/stats' ? '/stats' : '/library'
+  const back = loc.state?.from === '/progress' || loc.state?.from === '/stats' ? '/progress' : '/library'
   return <>
-    <div className="hdr"><button className="iconbtn" data-back={back} onClick={() => nav(back)} aria-label={back === '/stats' ? t('Stats') : t('Exercises')}><Icon name="chevronLeft" /></button>
+    <div className="hdr"><button className="iconbtn" data-back={back} onClick={() => nav(back)} aria-label={back === '/progress' ? t('Progress') : t('Exercises')}><Icon name="chevronLeft" /></button>
       <div style={{ flex: 1, marginInlineStart: 12 }}><h1>{t('Explore muscles')}</h1><div className="sub">{t('Choose a muscle to see exercises that train it.')}</div></div></div>
 
     <MuscleExplorer key={initial || ''} initial={initial} onDetail={exerciseDetailSheet} onPlan={addToRoutineSheet} />

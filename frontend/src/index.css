@@ -1696,9 +1696,15 @@ body.no-tabbar #timer.working{box-shadow:inset 0 var(--hair) 0 var(--acc),0 -10p
 .hm-fatigue .hm-c.l4{background:var(--red)}
 .hm-fatigue .hm-c.l3{background:var(--orange)}
 .hm-fatigue .hm-c.l2{background:var(--yellow)}
-/* Strength view: top band pops gold (owner tweak 2026-08-06) */
-.hm-strength .bm-m.l4{fill:var(--yellow);filter:drop-shadow(0 0 1.5px var(--yellow))}
-.hm-strength .hm-c.l4{background:var(--yellow)}
+/* Strength view: the same red as the muscle activity map, stronger where the strength is more fully kept (it was gold) */
+.hm-strength .bm-m.l1{fill:rgba(255,90,31,.34)}
+.hm-strength .bm-m.l2{fill:rgba(255,90,31,.54)}
+.hm-strength .bm-m.l3{fill:rgba(255,90,31,.74)}
+.hm-strength .bm-m.l4{fill:rgba(255,90,31,.92)}
+.hm-strength .hm-c.l1{background:rgba(255,90,31,.34)}
+.hm-strength .hm-c.l2{background:rgba(255,90,31,.54)}
+.hm-strength .hm-c.l3{background:rgba(255,90,31,.74)}
+.hm-strength .hm-c.l4{background:rgba(255,90,31,.92)}
 
 .bm-m.sel{stroke:var(--label);stroke-width:7}
 .bodymap.tappable .bm-m{cursor:pointer}
@@ -2618,3 +2624,23 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 .mp-play{background:var(--acc);color:var(--on-acc)}
 .mp-set{display:flex;flex-direction:column;gap:12px;padding:4px 12px 12px}
 .mp-auto{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:14px}
+
+/* --- Progress: the red of the muscle activity map, and the calories card (components/CaloriesCard.jsx) --- */
+:root{--act:rgb(255,90,31)}
+.cal h2{display:flex;align-items:center;gap:6px}
+.cal-hero{display:flex;align-items:baseline;gap:10px;margin:6px 0 10px}
+.cal-v{font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.cal-v span{font-size:15px;font-weight:600;margin-inline-start:5px;color:var(--label-2);letter-spacing:0}
+.cal-s{font-size:13px;color:var(--label-3);text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+.cal-list{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}
+.cal-row{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border-radius:12px;background:var(--surface-2);text-align:start;color:inherit}
+.cal-row:active{background:var(--surface-3)}
+.cal-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.cal-m{flex:none;font-size:13px;color:var(--label-3)}
+.cal-k{flex:none;color:var(--act)}
+.cal-none{margin:0 0 10px}
+.cal-sum{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.cal-sum>div{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:12px;background:var(--surface-2)}
+.cal-sum b{font-size:18px}
+.cal-sum small{font-size:12px;font-weight:600;color:var(--label-2)}
+.cal-note{margin:8px 0 0}

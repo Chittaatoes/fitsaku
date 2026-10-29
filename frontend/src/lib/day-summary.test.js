@@ -94,3 +94,22 @@ describe('doneCard', () => {
     expect(c.title).toBe('Workout complete today!')
   })
 })
+
+describe('calories on the day card', () => {
+  const withWeight = (...ws) => ({ ...S(...ws), bodyweight: [{ d: '2026-10-01', w: 80 }] })
+  it('an estimate from the real time and the own weight of the person is shown, with an approximation sign', () => {
+    const r = completedToday(withWeight(workout()), TODAY, idx)
+    expect(r.kcal).toBe(Math.round(4.5 * 80 * 0.75))                  // 45 minutes at 80 kg
+    expect(doneCard(r, { lang: 'en' }).chips).toContain('≈ 270 kcal')
+    expect(doneCard(r, { lang: 'id' }).chips).toContain('≈ 270 kkal')
+  })
+  it('none when the time or the weight is a guess', () => {
+    expect(completedToday(S(workout()), TODAY, idx).kcal).toBe(0)                                          // no weight logged
+    expect(completedToday(withWeight(workout({ start: undefined, end: undefined })), TODAY, idx).kcal).toBe(0)   // no times
+    expect(doneCard(completedToday(S(workout()), TODAY, idx), { lang: 'en' }).chips.some(c => /kcal/.test(c))).toBe(false)
+  })
+  it('adds up the workouts of the day', () => {
+    const r = completedToday(withWeight(workout(), workout({ name: 'Chest' })), TODAY, idx)
+    expect(r.kcal).toBe(2 * Math.round(4.5 * 80 * 0.75))
+  })
+})

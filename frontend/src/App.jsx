@@ -57,7 +57,6 @@ import { markIosStandalone } from './lib/ios-standalone.js'
 // (lib/lazy-view.js), so the first download is small and a tab switch is still instant.
 const CheckIn = lazyView(() => import('./views/CheckIn.jsx'))
 const Plan = lazyView(() => import('./views/Plan.jsx'))
-const Progress = lazyView(() => import('./views/Progress.jsx'))
 const RoutineEdit = lazyView(() => import('./views/RoutineEdit.jsx'))
 const Stats = lazyView(() => import('./views/Stats.jsx'))
 const History = lazyView(() => import('./views/History.jsx'))
@@ -91,6 +90,13 @@ function applyPrefs(theme, accent) {
   const meta = document.querySelector('meta[name="theme-color"]')
   if (meta) meta.content = de.dataset.theme === 'light' ? '#f2f2f7' : '#000000'
   if (MOBILE) setSystemBarsLight(de.dataset.theme === 'light')
+}
+
+// The statistics page's old address: the one progress page is /progress now, and a link to /stats (an old bookmark, a
+// home-screen shortcut) lands there, with its query ("?focus=weekly-volume").
+export function StatsRedirect() {
+  const loc = useLocation()
+  return <Navigate to={{ pathname: '/progress', search: loc.search }} replace />
 }
 
 function Shell() {
@@ -273,8 +279,9 @@ function Shell() {
       <Route path="/train" element={<Train />} />
       <Route path="/train/new" element={<CreateWorkout />} />
       <Route path="/workout" element={<Workout />} />
-      <Route path="/progress" element={<Progress />} />
-      <Route path="/stats" element={<Stats />} />
+      {/* One page for progress: the statistics. /stats, its old address, goes there (the query with it, as Plan's link has one). */}
+      <Route path="/progress" element={<Stats />} />
+      <Route path="/stats" element={<StatsRedirect />} />
       <Route path="/history" element={<History />} />
       <Route path="/library" element={<Library />} />
       <Route path="/muscles" element={<Muscles />} />

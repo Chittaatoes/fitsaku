@@ -7,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DEF, useStore } from '../store/useStore.js'
 import { setLang } from '../lib/i18n.js'
 import MuscleActivityMap from './MuscleActivityMap.jsx'
-import Progress from '../views/Progress.jsx'
+import Progress from '../views/Stats.jsx'    // the one progress page: the statistics
 
 vi.mock('react-router-dom', () => ({ useNavigate: () => () => {}, useLocation: () => ({ pathname: '/progress' }) }))
 globalThis.IS_REACT_ACT_ENVIRONMENT = true

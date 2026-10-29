@@ -15,6 +15,8 @@ vi.mock('../sheets.jsx', () => ({
   bwSheet: vi.fn(), goalSheet: vi.fn(), calendarSheet: vi.fn(), workoutDetailSheet: vi.fn(),
   exerciseHistorySheet: vi.fn(), WorkoutRow: () => React.createElement('div'), bwDeltaColor: () => '', weighInsSheet: vi.fn(),
 }))
+// The muscle activity map has a body map of its own, which would be the last one these tests read.
+vi.mock('../components/MuscleActivityMap.jsx', () => ({ default: () => null }))
 vi.mock('../components/Heatmap.jsx', () => ({ default: () => React.createElement('div') }))
 vi.mock('../components/LineChart.jsx', () => ({ default: () => React.createElement('div') }))
 vi.mock('../components/BodyMap.jsx', () => ({
@@ -287,7 +289,48 @@ describe('Stats — weekly planned vs completed volume', () => {
     const chip = comparison().querySelector('.mchip.miss')
     expect(chip.tagName).toBe('BUTTON')
     act(() => chip.click())
-    expect(mocks.nav).toHaveBeenCalledWith('/muscles?m=' + chip.dataset.muscle, { state: { from: '/stats' } })
+    expect(mocks.nav).toHaveBeenCalledWith('/muscles?m=' + chip.dataset.muscle, { state: { from: '/progress' } })
     expect(MUSCLES).toContain(chip.dataset.muscle)
+  })
+})
+
+describe('the progress page and the colours of the muscle balance', () => {
+  const alpha = c => +/,\s*([\d.]+)\)\s*$/.exec(c)[1]
+
+  it('colours the balance map in the red of the muscle activity map, stronger for the muscle with more, and leaves the untrained alone', () => {
+    mocks.S = state({ workouts: [completed('2026-09-30', 'chest', 8), completed('2026-09-30', 'biceps', 3)] })
+    mount()
+    const fills = mocks.bodyMaps.at(-1).fills
+    expect(fills.chest).toMatch(/^rgba\(255,\s*90,\s*31,/)
+    expect(fills.biceps).toMatch(/^rgba\(255,\s*90,\s*31,/)
+    expect(alpha(fills.chest)).toBeGreaterThan(alpha(fills.biceps))
+    expect(fills.quadriceps || '').toBe('')
+  })
+
+  it('draws the bars of the same muscles in that red, and the legend as the red fade', () => {
+    mocks.S = state({ workouts: [completed('2026-09-30', 'chest', 8)] })
+    mount()
+    expect(bar('chest').style.background).toMatch(/255,\s*90,\s*31/)
+    expect(host.querySelector('[data-body-map-legend]')).toBeTruthy()
+  })
+
+  it('is the statistics page: titled Progress, with the level and XP, the calories and the stats it already had', () => {
+    mocks.S = state({ xp: 575, level: 4, workouts: [completed('2026-09-30', 'chest', 8)] })
+    mount()
+    expect(host.querySelector('h1').textContent).toBe('Progress')
+    expect(host.querySelector('.game-card')).toBeTruthy()
+    expect(host.textContent).toContain('575')
+    expect(host.querySelector('[data-testid="calories-card"]')).toBeTruthy()
+    expect(host.querySelector('.tiles')).toBeTruthy()
+    expect(host.querySelector('[data-weekly-volume-comparison]')).toBeTruthy()
+  })
+
+  it('lists the latest workouts, with a way to all of them', () => {
+    mocks.S = state({ workouts: [completed('2026-09-28', 'chest', 2), completed('2026-09-29', 'biceps', 2), completed('2026-09-30', 'chest', 3)] })
+    mocks.nav = vi.fn()
+    mount()
+    expect(host.textContent).toContain('Recent Workouts')
+    act(() => [...host.querySelectorAll('button')].find(b => b.textContent.includes('View All')).click())
+    expect(mocks.nav).toHaveBeenCalledWith('/history')
   })
 })

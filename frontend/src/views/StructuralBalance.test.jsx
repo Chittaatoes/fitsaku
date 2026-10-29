@@ -161,10 +161,10 @@ describe('StructuralBalance view', () => {
     expect(host.querySelector('[data-role-id="frontSquat"] [data-needs-anchor]')).toBe(null)   // not logged either
   })
 
-  it('the back chevron navigates to /stats', () => {
+  it('the back chevron navigates to /progress', () => {
     const host = render()
     act(() => host.querySelector('.iconbtn').click())
-    expect(navSpy).toHaveBeenCalledWith('/stats')
+    expect(navSpy).toHaveBeenCalledWith('/progress')
   })
 
   it('changing a role\'s exercise via the picker saves an override and marks it custom', () => {

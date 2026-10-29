@@ -78,7 +78,9 @@ export default function BodyMap({ load = {}, thresholds, body = 'male', onMuscle
   )
 }
 
-export function BodyMapLegend() {
+export function BodyMapLegend({ red = false }) {
+  // The red scale of the muscle activity map: a fade from nothing to strong, as the map is shaded.
+  if (red) return <div className="ama-legend" aria-label={`${t('Less')} ${t('More')}`}><span>{t('Less')}</span><i /><span>{t('More')}</span></div>
   return <div className="hm-legend" aria-label={`${t('Less')} ${t('More')}`}>
     {t('Less')} <div className="hm-c l0" /><div className="hm-c l1" /><div className="hm-c l2" />
     <div className="hm-c l3" /><div className="hm-c l4" /> {t('More')}

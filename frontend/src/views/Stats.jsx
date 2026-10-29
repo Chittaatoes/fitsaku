@@ -12,6 +12,10 @@ import LineChart from '../components/LineChart.jsx'
 import Heatmap from '../components/Heatmap.jsx'
 import Icon from '../components/Icon.jsx'
 import BodyMap, { BodyMapLegend } from '../components/BodyMap.jsx'
+import GameCard from '../components/GameCard.jsx'
+import CaloriesCard from '../components/CaloriesCard.jsx'
+import MuscleActivityMap from '../components/MuscleActivityMap.jsx'
+import { activityColor } from '../lib/muscle-activity.js'
 import { loadOfWeeklyPlan, loadOfWorkouts, muscleBalanceWindow, rankOf, MUSCLES, MUSCLE_NAME, musclesOf } from '../lib/muscles.js'
 import { fatigueOf, strengthOf, STRENGTH_FLOOR, LB_TO_KG } from '../lib/recovery.js'
 import { strengthExerciseRowsForMuscle } from '../lib/strength-exercises.js'
@@ -175,6 +179,10 @@ function MuscleBalance({ S }) {
   const completedMuscles = weekly && weeklyExpanded ? worked : top
   const max = worked.length ? load[worked[0]] : 0
   const sets = m => fmtNum(Math.round((load[m] || 0) * 10) / 10)
+  // The balance map and its bars wear the colour of the muscle activity map (red, stronger where more was done), shaded by
+  // each muscle's share of the hardest-worked one, which is what the five steps of the old ramp were too.
+  const shade = m => (max > 0 && (load[m] || 0) > 0 ? activityColor(Math.max(8, (load[m] / max) * 100)) : '')
+  const fills = Object.fromEntries(MUSCLES.map(m => [m, shade(m)]))
   const visibleComparisonMuscles = sel ? [sel] : weeklyExpanded ? comparisonMuscles : comparisonMuscles.slice(0, 4)
   const comparisonRows = visibleComparisonMuscles.map(muscle => {
     const completed = Math.round((load[muscle] || 0) * 10) / 10
@@ -185,7 +193,7 @@ function MuscleBalance({ S }) {
     const plannedSets = t('{0} sets', fmtNum(target))
     return <div className="mrow" data-muscle-volume={muscle} key={muscle}>
       <span className="nm">{sel === muscle ? <b>{t(MUSCLE_NAME[muscle])}</b> : t(MUSCLE_NAME[muscle])}</span>
-      <span className="bar"><i style={{ width: fill + '%' }} /></span>
+      <span className="bar"><i style={{ width: fill + '%', background: activityColor(Math.max(8, fill)) }} /></span>
       <span className="v cmp"
         aria-label={`${t('Completed')} ${completedSets} · ${t('Planned')} ${plannedSets}`}>
         {fmtNum(completed)}/{fmtNum(target)}{percentage == null ? '' : ` · ${percentage}%`}
@@ -197,7 +205,7 @@ function MuscleBalance({ S }) {
       <h4 className="sec" style={{ marginTop: 12 }}>{on ? t('No hard sets in this period') : t('Not trained in this period')}</h4>
       {/* A tap opens the exercises for that muscle (#553). */}
       <div className="mchips">{missed.map(m => <button type="button" key={m} className="mchip miss" data-muscle={m}
-        aria-label={t('Exercises for {0}', t(MUSCLE_NAME[m]))} onClick={() => nav('/muscles?m=' + encodeURIComponent(m), { state: { from: '/stats' } })}>{t(MUSCLE_NAME[m])}</button>)}</div>
+        aria-label={t('Exercises for {0}', t(MUSCLE_NAME[m]))} onClick={() => nav('/muscles?m=' + encodeURIComponent(m), { state: { from: '/progress' } })}>{t(MUSCLE_NAME[m])}</button>)}</div>
     </>}
     {!missed.length && worked.length > 0 &&
       <div className="muted small" style={{ marginTop: 10 }}>{on
@@ -218,7 +226,7 @@ function MuscleBalance({ S }) {
     </div>}
     {!sel && completedMuscles.map(m => <div key={m} className="mrow" data-muscle-volume={m}>
       <span className="nm">{t(MUSCLE_NAME[m])}</span>
-      <span className="bar"><i style={{ width: Math.round(load[m] / max * 100) + '%', background: on ? 'var(--yellow)' : undefined }} /></span>
+      <span className="bar"><i style={{ width: Math.round(load[m] / max * 100) + '%', background: shade(m) || undefined }} /></span>
       <span className="v">{t('{0} sets', sets(m))}</span>
     </div>)}
     {weeklyToggle(worked.length)}
@@ -231,7 +239,7 @@ function MuscleBalance({ S }) {
     {view === 'balance' ? <>
       <div className="row between" style={{ marginBottom: 8 }}>
         <h2 style={{ margin: 0 }}>{t('Muscle balance')} <span className="dim" style={{ textTransform: 'none', letterSpacing: 0 }}>· {on ? t('by hard sets') : t('by sets worked')}</span></h2>
-        {!weekly && rated && <Button size="sm" icon="gauge" style={on ? { color: 'var(--yellow)' } : undefined}
+        {!weekly && rated && <Button size="sm" icon="gauge" style={on ? { color: 'var(--act)' } : undefined}
           onClick={() => { setHard(h => !h); setSel(null) }}>{on ? t('Hard') : t('All')}</Button>}
       </div>
       <Segmented className="seg-range" value={win} onChange={v => { setWin(v); setSel(null); setWeeklyExpanded(false) }}
@@ -243,15 +251,15 @@ function MuscleBalance({ S }) {
           <button className="iconbtn sm" aria-label={t('Next week')} disabled={weekOffset === 0}
             onClick={() => { setWeekOffset(offset => Math.min(0, offset + 1)); setSel(null); setWeeklyExpanded(false) }}><Icon name="chevronRight" /></button>
         </div>
-        <BodyMap className="tappable" load={load} body={S.body} selected={sel} onMuscle={toggleSel} />
-        <BodyMapLegend />
+        <BodyMap className="tappable" load={load} fills={fills} body={S.body} selected={sel} onMuscle={toggleSel} />
+        <BodyMapLegend red />
         {weekOffset === 0
           ? comparisonRows.length ? <>{comparisonRows}{weeklyToggle(comparisonMuscles.length)}{completionSummary}</> : <div className="muted small">{t('No workouts in this period yet.')}</div>
           : inWin.length ? completedRows : <div className="muted small">{t('No workouts in this period yet.')}</div>}
       </div> : inWin.length ? <>
-        <BodyMap className="tappable" load={load} body={S.body} selected={sel}
+        <BodyMap className="tappable" load={load} fills={fills} body={S.body} selected={sel}
           onMuscle={toggleSel} />
-        <BodyMapLegend />
+        <BodyMapLegend red />
         {completedRows}
       </> : <div className="muted small">{t('No workouts in this period yet.')}</div>}
     </> : view === 'fatigue' ? <>
@@ -422,6 +430,9 @@ export default function Stats() {
     const frame = window.requestAnimationFrame(() => document.getElementById('weekly-volume')?.scrollIntoView?.({ block: 'start', behavior: 'smooth' }))
     return () => window.cancelAnimationFrame(frame)
   }, [])
+  // The latest three, newest first (by day, then the order they were stored in).
+  const recentWorkouts = useMemo(() => (S.workouts || []).map((w, i) => [w, i])
+    .sort((a, b) => (a[0].d < b[0].d ? 1 : a[0].d > b[0].d ? -1 : b[1] - a[1])).slice(0, 3).map(([w]) => w), [S.workouts])
   const [exId, setExId] = useState(null)
   const [exMetric, setExMetric] = useState('top')
   // Exercise progress over a date range (issue #511), All by default. Only the chart follows it:
@@ -639,7 +650,7 @@ export default function Stats() {
   if (showMax) exOpts.push({ value: 'max', label: t('Max reps') })
 
   return <>
-    <div className="hdr"><div><h1>{t('Stats')}</h1><div className="sub">{t('Progress & history')}</div></div>
+    <div className="hdr"><div><h1>{t('Progress')}</h1><div className="sub">{t('Progress & history')}</div></div>
       <button className="iconbtn" onClick={() => nav('/history')} aria-label={t('History')}><Icon name="history" /></button></div>
 
     <div className="tiles">
@@ -649,6 +660,12 @@ export default function Stats() {
       <div className="tile"><div className="l"><Icon name="scale" />{t('Weight 30d')}</div><div className="v" style={{ fontSize: 22, color: bwDelta30 === null ? 'inherit' : bwDeltaColor(bwDelta30, (lastBW(S) || {}).w || 0) }}>{bwDelta30 === null ? '–' : (bwDelta30 > 0 ? '+' : '') + fmtNum(bwDelta30) + ' ' + S.unit}</div></div>
 
     </div>
+
+    {/* Level and XP, as on Home: how far to the next level. */}
+    <GameCard xp={S.xp || 0} level={S.level || 1} />
+
+    {/* What the workouts burned: today's, with the total, and the last 7 and 30 days. */}
+    <CaloriesCard />
 
     <div className="card">
       <h2>{t('Activity (last 12 months)')}</h2>
@@ -660,8 +677,18 @@ export default function Stats() {
       />
     </div>
 
+    {workouts.length > 0 && <div className="card">
+      <div className="row between" style={{ marginBottom: 8 }}>
+        <h2 style={{ margin: 0 }}>{t('Recent Workouts')}</h2>
+        <Button size="sm" variant="ghost" trailingIcon="chevronRight" onClick={() => nav('/history')}>{t('View All')}</Button>
+      </div>
+      <div className="list">{recentWorkouts.map(w => <WorkoutRow key={w.id || w.start} w={w} onClick={() => workoutDetailSheet(w)} />)}</div>
+    </div>}
+
     {(workouts.length > 0 || Object.keys(loadOfWeeklyPlan(S)).length > 0) && <MuscleBalance S={S} />}
     {S.routines.length > 0 && <WeeklyPlanVolume S={S} />}
+    {/* Where recent sets went, fading with time (the same colour as the balance map). */}
+    <MuscleActivityMap />
     {workouts.length > 0 && <div className="card row between" style={{ alignItems: 'center', gap: 12 }}>
       <div style={{ minWidth: 0 }}><h2 style={{ margin: 0 }}>{t('Structural balance')}</h2>
         <div className="muted small" style={{ marginTop: 4 }}>{t('See which lift is holding back the rest.')}</div></div>

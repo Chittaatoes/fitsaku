@@ -10,6 +10,7 @@ import { setsDone, doneUnits, workoutVolume } from './history.js'
 import { EXIDX } from './exercises.js'
 import { fmtDur, fmtNum } from './format.js'
 import { getLang } from './i18n.js'
+import { workoutKcal, kcalUnit } from './calories.js'
 
 const DAY_MS = 24 * 3600 * 1000
 
@@ -19,7 +20,7 @@ export function completedToday(S, today, index = EXIDX) {
   if (!list.length) return null
   const names = []
   const bodyParts = []
-  let sets = 0, durMs = 0, volume = 0, prs = 0
+  let sets = 0, durMs = 0, volume = 0, prs = 0, kcal = 0
   for (const w of list) {
     const name = typeof w.name === 'string' ? w.name.trim() : ''
     if (name && !names.includes(name)) names.push(name)
@@ -33,8 +34,12 @@ export function completedToday(S, today, index = EXIDX) {
     const vol = Math.round(workoutVolume(w))
     if (vol > 0) volume += vol
     if (Array.isArray(w.prs)) prs += w.prs.length
+    // Calories only where the estimate rests on the session's real time and the person's own weight: a figure built on a guessed
+    // time or a default weight is on the Progress page, with its caveat, but not here, on a line of facts.
+    const est = workoutKcal(w, S)
+    if (est && est.timeKnown && est.weightKnown) kcal += est.kcal
   }
-  return { count: list.length, names, bodyParts, sets, durMs, volume, prs }
+  return { count: list.length, names, bodyParts, sets, durMs, volume, prs, kcal }
 }
 
 const COPY = {
@@ -66,6 +71,7 @@ export function doneCard(summary, { unit = 'kg', label = bp => bp, lang = getLan
   if (summary.sets > 0) chips.push((summary.sets === 1 ? c.set : c.sets).replace('{0}', String(summary.sets)))
   if (summary.durMs >= 60000) chips.push(fmtDur(summary.durMs))
   if (summary.volume > 0) chips.push(fmtNum(summary.volume) + ' ' + unit)
+  if (summary.kcal > 0) chips.push('≈ ' + fmtNum(summary.kcal) + ' ' + kcalUnit(lang))
   return {
     title: c.title,
     message: trained ? c.one.replace('{0}', trained) : c.none,

@@ -41,6 +41,8 @@ vi.mock('../components/LineChart.jsx', () => ({ default: props => {
   mocks.charts.push(props)
   return React.createElement('div')
 } }))
+// The muscle activity map has a body map of its own, which would be the last one these tests read.
+vi.mock('../components/MuscleActivityMap.jsx', () => ({ default: () => null }))
 vi.mock('../components/Heatmap.jsx', () => ({ default: () => React.createElement('div') }))
 vi.mock('../components/Icon.jsx', () => ({ default: props => React.createElement('span', props) }))
 vi.mock('../components/BodyMap.jsx', () => ({
