@@ -2657,3 +2657,13 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 .cal-sum b{font-size:18px}
 .cal-sum small{font-size:12px;font-weight:600;color:var(--label-2)}
 .cal-note{margin:8px 0 0}
+
+/* The level, small, beside the name on Home (a button to Progress): the number in the accent circle the level card uses. */
+.lvl-chip{
+  display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;
+  min-width:24px;height:24px;padding:0 6px;margin-inline-start:10px;margin-top:-4px;border-radius:999px;
+  background:var(--acc);color:var(--on-acc);font-size:13px;font-weight:700;letter-spacing:0;line-height:1;
+  -webkit-tap-highlight-color:transparent;transition:transform var(--fast) var(--ease);
+}
+.lvl-chip:active{transform:scale(.92)}
+.lvl-chip:focus-visible{outline:2px solid var(--acc);outline-offset:2px}

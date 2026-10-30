@@ -8,7 +8,6 @@ import { bwSheet, goalSheet, dayOverrideSheet, calendarSheet, startFlow, starter
 import LineChart from '../components/LineChart.jsx'
 import Icon from '../components/Icon.jsx'
 import QueueRow from '../components/QueueRow.jsx'
-import GameCard from '../components/GameCard.jsx'
 import QuestCard from '../components/QuestCard.jsx'
 import { queueOf, queueView, weekTally, pinState } from '../lib/queue.js'
 import { scheduleModeOf } from '../lib/rotation.js'
@@ -18,7 +17,7 @@ import { tappable } from '../lib/use-sheet-keyboard.js'
 import { glyphOf } from '../lib/glyphs.js'
 import { dayNoteOf } from '../lib/day-notes.js'
 import { weighInAt } from '../lib/bodyweight.js'
-import { generateQuests } from '../lib/gamification.js'
+import { generateQuests, calculateLevel } from '../lib/gamification.js'
 
 // Home = what to do now + a quick glance. Deep charts & history live in Stats.
 export default function Home() {
@@ -101,6 +100,8 @@ export default function Home() {
   // REPO Gamification
   const ws_iso = isoOf(wkStart)
   const quests = generateQuests(S, ws_iso)
+  // The level as the XP says it is (the same count the Progress page's level card uses).
+  const myLevel = calculateLevel(S.xp || 0)
 
   // today's session shown right under the week strip
   // Once today's session is logged the row shows it (its details) instead of starting it again; another session is
@@ -121,7 +122,7 @@ export default function Home() {
 
   return <div className="narrow home">
     <div className="hdr">
-      <div><h1>{user ? t('Hi {0}', user.name) : 'FitSaku'}</h1><div className="sub">{today.toLocaleDateString(dateLocale(), { weekday: 'long', day: 'numeric', month: 'long' })}</div></div>
+      <div><h1>{user ? t('Hi {0}', user.name) : 'FitSaku'}<button type="button" className="lvl-chip" aria-label={t('Level {0}', myLevel)} title={t('Level {0}', myLevel)} onClick={() => nav('/progress')}>{myLevel}</button></h1><div className="sub">{today.toLocaleDateString(dateLocale(), { weekday: 'long', day: 'numeric', month: 'long' })}</div></div>
       <button className="iconbtn" onClick={() => nav('/settings')} aria-label={trouble ? t('Settings') + ', ' + t('Connection problem') : t('Settings')}><Icon name="gear" />{trouble && <span className="tab-dot" aria-hidden="true" />}</button>
     </div>
 
@@ -225,8 +226,7 @@ export default function Home() {
       </div>
     </div>}
 
-    {/* REPO Gamification: XP/Level and the week's quests */}
-    <GameCard xp={S.xp || 0} level={S.level || 1} />
+    {/* The week's quests. The level lives by the name at the top (a small badge that opens Progress, where the XP is). */}
     {quests.length > 0 && <div style={{ marginBottom: 12 }}>
       <div className="home-h">{t('This week')}</div>
       {quests.map(q => <QuestCard key={q.id} quest={q} />)}
