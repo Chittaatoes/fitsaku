@@ -2676,7 +2676,9 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 .qa-lv{font-size:13px;font-weight:700;color:var(--acc);white-space:nowrap;transition:transform .4s var(--ease)}
 .qa-lv.up{animation:qa-pop .7s var(--ease)}
 .qa-bar{flex:1;height:6px;border-radius:999px;background:var(--surface-2);overflow:hidden}
-.qa-bar i{display:block;height:100%;border-radius:inherit;background:var(--acc);transition:width .6s var(--ease)}
+.qa-bar i{display:block;height:100%;width:var(--to);border-radius:inherit;background:var(--acc);animation:qa-fill .9s .15s var(--ease) both}
+.qa-xp{animation:qa-fade .35s var(--ease) both}
+.qa-in{margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--line,var(--surface-3))}
 .qa-num{white-space:nowrap;font-variant-numeric:tabular-nums}
 .qa-list{display:flex;flex-direction:column;gap:6px}
 .qa-row{position:relative;display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 12px;border:0;border-radius:14px;
@@ -2704,6 +2706,7 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 .qa-say{min-height:20px;font-size:14px;font-weight:600;text-align:center}
 .qa-praise{animation:qa-fade .35s var(--ease) both}
 .qa-levelup{display:inline-block;color:var(--acc);font-weight:700;animation:qa-pop .8s var(--ease) both}
+@keyframes qa-fill{from{width:var(--from)}to{width:var(--to)}}
 @keyframes qa-draw{from{stroke-dashoffset:24}to{stroke-dashoffset:0}}
 @keyframes qa-burst{0%{opacity:1;transform:translate(0,0) rotate(0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r)) scale(1)}}
 @keyframes qa-rise{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px)}}
@@ -2711,6 +2714,7 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 @keyframes qa-pop{0%{transform:scale(.8);opacity:0}50%{transform:scale(1.2);opacity:1}100%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){
   .qa-tick.fresh path,.qa-praise,.qa-levelup,.qa-lv.up{animation:none}
-  .qa-bar i,.qa-box,.qa-row{transition:none}
+  .qa-bar i,.qa-xp{animation:none}
+  .qa-box,.qa-row{transition:none}
   .qa-float{animation:none;opacity:1}
 }

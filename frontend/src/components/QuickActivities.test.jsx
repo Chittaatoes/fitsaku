@@ -132,3 +132,22 @@ describe('the card', () => {
     expect(seen[1]).not.toBe(seen[2])
   })
 })
+
+describe('level and XP are a notice, not a fixture', () => {
+  it('nothing about level or XP is shown until something is earned, then it appears with the new numbers and goes away', () => {
+    show()
+    expect(host.querySelector('.qa-xp')).toBeNull()
+    expect(host.textContent).not.toMatch(/Level|XP/)
+    act(() => rows()[0].click())
+    const n = host.querySelector('.qa-xp')
+    expect(n.textContent).toContain('Level 1')
+    expect(n.textContent).toContain('5 / 100 XP')
+    act(() => { vi.advanceTimersByTime(3000) })
+    expect(host.querySelector('.qa-xp')).toBeNull()
+  })
+  it('embedded in the hero it is not a card of its own', () => {
+    act(() => { root.render(<QuickActivities embedded />) })
+    expect(host.querySelector('.qa').classList.contains('card')).toBe(false)
+    expect(host.querySelector('.qa').classList.contains('qa-in')).toBe(true)
+  })
+})

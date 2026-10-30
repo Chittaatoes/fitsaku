@@ -107,6 +107,7 @@ export default function Home() {
   // today's session shown right under the week strip
   // Once today's session is logged the row shows it (its details) instead of starting it again; another session is
   // still one tap away under the week ("Choose a different workout").
+  const restDay = !S.active && !doneToday && !routine
   const onToday = () => { if (S.active) nav('/workout'); else if (doneToday) workoutDetailSheet(doneToday); else if (todayRoutines.length) startFlow(effectiveRoutineIds(S, todayISO())); else dayOverrideSheet(todayISO()) }
   // What the done session was, under its name: how long it took and what it lifted.
   const doneDur = doneToday && Number.isFinite(doneToday.start) && Number.isFinite(doneToday.end) ? doneToday.end - doneToday.start : 0
@@ -165,6 +166,9 @@ export default function Home() {
           : <Icon name="plus" className="chev" />}
       </div>
 
+      {/* Only on a rest day: three small things worth doing when there is no session to start. */}
+      {restDay && <QuickActivities embedded />}
+
       {/* A coach week runs by order, not by weekday, so its progress row stands in for the
           seven dots (components/QueueRow.jsx). */}
       <div className="home-week">
@@ -187,8 +191,6 @@ export default function Home() {
         </Button>
       </div>}
     </div>
-
-    <QuickActivities />
 
     {/* At a glance: streak, this week, total. Tapping opens the calendar. */}
     <div className="home-stats" {...tappable(() => calendarSheet())} aria-label={t('{0} week streak', streakWeeks(S))}>

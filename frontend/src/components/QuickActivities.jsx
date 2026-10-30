@@ -45,57 +45,41 @@ function Confetti({ n }) {
   </span>
 }
 
-export default function QuickActivities() {
+export default function QuickActivities({ embedded = false }) {
   useLang()
   const S = useStore(s => s.S)
   const update = useStore(s => s.update)
   const today = useLocalToday()
   const done = useMemo(() => quickDone(S, today), [S.xpAwarded, today])      // eslint-disable-line react-hooks/exhaustive-deps
-  const xp = Number(S.xp) || 0
   const [fx, setFx] = useState(null)               // what the last tick is showing: { id, n, gain, say, levelUp }
   const busy = useRef(false)
   const timer = useRef(0)
   const seq = useRef(0)
   useEffect(() => () => clearTimeout(timer.current), [])
 
-  // The XP bar as shown: it fills toward the next level and, on a new level, first fills up before it starts again from the new one.
-  const target = { level: calculateLevel(xp), pct: levelProgress(xp) }
-  const [shown, setShown] = useState(target)
-  useEffect(() => {
-    if (target.level > shown.level) {
-      setShown({ level: shown.level, pct: 100 })
-      const id = setTimeout(() => setShown(target), reducedMotion() ? 0 : 650)
-      return () => clearTimeout(id)
-    }
-    setShown(target)
-  }, [target.level, target.pct])                // eslint-disable-line react-hooks/exhaustive-deps
-
   const tick = id => {
     if (busy.current || done.has(id)) return
     busy.current = true
-    let gain = 0, before = calculateLevel(Number(useStore.getState().S.xp) || 0), after = before
+    const xp0 = Number(useStore.getState().S.xp) || 0
+    let gain = 0, before = calculateLevel(xp0), after = before
     update(s => { gain = awardQuickActivityXp(s, id, today); after = calculateLevel(Number(s.xp) || 0) })
     // Nothing earned: it was already ticked (another tab, another device) or the day moved on under an open screen.
     if (!gain) { busy.current = false; return }
     const levelUp = after > before
     actionSound(levelUp ? 'levelup' : 'check')
     clearTimeout(timer.current)
-    setFx({ id, n: ++seq.current, gain, say: pickPraise(), levelUp, level: after })
+    const xp1 = xp0 + gain
+    setFx({ id, n: ++seq.current, gain, say: pickPraise(), levelUp, level: after, xp: xp1, from: levelUp ? 0 : levelProgress(xp0), to: levelProgress(xp1), next: xpToNextLevel(xp1) })
     timer.current = setTimeout(() => { setFx(null) }, CARD_FX_MS)
     setTimeout(() => { busy.current = false }, 350)          // a double tap is one tick
   }
 
-  const next = xpToNextLevel(xp)
   const motion = !reducedMotion()
-  return <section className="card qa" aria-labelledby="qa-h" data-testid="quick-activities">
+  const Shell = embedded ? 'div' : 'section'
+  return <Shell className={'qa' + (embedded ? ' qa-in' : ' card')} aria-labelledby="qa-h" data-testid="quick-activities">
     <div className="qa-hd">
       <h2 id="qa-h">{t('Quick Activities')}</h2>
       <span className="qa-count dim small">{t('{0} of {1} done today', done.size, QUICK_ACTIVITIES.length)}</span>
-    </div>
-    <div className="qa-xp" aria-label={t('Level {0}', shown.level)}>
-      <span className={'qa-lv' + (fx?.levelUp ? ' up' : '')}>{t('Level {0}', shown.level)}</span>
-      <span className="qa-bar" role="presentation"><i style={{ width: shown.pct + '%' }} /></span>
-      <span className="qa-num dim small">{next ? t('{0} / {1} XP', fmtNum(next.current), fmtNum(next.needed)) : t('{0} total XP', fmtNum(xp))}</span>
     </div>
     <div className="qa-list">
       {QUICK_ACTIVITIES.map(a => {
@@ -119,5 +103,10 @@ export default function QuickActivities() {
         {fx.levelUp ? t('Level up! You reached level {0}.', fx.level) : fx.say()}
       </span>}
     </div>
-  </section>
+    {fx && <div className="qa-xp" key={'x' + fx.n}>
+      <span className={'qa-lv' + (fx.levelUp ? ' up' : '')}>{t('Level {0}', fx.level)}</span>
+      <span className="qa-bar" role="presentation"><i style={{ '--from': fx.from + '%', '--to': fx.to + '%' }} /></span>
+      <span className="qa-num dim small">{fx.next ? t('{0} / {1} XP', fmtNum(fx.next.current), fmtNum(fx.next.needed)) : t('{0} total XP', fmtNum(fx.xp))}</span>
+    </div>}
+  </Shell>
 }

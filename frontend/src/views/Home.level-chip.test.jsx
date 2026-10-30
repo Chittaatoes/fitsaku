@@ -54,3 +54,18 @@ describe('the level on Home', () => {
     expect(host.textContent).toContain('This week')
   })
 })
+
+describe('Quick Activities on Home', () => {
+  it('sit in the top card on a rest day, and the level is not shown there until something is earned', () => {
+    mount(575)
+    const hero = host.querySelector('.home-hero')
+    expect(hero.querySelector('[data-testid="quick-activities"]')).not.toBeNull()
+    expect(host.querySelectorAll('[data-testid="quick-activities"]')).toHaveLength(1)
+    expect(hero.querySelector('.qa-xp')).toBeNull()
+  })
+  it('are not there while a session is in progress', () => {
+    useStore.setState({ S: { ...JSON.parse(JSON.stringify(DEF)), active: { name: 'Push', exercises: [], start: Date.now() } }, user: { id: 1, name: 'Jay' } })
+    act(() => root.render(<Home />))
+    expect(host.querySelector('[data-testid="quick-activities"]')).toBeNull()
+  })
+})
