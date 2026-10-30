@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore.js'
 import { t } from '../lib/i18n.js'
 import Icon from './Icon.jsx'
 import Elapsed from './Elapsed.jsx'
 import { useConnectionTrouble } from './SyncBanner.jsx'
+import { approach, settled, locateTab, settleOn, PILL_TAU, BUBBLE_TAU } from '../lib/tab-slide.js'
 
 // Floating pill nav button - module scope to avoid re-renders
 function PillButton({ active, peek, icon, label, onClick, dot, since }) {
@@ -24,11 +25,23 @@ function PillButton({ active, peek, icon, label, onClick, dot, since }) {
   )
 }
 
-// The slide: press and hold anywhere on the bar, or press and drag, and a glass bubble lifts under the finger. It follows the
-// finger along the bar, the tab under it lights up, and letting go goes to that tab. A plain tap is still a tap.
+/* The tab bar, as iOS draws one: four equal tabs, an icon over its name, and one soft glass pill behind the lit tab. The pill is a
+   single element that slides from tab to tab (it never changes size, and the colour of the lit tab goes where it goes).
+
+   Press and hold anywhere on the bar, or press and drag, and the same pill lifts into a glass bubble under the finger: it follows the
+   finger along the bar, the tab under it lights up, and letting go goes to that tab while the bubble settles onto it. A plain tap is
+   still a tap.
+
+   All the motion is one loop (`frame`), running only while something is on its way: the pill and the bubble ease toward where they
+   are going every frame (lib/tab-slide.js approach), so they glide whatever the finger or the layout does in between. */
 export const HOLD_MS = 180      // a press this long, still, lifts the bubble
 export const SLIDE_PX = 6       // a drag this far lifts it at once
-const BUBBLE_PAD = 14           // the bubble is a little wider than the tab it is over
+const SETTLE_MS = 600           // after a release, the pill heads for the tab that was chosen until the route has caught up
+
+const raf = typeof window !== 'undefined' && window.requestAnimationFrame ? cb => window.requestAnimationFrame(cb) : cb => setTimeout(() => cb(Date.now()), 16)
+const caf = typeof window !== 'undefined' && window.cancelAnimationFrame ? id => window.cancelAnimationFrame(id) : id => clearTimeout(id)
+const clock = () => (typeof performance !== 'undefined' ? performance.now() : Date.now())
+const reducedMotion = () => { try { return !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches } catch { return false } }
 
 export default function TabBar({ onStart }) {
   const nav = useNavigate()
@@ -38,9 +51,12 @@ export default function TabBar({ onStart }) {
   const isGuest = useStore(s => s.isGuest())
   const trouble = useConnectionTrouble()
   const navRef = useRef(null)
-  const [bubble, setBubble] = useState(null)          // null, or { idx, x, w }: where the bubble is and which tab it is over
+  const pillRef = useRef(null)
+  const [lift, setLift] = useState(null)          // null, or { idx }: the pill is lifted into a bubble over this tab
   const g = useRef({ id: null, x0: 0, x: 0, engaged: false, timer: 0, suppress: 0 })
-  if (!user && !isGuest) return null
+  const eng = useRef({ raf: 0, at: 0, last: 0, hold: 0, pill: null, drag: null, settle: null, settleUntil: 0 })
+  const tabsRef = useRef([])
+  const activeRef = useRef(0)
 
   const cur = loc.pathname.split('/')[1] || 'home'
   // Map routes to REPO's four nav destinations:
@@ -63,31 +79,96 @@ export default function TabBar({ onStart }) {
     { key: 'progress', active: isProgress, icon: 'chart', label: t('Progress'), onClick: () => nav('/progress') },
     { key: 'profile', active: isProfile, icon: 'person', label: t('Profile'), onClick: () => nav('/profile') },
   ]
+  tabsRef.current = tabs
+  const activeIdx = Math.max(0, tabs.findIndex(tab => tab.active))
+  activeRef.current = activeIdx
 
-  // Which tab is under a finger at `clientX`, and where the bubble goes: centred on the finger, kept inside the bar.
-  const locate = clientX => {
+  // ---- the motion ----
+  const geometry = () => {
     const bar = navRef.current
     if (!bar) return null
     const barBox = bar.getBoundingClientRect()
-    const boxes = [...bar.querySelectorAll('.pill-btn')].map(b => b.getBoundingClientRect())
-    if (!boxes.length) return null
-    let idx = 0, best = Infinity
-    boxes.forEach((r, i) => {
-      const d = clientX >= r.left && clientX <= r.right ? 0 : Math.abs(clientX - (r.left + r.right) / 2)
-      if (d < best) { best = d; idx = i }
-    })
-    const w = boxes[idx].width + BUBBLE_PAD
-    const x = Math.min(Math.max(clientX - barBox.left - w / 2, 2), Math.max(2, barBox.width - w - 2))
-    return { idx, x, w }
+    return { bar, barBox, inset: bar.clientLeft || 0, boxes: [...bar.querySelectorAll('.pill-btn')].map(b => b.getBoundingClientRect()) }
   }
-  const lift = clientX => { g.current.engaged = true; setBubble(locate(clientX)) }
-  const move = clientX => {
-    const next = locate(clientX)
-    setBubble(prev => {
+  const frame = now => {
+    const e = eng.current
+    e.raf = 0
+    const geo = geometry()
+    const pill = pillRef.current
+    if (!geo || !pill) return
+    const dt = e.last ? Math.min(64, now - e.last) : 16
+    e.last = now
+    const reduced = reducedMotion()
+    // Where the pill is going: under the finger while it is lifted, else onto the tab just chosen (until the route has caught
+    // up with the choice), else onto the lit tab.
+    if (e.settle != null && (activeRef.current === e.settle || clock() > e.settleUntil)) e.settle = null
+    let tx, tw, tau
+    if (e.drag) { tx = e.drag.tx; tw = e.drag.tw; tau = BUBBLE_TAU }
+    else {
+      const r = geo.boxes[e.settle != null ? e.settle : activeRef.current]
+      if (!r) return
+      tx = r.left - geo.barBox.left - geo.inset; tw = r.width; tau = PILL_TAU
+    }
+    const lit = geo.boxes[activeRef.current] || geo.boxes[0]
+    const p = e.pill || (e.pill = { x: tx, w: tw })          // the first time it appears where it belongs, not sliding in
+    p.x = reduced ? tx : approach(p.x, tx, dt, tau)
+    p.w = reduced ? tw : approach(p.w, tw, dt, tau)
+    pill.style.transform = `translateX(${p.x}px)`
+    pill.style.width = p.w + 'px'
+    pill.style.top = (lit.top - geo.barBox.top - (geo.bar.clientTop || 0)) + 'px'
+    pill.style.height = lit.height + 'px'
+    pill.classList.add('ready')
+    const busy = !!e.drag || e.settle != null || !settled(p.x, tx) || !settled(p.w, tw)
+    if (busy || now < e.hold) { e.raf = raf(frame); e.at = clock() }
+    else e.last = 0
+  }
+  const kick = (holdMs = 0) => {
+    const e = eng.current
+    e.hold = Math.max(e.hold, clock() + holdMs)
+    // A frame that was asked for and has not come in a quarter of a second is not coming (a page that is not being drawn, a
+    // browser that throttles): ask again, rather than wait on it for ever.
+    if (e.raf && clock() - e.at > 250) { caf(e.raf); e.raf = 0 }
+    if (!e.raf) { e.raf = raf(frame); e.at = clock() }
+  }
+  const labelsKey = tabs.map(x => x.label + (x.since ? '*' : '')).join('|')
+
+  // Another tab lit, or a tab changed (Train turns into Resume while a workout runs): the pill goes to the lit tab.
+  useLayoutEffect(() => { kick(400) }, [activeIdx, labelsKey])         // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const onResize = () => kick(120)
+    window.addEventListener('resize', onResize)
+    return () => { window.removeEventListener('resize', onResize); caf(eng.current.raf); eng.current.raf = 0; clearTimeout(g.current.timer) }
+  }, [])                                                               // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!user && !isGuest) return null
+
+  const aim = clientX => {
+    const geo = geometry()
+    return geo && { geo, at: locateTab(geo.boxes, clientX, geo.barBox, geo.inset) }
+  }
+  const raise = clientX => {
+    const a = aim(clientX)
+    if (!a || !a.at) return
+    g.current.engaged = true
+    eng.current.drag = { tx: a.at.x, tw: a.at.w }
+    eng.current.settle = null
+    if (pillRef.current) { pillRef.current.dataset.tx = String(a.at.x); pillRef.current.dataset.tw = String(a.at.w) }
+    setLift({ idx: a.at.idx })
+    kick()
+  }
+  const follow = clientX => {
+    const a = aim(clientX)
+    const d = eng.current.drag
+    if (!a || !a.at || !d) return
+    d.tx = a.at.x; d.tw = a.at.w
+    if (pillRef.current) { pillRef.current.dataset.tx = String(a.at.x); pillRef.current.dataset.tw = String(a.at.w) }
+    setLift(prev => {
+      if (!prev || prev.idx === a.at.idx) return prev
       // A new tab under the bubble is a small tick on the phones that can give one.
-      if (prev && next && prev.idx !== next.idx) { try { navigator.vibrate?.(6) } catch { /* no haptics here */ } }
-      return next
+      try { navigator.vibrate?.(6) } catch { /* no haptics here */ }
+      return { idx: a.at.idx }
     })
+    kick()
   }
 
   const onPointerDown = e => {
@@ -95,17 +176,17 @@ export default function TabBar({ onStart }) {
     const s = g.current
     clearTimeout(s.timer)
     s.id = e.pointerId; s.x0 = e.clientX; s.x = e.clientX; s.engaged = false
-    s.timer = setTimeout(() => { if (s.id != null && !s.engaged) lift(s.x) }, HOLD_MS)
+    s.timer = setTimeout(() => { if (s.id != null && !s.engaged) raise(s.x) }, HOLD_MS)
   }
   const onPointerMove = e => {
     const s = g.current
     if (s.id == null || e.pointerId !== s.id) return
     s.x = e.clientX
-    if (s.engaged) { move(e.clientX); return }
+    if (s.engaged) { follow(e.clientX); return }
     if (Math.abs(e.clientX - s.x0) > SLIDE_PX) {
       clearTimeout(s.timer)
       try { navRef.current?.setPointerCapture(e.pointerId) } catch { /* a pointer that is already gone */ }
-      lift(e.clientX)
+      raise(e.clientX)
     }
   }
   const finish = (e, commit) => {
@@ -115,12 +196,19 @@ export default function TabBar({ onStart }) {
     const was = s.engaged
     s.id = null; s.engaged = false
     if (!was) return
-    const at = locate(e.clientX)
-    setBubble(null)
+    const a = aim(e.clientX)
     try { navRef.current?.releasePointerCapture(e.pointerId) } catch { /* not captured */ }
+    // The bubble lets go of the finger and settles onto the tab that was chosen, the pill it is again; if the touch was taken away
+    // it goes back to the lit tab.
+    const choice = commit && a && a.at ? a.at.idx : null
+    eng.current.drag = null
+    eng.current.settle = choice
+    eng.current.settleUntil = clock() + SETTLE_MS
+    setLift(null)
+    kick(SETTLE_MS)
     // The click that follows a slide is not a tap on whatever it ended over.
     s.suppress = Date.now() + 400
-    if (commit && at && tabs[at.idx]) tabs[at.idx].onClick()
+    if (choice != null && tabsRef.current[choice]) tabsRef.current[choice].onClick()
   }
   const onClickCapture = e => {
     const s = g.current
@@ -130,16 +218,15 @@ export default function TabBar({ onStart }) {
 
   return (
     <nav id="tabbar" className="floating-pill">
-      <div className={'pill-nav' + (bubble ? ' sliding' : '')} ref={navRef}
+      <div className={'pill-nav' + (lift ? ' sliding' : '')} ref={navRef}
         onPointerDown={onPointerDown} onPointerMove={onPointerMove}
         onPointerUp={e => finish(e, true)} onPointerCancel={e => finish(e, false)}
         onClickCapture={onClickCapture}>
+        <span className={'pill-active' + (lift ? ' lifted' : '')} ref={pillRef} data-testid="pill-active" data-idx={lift ? lift.idx : undefined} aria-hidden="true" />
         {tabs.map((tab, i) => (
-          <PillButton key={tab.key} active={tab.active} peek={!!bubble && bubble.idx === i}
+          <PillButton key={tab.key} active={tab.active} peek={!!lift && lift.idx === i}
             icon={tab.icon} label={tab.label} dot={tab.dot} since={tab.since} onClick={tab.onClick} />
         ))}
-        {bubble && <span className="pill-bubble" data-testid="pill-bubble" data-idx={bubble.idx} aria-hidden="true"
-          style={{ transform: `translateX(${bubble.x}px)`, width: bubble.w }} />}
       </div>
     </nav>
   )
