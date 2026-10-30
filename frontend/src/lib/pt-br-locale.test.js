@@ -40,9 +40,10 @@ describe('Brazilian Portuguese locale', () => {
     // in pt.js and pt-BR.js together and moves both, and a number in a test that every new string
     // has to be taught is a number nobody reads. What the numbers stood for is asserted above.
     // If the hash fails, review the changed keys and wording before accepting a new one. From
+    // Reviewed 2026-10-30: 20 Quick Activities strings added to pt with English text (no Portuguese yet), inherited as is.
     // Reviewed 2026-10-27: the only change is the product name openGym -> FitSaku in 12 inherited entries.
     // frontend/: node scripts/pt-br-inheritance-fingerprint.mjs --list
-    expect(fingerprint, 'pt-PT inheritance changed; review the inherited pt-BR wording').toBe('63b8989d7b97af56bc044d0da19227f349303815116cc19aa6fb67ab5b95d549')
+    expect(fingerprint, 'pt-PT inheritance changed; review the inherited pt-BR wording').toBe('0e67d758f6bfe8c06dee6c5ab198976e37d60764e7448527821c868c5757948b')
   })
 
   // pt-PT labelled Unpair 'Desfazer': Undo, in Portuguese (it is pt-BR's Undo), on the button that

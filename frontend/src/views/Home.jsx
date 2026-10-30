@@ -9,6 +9,7 @@ import LineChart from '../components/LineChart.jsx'
 import Icon from '../components/Icon.jsx'
 import QueueRow from '../components/QueueRow.jsx'
 import QuestCard from '../components/QuestCard.jsx'
+import QuickActivities from '../components/QuickActivities.jsx'
 import { queueOf, queueView, weekTally, pinState } from '../lib/queue.js'
 import { scheduleModeOf } from '../lib/rotation.js'
 import { useConnectionTrouble } from '../components/SyncBanner.jsx'
@@ -186,6 +187,8 @@ export default function Home() {
         </Button>
       </div>}
     </div>
+
+    <QuickActivities />
 
     {/* At a glance: streak, this week, total. Tapping opens the calendar. */}
     <div className="home-stats" {...tappable(() => calendarSheet())} aria-label={t('{0} week streak', streakWeeks(S))}>

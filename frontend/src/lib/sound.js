@@ -167,6 +167,8 @@ export const SFX = {
   add: { peak: 0.55, hold: 0.5, timbre: 'bright', notes: [[660, 0.09, 0], [990, 0.16, 0.08]] },
   delete: { peak: 0.55, hold: 0.4, timbre: 'bright', notes: [[520, 0.1, 0, 300], [330, 0.2, 0.09, 180]] },
   finish: { peak: 0.6, hold: 0.55, timbre: 'bell', notes: [[523, 0.16, 0], [659, 0.16, 0.14], [784, 0.16, 0.28], [1047, 0.7, 0.42], [1568, 0.4, 0.5], [2093, 0.5, 0.62]] },
+  check: { peak: 0.5, hold: 0.45, timbre: 'bell', notes: [[784, 0.1, 0], [1175, 0.3, 0.09]] },        // a quick activity ticked
+  levelup: { peak: 0.55, hold: 0.5, timbre: 'bell', notes: [[784, 0.12, 0], [988, 0.12, 0.1], [1175, 0.12, 0.2], [1568, 0.5, 0.3]] },
 }
 export function sfx(enabled, kind) {
   if (!enabled || !Object.hasOwn(SFX, kind)) return

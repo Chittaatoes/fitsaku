@@ -1,5 +1,7 @@
 import { t } from './i18n.js';
 import { LEVEL_THRESHOLDS, calculateLevel } from './xp.js';
+import { todayISO } from './format.js';
+import { QUICK_IDS, quickKey } from './quick-activities.js';
 
 export { calculateLevel };
 
@@ -7,11 +9,14 @@ export { calculateLevel };
    Non-destructive, idempotent, local-first design. */
 
 // XP per action: awards are tracked by workout date + action to prevent duplicates
-const XP_AWARDS = {
+export const XP_AWARDS = {
   workoutCompleted: 50,     // per session
   workoutPR: 25,            // bonus for hitting a new 1RM
   trainingWeekComplete: 100, // bonus for finishing all planned sessions in a week
   consistencyMilestone: 50,  // bonuses at 5, 10, 20, 50+ workout milestones
+  // One quick activity (a glass of water, a few deep breaths, a stretch), once a day each. Small on purpose: all three together are
+  // 15 XP, under a third of one workout, so they are a nudge and never a way to level up without training. The one number to tune.
+  quickActivity: 5,
 };
 
 // ISO date + n days, by calendar arithmetic (no timezone involved).
@@ -95,6 +100,23 @@ export function awardWorkoutXp(s, w) {
   if (Object.hasOwn(s.xpAwarded, w.id)) return 0;
   const earned = XP_AWARDS.workoutCompleted + (w.prs?.length ? XP_AWARDS.workoutPR : 0);
   s.xpAwarded[w.id] = earned;
+  s.xp = (Number(s.xp) || 0) + earned;
+  s.level = calculateLevel(s.xp);
+  return earned;
+}
+
+// XP rule: a quick activity ticked today pays quickActivity, once per activity per local day. It goes through the same ledger
+// as a workout (`S.xpAwarded`, under the key lib/quick-activities.js quickKey gives), so everything that already reads or merges
+// the ledger (the total, the level, two devices that both tick the same activity: counted once) treats it the same way. Refused
+// (0) for an activity that is not one of the three, a day that is not today on this device's clock (a screen left open past
+// midnight, a made-up request), or one already paid. `s` is the store draft: call it inside update().
+export function awardQuickActivityXp(s, id, day) {
+  if (!QUICK_IDS.includes(id) || typeof day !== 'string' || day !== todayISO()) return 0;
+  if (!s.xpAwarded || typeof s.xpAwarded !== 'object') s.xpAwarded = {};
+  const key = quickKey(day, id);
+  if (Object.hasOwn(s.xpAwarded, key)) return 0;
+  const earned = XP_AWARDS.quickActivity;
+  s.xpAwarded[key] = earned;
   s.xp = (Number(s.xp) || 0) + earned;
   s.level = calculateLevel(s.xp);
   return earned;

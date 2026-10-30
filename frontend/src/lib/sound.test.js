@@ -529,7 +529,7 @@ describe('loudness and the action sounds', () => {
       sound.sfx(true, kind)
       counts[kind] = ctx().tones.length - before
     }
-    expect(counts).toEqual({ add: 2, delete: 2, finish: 6 })
+    expect(counts).toEqual({ add: 2, delete: 2, finish: 6, check: 2, levelup: 4 })
     // the delete sound falls, the add sound rises, the finish one climbs
     const f = k => sound.SFX[k].notes.map(n => n[0])
     expect(f('add')[1]).toBeGreaterThan(f('add')[0])

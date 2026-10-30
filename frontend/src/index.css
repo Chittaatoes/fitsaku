@@ -2667,3 +2667,50 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 }
 .lvl-chip:active{transform:scale(.92)}
 .lvl-chip:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+
+/* Quick Activities on Home (components/QuickActivities.jsx): three rows with a round check, the level and its bar above them. */
+.qa{display:flex;flex-direction:column;gap:10px}
+.qa-hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.qa-hd h2{margin:0;font-size:17px;font-weight:700}
+.qa-xp{display:flex;align-items:center;gap:10px}
+.qa-lv{font-size:13px;font-weight:700;color:var(--acc);white-space:nowrap;transition:transform .4s var(--ease)}
+.qa-lv.up{animation:qa-pop .7s var(--ease)}
+.qa-bar{flex:1;height:6px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.qa-bar i{display:block;height:100%;border-radius:inherit;background:var(--acc);transition:width .6s var(--ease)}
+.qa-num{white-space:nowrap;font-variant-numeric:tabular-nums}
+.qa-list{display:flex;flex-direction:column;gap:6px}
+.qa-row{position:relative;display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 12px;border:0;border-radius:14px;
+  background:var(--surface-2);color:inherit;font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:transform var(--fast) var(--ease),background .25s var(--ease)}
+.qa-row:active{transform:scale(.985)}
+.qa-row:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.qa-row.done{cursor:default}
+.qa-ic{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;color:var(--acc);flex:none}
+.qa-ic svg{width:22px;height:22px}
+.qa-t{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
+.qa-t b{font-size:15px;font-weight:600}
+.qa-t span{font-size:12.5px;color:var(--label-2)}
+.qa-row.done .qa-t b{color:var(--label-2)}
+.qa-box{position:relative;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;flex:none;
+  border:2px solid var(--label-3,var(--label-2));transition:background .25s var(--ease),border-color .25s var(--ease)}
+.qa-box.on{background:var(--acc);border-color:var(--acc)}
+.qa-tick{width:18px;height:18px;fill:none;stroke:var(--on-acc);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.qa-tick path{stroke-dasharray:24;stroke-dashoffset:0}
+.qa-tick.fresh path{animation:qa-draw .35s .05s var(--ease) both}
+.qa-conf{position:absolute;inset:0;pointer-events:none}
+.qa-conf i{position:absolute;left:50%;top:50%;width:6px;height:9px;margin:-4px 0 0 -3px;border-radius:2px;background:var(--c);opacity:0;
+  animation:qa-burst 1s var(--ease) forwards}
+.qa-float{position:absolute;inset-inline-end:44px;top:6px;font-size:14px;font-weight:700;color:var(--acc);pointer-events:none;animation:qa-rise 1.4s var(--ease) forwards}
+.qa-say{min-height:20px;font-size:14px;font-weight:600;text-align:center}
+.qa-praise{animation:qa-fade .35s var(--ease) both}
+.qa-levelup{display:inline-block;color:var(--acc);font-weight:700;animation:qa-pop .8s var(--ease) both}
+@keyframes qa-draw{from{stroke-dashoffset:24}to{stroke-dashoffset:0}}
+@keyframes qa-burst{0%{opacity:1;transform:translate(0,0) rotate(0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r)) scale(1)}}
+@keyframes qa-rise{0%{opacity:0;transform:translateY(6px)}20%{opacity:1}100%{opacity:0;transform:translateY(-34px)}}
+@keyframes qa-fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes qa-pop{0%{transform:scale(.8);opacity:0}50%{transform:scale(1.2);opacity:1}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){
+  .qa-tick.fresh path,.qa-praise,.qa-levelup,.qa-lv.up{animation:none}
+  .qa-bar i,.qa-box,.qa-row{transition:none}
+  .qa-float{animation:none;opacity:1}
+}
