@@ -78,9 +78,10 @@ describe('the card', () => {
     expect(rows()[0].getAttribute('aria-checked')).toBe('true')
     expect(host.querySelector('.qa-float').textContent).toBe('+' + XP_AWARDS.quickActivity + ' XP')
     expect(host.querySelector('.qa-praise').textContent.length).toBeGreaterThan(3)
-    expect(host.textContent).toContain('1 of 3 done today')
     expect(actionSound).toHaveBeenCalledTimes(1)
     expect(actionSound).toHaveBeenCalledWith('check')
+    act(() => { vi.advanceTimersByTime(3000) })
+    expect(host.textContent).toContain('1 of 3 done today')
   })
   it('a double tap is one reward, and a done row cannot be unticked or paid again', () => {
     show()

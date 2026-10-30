@@ -2668,44 +2668,43 @@ html:has(#modal-root .center){background:color-mix(in srgb,var(--bg) 66%,#000)}
 .lvl-chip:active{transform:scale(.92)}
 .lvl-chip:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 
-/* Quick Activities on Home (components/QuickActivities.jsx): three rows with a round check, the level and its bar above them. */
-.qa{display:flex;flex-direction:column;gap:10px}
-.qa-hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
-.qa-hd h2{margin:0;font-size:17px;font-weight:700}
-.qa-xp{display:flex;align-items:center;gap:10px}
-.qa-lv{font-size:13px;font-weight:700;color:var(--acc);white-space:nowrap;transition:transform .4s var(--ease)}
+/* Quick Activities on Home (components/QuickActivities.jsx): one header line and three small tiles in a row. The header line
+   gives way to the thanks and the level/XP notice for a moment when something is earned, so the card never grows. */
+.qa{display:flex;flex-direction:column;gap:8px}
+.qa-hd{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:20px}
+.qa-hd h2{margin:0;font-size:14px;font-weight:700}
+.qa-count{font-size:12px;font-weight:600;color:var(--label-2)}
+.qa-praise,.qa-levelup{font-size:13px;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qa-praise{animation:qa-fade .35s var(--ease) both}
+.qa-levelup{color:var(--acc);animation:qa-pop .8s var(--ease) both}
+.qa-xp{display:flex;align-items:center;gap:6px;flex:none;font-size:12px;font-weight:600;animation:qa-fade .35s var(--ease) both}
+.qa-lv{font-weight:700;color:var(--acc);white-space:nowrap}
 .qa-lv.up{animation:qa-pop .7s var(--ease)}
-.qa-bar{flex:1;height:6px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.qa-num{white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--label-2)}
+.qa-bar{position:absolute;inset-inline:0;bottom:-3px;height:3px;border-radius:999px;background:var(--surface-3);overflow:hidden}
 .qa-bar i{display:block;height:100%;width:var(--to);border-radius:inherit;background:var(--acc);animation:qa-fill .9s .15s var(--ease) both}
-.qa-xp{animation:qa-fade .35s var(--ease) both}
-.qa-in{margin:14px 0 4px;padding-top:12px;border-top:1px solid var(--line,var(--surface-3))}
-.qa-num{white-space:nowrap;font-variant-numeric:tabular-nums}
-.qa-list{display:flex;flex-direction:column;gap:6px}
-.qa-row{position:relative;display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 12px;border:0;border-radius:14px;
-  background:var(--surface-2);color:inherit;font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;
+.qa-in{margin:10px 0 2px}
+.qa-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.qa-row{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:64px;padding:8px 6px;border:0;border-radius:14px;
+  background:var(--surface-2);color:inherit;font:inherit;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;
   transition:transform var(--fast) var(--ease),background .25s var(--ease)}
-.qa-row:active{transform:scale(.985)}
+.qa-row:active{transform:scale(.97)}
 .qa-row:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .qa-row.done{cursor:default}
-.qa-ic{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;color:var(--acc);flex:none}
+.qa-ic{display:grid;place-items:center;color:var(--acc)}
 .qa-ic svg{width:22px;height:22px}
-.qa-t{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
-.qa-t b{font-size:15px;font-weight:600}
-.qa-t span{font-size:12.5px;color:var(--label-2)}
-.qa-row.done .qa-t b{color:var(--label-2)}
-.qa-box{position:relative;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;flex:none;
-  border:2px solid var(--label-3,var(--label-2));transition:background .25s var(--ease),border-color .25s var(--ease)}
+.qa-row b{max-width:100%;font-size:12px;font-weight:600;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qa-row.done b{color:var(--label-2)}
+.qa-box{position:absolute;top:6px;inset-inline-end:6px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;
+  border:1.5px solid var(--label-3,var(--label-2));transition:background .25s var(--ease),border-color .25s var(--ease)}
 .qa-box.on{background:var(--acc);border-color:var(--acc)}
-.qa-tick{width:18px;height:18px;fill:none;stroke:var(--on-acc);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.qa-tick{width:12px;height:12px;fill:none;stroke:var(--on-acc);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
 .qa-tick path{stroke-dasharray:24;stroke-dashoffset:0}
 .qa-tick.fresh path{animation:qa-draw .35s .05s var(--ease) both}
 .qa-conf{position:absolute;inset:0;pointer-events:none}
-.qa-conf i{position:absolute;left:50%;top:50%;width:6px;height:9px;margin:-4px 0 0 -3px;border-radius:2px;background:var(--c);opacity:0;
+.qa-conf i{position:absolute;left:50%;top:50%;width:5px;height:8px;margin:-4px 0 0 -2px;border-radius:2px;background:var(--c);opacity:0;
   animation:qa-burst 1s var(--ease) forwards}
-.qa-float{position:absolute;inset-inline-end:44px;top:6px;font-size:14px;font-weight:700;color:var(--acc);pointer-events:none;animation:qa-rise 1.4s var(--ease) forwards}
-.qa-say{min-height:20px;font-size:14px;font-weight:600;text-align:center}
-.qa-praise{animation:qa-fade .35s var(--ease) both}
-.qa-levelup{display:inline-block;color:var(--acc);font-weight:700;animation:qa-pop .8s var(--ease) both}
+.qa-float{position:absolute;top:4px;inset-inline-start:8px;font-size:12px;font-weight:700;color:var(--acc);pointer-events:none;animation:qa-rise 1.4s var(--ease) forwards}
 @keyframes qa-fill{from{width:var(--from)}to{width:var(--to)}}
 @keyframes qa-draw{from{stroke-dashoffset:24}to{stroke-dashoffset:0}}
 @keyframes qa-burst{0%{opacity:1;transform:translate(0,0) rotate(0) scale(.6)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--r)) scale(1)}}

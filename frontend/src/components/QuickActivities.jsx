@@ -76,10 +76,21 @@ export default function QuickActivities({ embedded = false }) {
 
   const motion = !reducedMotion()
   const Shell = embedded ? 'div' : 'section'
-  return <Shell className={'qa' + (embedded ? ' qa-in' : ' card')} aria-labelledby="qa-h" data-testid="quick-activities">
-    <div className="qa-hd">
-      <h2 id="qa-h">{t('Quick Activities')}</h2>
-      <span className="qa-count dim small">{t('{0} of {1} done today', done.size, QUICK_ACTIVITIES.length)}</span>
+  return <Shell className={'qa' + (embedded ? ' qa-in' : ' card')} aria-label={t('Quick Activities')} data-testid="quick-activities">
+    <div className="qa-hd" role="status" aria-live="polite">
+      {fx ? <>
+        <span key={fx.n} className={fx.levelUp ? 'qa-levelup' : 'qa-praise'}>
+          {fx.levelUp ? t('Level up! You reached level {0}.', fx.level) : fx.say()}
+        </span>
+        <span className="qa-xp" key={'x' + fx.n}>
+          <span className={'qa-lv' + (fx.levelUp ? ' up' : '')}>{t('Level {0}', fx.level)}</span>
+          <span className="qa-num">{fx.next ? t('{0} / {1} XP', fmtNum(fx.next.current), fmtNum(fx.next.needed)) : t('{0} total XP', fmtNum(fx.xp))}</span>
+          <span className="qa-bar" role="presentation"><i style={{ '--from': fx.from + '%', '--to': fx.to + '%' }} /></span>
+        </span>
+      </> : <>
+        <h2 id="qa-h">{t('Quick Activities')}</h2>
+        <span className="qa-count">{t('{0} of {1} done today', done.size, QUICK_ACTIVITIES.length)}</span>
+      </>}
     </div>
     <div className="qa-list">
       {QUICK_ACTIVITIES.map(a => {
@@ -87,9 +98,9 @@ export default function QuickActivities({ embedded = false }) {
         const isDone = done.has(a.id)
         const mine = fx && fx.id === a.id
         return <button key={a.id} type="button" role="checkbox" aria-checked={isDone} className={'qa-row' + (isDone ? ' done' : '')}
-          aria-label={isDone ? t('{0}, done', w.name()) : t('Mark {0} as done', w.name())} title={w.cat()} onClick={() => tick(a.id)}>
+          aria-label={isDone ? t('{0}, done', w.name()) : t('Mark {0} as done', w.name())} title={w.about()} onClick={() => tick(a.id)}>
           <span className="qa-ic"><Icon name={a.icon} /></span>
-          <span className="qa-t"><b>{w.name()}</b><span>{w.about()}</span></span>
+          <b>{w.name()}</b>
           <span className={'qa-box' + (isDone ? ' on' : '')} aria-hidden="true">
             {isDone && <svg className={'qa-tick' + (mine ? ' fresh' : '')} viewBox="0 0 24 24"><path d="M5.5 12.5l4.2 4.2L18.5 7.8" /></svg>}
             {mine && motion && <Confetti key={fx.n} n={fx.levelUp ? 26 : 12} />}
@@ -98,15 +109,5 @@ export default function QuickActivities({ embedded = false }) {
         </button>
       })}
     </div>
-    <div className="qa-say" role="status" aria-live="polite">
-      {fx && <span key={fx.n} className={fx.levelUp ? 'qa-levelup' : 'qa-praise'}>
-        {fx.levelUp ? t('Level up! You reached level {0}.', fx.level) : fx.say()}
-      </span>}
-    </div>
-    {fx && <div className="qa-xp" key={'x' + fx.n}>
-      <span className={'qa-lv' + (fx.levelUp ? ' up' : '')}>{t('Level {0}', fx.level)}</span>
-      <span className="qa-bar" role="presentation"><i style={{ '--from': fx.from + '%', '--to': fx.to + '%' }} /></span>
-      <span className="qa-num dim small">{fx.next ? t('{0} / {1} XP', fmtNum(fx.next.current), fmtNum(fx.next.needed)) : t('{0} total XP', fmtNum(fx.xp))}</span>
-    </div>}
   </Shell>
 }
